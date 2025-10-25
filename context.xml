@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Context antiResourceLocking="false" privileged="true">
+
+    <!-- Iran Bazaar Database Connection Pool -->
+    <Resource name="jdbc/IranBazaarDB" 
+              auth="Container"
+              type="javax.sql.DataSource"
+              factory="org.apache.tomcat.jdbc.pool.DataSourceFactory"
+              testWhileIdle="true"
+              testOnBorrow="true"
+              testOnReturn="false"
+              validationQuery="SELECT 1"
+              validationInterval="30000"
+              timeBetweenEvictionRunsMillis="30000"
+              maxActive="20" 
+              minIdle="5"
+              maxWait="10000"
+              initialSize="5"
+              removeAbandonedTimeout="60"
+              removeAbandoned="true"
+              logAbandoned="true"
+              minEvictableIdleTimeMillis="30000"
+              jmxEnabled="true"
+              username="postgres" 
+              password="5Azar1360"
+              driverClassName="org.postgresql.Driver"
+              url="jdbc:postgresql://localhost:5432/bazaar"/>
+              
+    <!-- Security valve for admin access -->
+    <Valve className="org.apache.catalina.valves.RemoteAddrValve"
+           allow="127\.0\.0\.1|::1|0:0:0:0:0:0:0:1" />
+           
+    <!-- Manager webapp access -->
+    <Manager pathname="" />
+</Context>

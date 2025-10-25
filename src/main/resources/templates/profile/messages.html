@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Messages - Persia Bazaar</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Universal Styles -->
+    <link href="/css/universal-styles.css" rel="stylesheet">
+    <link href="/css/profile-styles.css" rel="stylesheet">
+    
+    <style>
+        .message-item {
+            background: white;
+            border: 1px solid #e9ecef;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+        
+        .message-item:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+        }
+        
+        .message-header {
+            padding: 12px 16px;
+            background: #f8f9fa;
+            border-bottom: 1px solid #e9ecef;
+        }
+        
+        .sender-info {
+            display: flex;
+            align-items: center;
+        }
+        
+        .sender-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 0.875rem;
+            margin-right: 12px;
+        }
+        
+        .message-content {
+            padding: 12px 16px;
+        }
+        
+        .message-actions {
+            padding: 8px 16px;
+            background: #f8f9fa;
+            border-top: 1px solid #e9ecef;
+            text-align: right;
+        }
+        
+        .btn-mark-read {
+            background: linear-gradient(45deg, #28a745, #20c997);
+            border: none;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 15px;
+            font-size: 0.75rem;
+        }
+        
+        .btn-mark-read:hover {
+            background: linear-gradient(45deg, #218838, #1ea478);
+            color: white;
+        }
+        
+        .ad-info {
+            background: #e3f2fd;
+            border: 1px solid #bbdefb;
+            border-radius: 6px;
+            padding: 8px 12px;
+            margin-top: 10px;
+            font-size: 0.875rem;
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: #6c757d;
+        }
+        
+        .empty-state i {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            opacity: 0.5;
+        }
+        
+        .messages-nav {
+            background: #f8f9fa;
+            border-bottom: 1px solid #dee2e6;
+        }
+        
+        .nav-pills .nav-link {
+            border-radius: 0;
+            color: #6c757d;
+            font-weight: 500;
+        }
+        
+        .nav-pills .nav-link.active {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg">
+        <div class="container">
+            <a class="navbar-brand" href="/">
+                <img src="/images/logo-persia-bazaar-small.png" alt="Persia Bazaar" height="100">
+            </a>
+            
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link text-white" href="/">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-white" href="/ads">Ads</a>
+                    </li>
+                </ul>
+                
+                <div class="d-flex align-items-center">
+                    <div class="dropdown">
+                        <button class="btn btn-outline-light dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                            <i class="bi bi-person-circle"></i>
+                            <span th:text="${user.firstName + ' ' + user.lastName}">کاربر</span>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li><a class="dropdown-item" href="/profile"><i class="bi bi-person me-2"></i>My Profile</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li>
+                                <form method="post" action="/logout" class="d-inline">
+                                    <button type="submit" class="dropdown-item text-danger">
+                                        <i class="bi bi-box-arrow-right me-2"></i>Logout
+                                    </button>
+                                </form>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        <div class="row">
+            <!-- Profile Sidebar -->
+            <div class="col-lg-3">
+                <div class="profile-sidebar">
+                    <!-- Avatar and Info -->
+                    <div class="profile-avatar">
+                        <span th:text="${user.firstName?.substring(0,1)}">ک</span>
+                    </div>
+                    
+                    <div class="profile-info">
+                        <h4 class="profile-name" th:text="${user.firstName + ' ' + user.lastName}">User Name</h4>
+                        <p class="profile-username" th:text="'@' + ${user.username}">@username</p>
+                    </div>
+                    
+                        <!-- Stats -->
+                        <div class="stats-badges">
+                            <span class="stat-badge">
+                                <span th:text="${userAdsCount}">0</span> Ads
+                            </span>
+                            <span class="stat-badge">
+                                <span th:text="${activeAdsCount}">0</span> Active
+                            </span>
+                        </div>
+                        
+                        <!-- Social Media Links -->
+                        <div class="social-links" th:if="${user.linkdin != null or user.facebook != null or user.instagram != null}">
+                            <div class="social-links-title">
+                                <small class="text-muted">Follow me:</small>
+                            </div>
+                            <div class="social-icons">
+                                <a th:if="${user.linkdin != null and user.linkdin != ''}" 
+                                   th:href="${user.linkdin}" 
+                                   target="_blank" 
+                                   class="social-icon linkedin"
+                                   title="LinkedIn">
+                                    <i class="bi bi-linkedin"></i>
+                                </a>
+                                <a th:if="${user.facebook != null and user.facebook != ''}" 
+                                   th:href="${user.facebook}" 
+                                   target="_blank" 
+                                   class="social-icon facebook"
+                                   title="Facebook">
+                                    <i class="bi bi-facebook"></i>
+                                </a>
+                                <a th:if="${user.instagram != null and user.instagram != ''}" 
+                                   th:href="${user.instagram}" 
+                                   target="_blank" 
+                                   class="social-icon instagram"
+                                   title="Instagram">
+                                    <i class="bi bi-instagram"></i>
+                                </a>
+                            </div>
+                        </div>                    <!-- Menu -->
+                    <ul class="profile-menu">
+                        <li>
+                            <a href="/profile">
+                                <i class="bi bi-house-door"></i>
+                                Dashboard
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/profile/ads">
+                                <i class="bi bi-megaphone"></i>
+                                My Ads
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/ads/create">
+                                <i class="bi bi-plus-circle"></i>
+                                Post New Ad
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/profile/messages" class="active">
+                                <i class="bi bi-chat-dots"></i>
+                                Messages
+                                <span th:if="${unreadCount > 0}" class="badge bg-danger ms-auto" th:text="${unreadCount}">New</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/profile/edit">
+                                <i class="bi bi-gear"></i>
+                                Edit Profile
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/profile/change-password" class="text-warning">
+                                <i class="bi bi-shield-lock"></i>
+                                Change Password
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Main Content -->
+            <div class="col-lg-9">
+                <!-- Messages Header -->
+                <div class="content-header mb-4">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h2 class="content-title">Messages</h2>
+                            <p class="content-subtitle">Manage your conversations</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Flash Messages -->
+                <div th:if="${success}" class="alert alert-success alert-dismissible fade show">
+                    <span th:text="${success}"></span>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+
+                <div th:if="${error}" class="alert alert-danger alert-dismissible fade show">
+                    <span th:text="${error}"></span>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+
+                <!-- Messages Tabs -->
+                <div class="content-wrapper">
+                    <div class="messages-nav">
+                        <ul class="nav nav-pills" id="messagesTabs">
+                            <li class="nav-item">
+                                <a class="nav-link" th:classappend="${activeTab == 'received' || activeTab == null} ? 'active'" 
+                                   th:href="@{/profile/messages(tab='received')}">
+                                    <i class="bi bi-inbox me-2"></i>
+                                    Received Messages
+                                    <span th:if="${unreadCount > 0}" class="badge bg-danger ms-2" th:text="${unreadCount}">0</span>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" th:classappend="${activeTab == 'sent'} ? 'active'" 
+                                   th:href="@{/profile/messages(tab='sent')}">
+                                    <i class="bi bi-send me-2"></i>
+                                    Sent Messages
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- Messages Content -->
+                    <div class="messages-content p-4">
+                        <!-- Received Messages -->
+                        <div th:if="${activeTab == 'received' || activeTab == null}">
+                            <div th:if="${#lists.isEmpty(messages)}">
+                                <div class="empty-state">
+                                    <i class="bi bi-inbox"></i>
+                                    <h4>No messages received yet</h4>
+                                    <p>When someone sends you a message about your ads, it will appear here.</p>
+                                </div>
+                            </div>
+
+                            <div th:each="message : ${messages}" class="message-item">
+                                <!-- Message Header -->
+                                <div class="message-header">
+                                    <div class="d-flex align-items-center flex-grow-1">
+                                        <!-- Sender Info -->
+                                        <div class="sender-info">
+                                            <div class="sender-avatar" th:if="${message.sender != null}">
+                                                <span th:text="${#strings.substring(message.sender.username, 0, 1).toUpperCase()}">U</span>
+                                            </div>
+                                            <div class="sender-avatar" th:unless="${message.sender != null}" style="background: #6c757d;">
+                                                <span th:if="${message.senderName != null}" th:text="${#strings.substring(message.senderName, 0, 1).toUpperCase()}">A</span>
+                                                <i th:unless="${message.senderName != null}" class="bi bi-person"></i>
+                                            </div>
+                                            <div>
+                                                <strong th:if="${message.sender != null}" th:text="${message.sender.username}">Username</strong>
+                                                <strong th:unless="${message.sender != null}">
+                                                    <span th:if="${message.senderName != null}" th:text="${message.senderName}">Anonymous User</span>
+                                                    <span th:unless="${message.senderName != null}">Anonymous User</span>
+                                                </strong>
+                                                <div class="text-muted small" th:if="${message.sender == null && message.senderEmail != null}">
+                                                    <i class="bi bi-envelope me-1"></i>
+                                                    <span th:text="${message.senderEmail}">email@example.com</span>
+                                                </div>
+                                                <div class="text-muted small">
+                                                    <i class="bi bi-clock me-1"></i>
+                                                    <span th:text="${#dates.format(message.createdAt, 'yyyy/MM/dd HH:mm')}">Date</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Unread Badge -->
+                                    <div th:if="${!message.isRead}">
+                                        <span class="badge bg-primary">New</span>
+                                    </div>
+                                </div>
+                                
+                                <!-- Message Content -->
+                                <div class="message-content">
+                                    <p th:text="${message.content}" class="mb-2" style="font-size: 0.9rem; line-height: 1.4;">Message content here...</p>
+                                    
+                                    <!-- Ad Info -->
+                                    <div class="ad-info">
+                                        <div class="d-flex align-items-center">
+                                            <i class="bi bi-megaphone me-1 text-primary" style="font-size: 0.875rem;"></i>
+                                            <div>
+                                                <span class="fw-medium">Ad:</span>
+                                                <a th:href="@{'/ads/' + ${message.ad.id}}" 
+                                                   th:text="${message.ad.title}" 
+                                                   class="text-decoration-none ms-1">Ad Title</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Message Actions -->
+                                <div class="message-actions" th:if="${!message.isRead}">
+                                    <form th:action="@{'/messages/mark-read/' + ${message.id}}" method="post" class="d-inline">
+                                        <button type="submit" class="btn btn-mark-read btn-sm">
+                                            <i class="bi bi-check2"></i> Mark as Read
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Sent Messages -->
+                        <div th:if="${activeTab == 'sent'}">
+                            <div th:if="${#lists.isEmpty(messages)}">
+                                <div class="empty-state">
+                                    <i class="bi bi-send"></i>
+                                    <h4>No messages sent yet</h4>
+                                    <p>Messages you send to other users will appear here.</p>
+                                </div>
+                            </div>
+
+                            <div th:each="message : ${messages}" class="message-item">
+                                <!-- Message Header -->
+                                <div class="message-header">
+                                    <div class="sender-info">
+                                        <div class="sender-avatar">
+                                            <span th:text="${#strings.substring(message.receiver.username, 0, 1).toUpperCase()}">U</span>
+                                        </div>
+                                        <div>
+                                            <strong>To: <span th:text="${message.receiver.username}">Username</span></strong>
+                                            <div class="text-muted small">
+                                                <i class="bi bi-clock me-1"></i>
+                                                <span th:text="${#dates.format(message.createdAt, 'yyyy/MM/dd HH:mm')}">Date</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Message Content -->
+                                <div class="message-content">
+                                    <p th:text="${message.content}" class="mb-2" style="font-size: 0.9rem; line-height: 1.4;">Message content here...</p>
+                                    
+                                    <!-- Ad Info -->
+                                    <div class="ad-info">
+                                        <div class="d-flex align-items-center">
+                                            <i class="bi bi-megaphone me-1 text-primary" style="font-size: 0.875rem;"></i>
+                                            <div>
+                                                <span class="fw-medium">Ad:</span>
+                                                <a th:href="@{'/ads/' + ${message.ad.id}}" 
+                                                   th:text="${message.ad.title}" 
+                                                   class="text-decoration-none ms-1">Ad Title</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

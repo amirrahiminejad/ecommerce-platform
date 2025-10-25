@@ -1,0 +1,277 @@
+<!-- 
+    Integration Example: How to use Image Upload Component in your forms
+    
+    This example shows how to integrate the image upload component into your existing forms
+    without changing any backend code.
+-->
+
+<!-- Include the component CSS and JS (add to your layout template) -->
+<!--
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<script src="/js/image-upload-component.js"></script>
+-->
+
+<!-- Example 1: Simple Integration -->
+<form action="/ads/create" method="post" enctype="multipart/form-data">
+    <div class="mb-3">
+        <label for="title" class="form-label">Ad Title</label>
+        <input type="text" class="form-control" id="title" name="title" required>
+    </div>
+    
+    <div class="mb-3">
+        <label for="description" class="form-label">Description</label>
+        <textarea class="form-control" id="description" name="description" rows="4"></textarea>
+    </div>
+    
+    <!-- Image Upload Component -->
+    <div class="mb-3">
+        <label class="form-label">Images</label>
+        <div id="adImageUploader"></div>
+        <!-- Hidden inputs will be populated by the component -->
+        <div id="imageInputs"></div>
+    </div>
+    
+    <button type="submit" class="btn btn-primary">Create Ad</button>
+</form>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Initialize image uploader
+    const imageUploader = new ImageUploadManager('adImageUploader', {
+        maxFiles: 10,
+        maxFileSize: 5 * 1024 * 1024, // 5MB
+        theme: 'modern',
+        uploadUrl: '/api/images/upload', // Your upload endpoint
+        deleteUrl: '/api/images/delete'  // Your delete endpoint
+    });
+    
+    // When form is submitted, populate hidden inputs with image data
+    document.querySelector('form').addEventListener('submit', function(e) {
+        const uploadedImages = imageUploader.getUploadedImages();
+        const imageInputsContainer = document.getElementById('imageInputs');
+        
+        // Clear existing hidden inputs
+        imageInputsContainer.innerHTML = '';
+        
+        // Add hidden input for each uploaded image
+        uploadedImages.forEach((image, index) => {
+            const hiddenInput = document.createElement('input');
+            hiddenInput.type = 'hidden';
+            hiddenInput.name = `imageUrls[${index}]`;
+            hiddenInput.value = image.url; // or image.serverId
+            imageInputsContainer.appendChild(hiddenInput);
+        });
+    });
+});
+</script>
+
+<!-- ============================================================================ -->
+
+<!-- Example 2: Auto-Initialize with Data Attributes (Simplest Method) -->
+<form action="/profile/update" method="post">
+    <div class="mb-3">
+        <label for="name" class="form-label">Name</label>
+        <input type="text" class="form-control" id="name" name="name">
+    </div>
+    
+    <!-- Auto-initialized image uploader -->
+    <div class="mb-3">
+        <label class="form-label">Profile Pictures</label>
+        <div id="profileImageUploader" 
+             data-image-upload='{
+                "maxFiles": 3,
+                "maxFileSize": 2097152,
+                "theme": "minimal",
+                "uploadUrl": "/api/profile/images/upload",
+                "deleteUrl": "/api/profile/images/delete"
+             }'></div>
+    </div>
+    
+    <button type="submit" class="btn btn-success">Update Profile</button>
+</form>
+
+<!-- ============================================================================ -->
+
+<!-- Example 3: Load Existing Images -->
+<form action="/ads/edit/123" method="post">
+    <div class="mb-3">
+        <label for="title" class="form-label">Ad Title</label>
+        <input type="text" class="form-control" id="title" name="title" value="My Existing Ad">
+    </div>
+    
+    <div class="mb-3">
+        <label class="form-label">Images</label>
+        <div id="editImageUploader"></div>
+    </div>
+    
+    <button type="submit" class="btn btn-primary">Update Ad</button>
+</form>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const editImageUploader = new ImageUploadManager('editImageUploader', {
+        maxFiles: 8,
+        theme: 'default',
+        uploadUrl: '/api/images/upload',
+        deleteUrl: '/api/images/delete'
+    });
+    
+    // Load existing images (you would get this data from your backend)
+    const existingImages = [
+        {
+            id: 'existing1',
+            name: 'existing-image-1.jpg',
+            size: 245760,
+            status: 'success',
+            preview: '/uploads/images/existing-image-1.jpg',
+            url: '/uploads/images/existing-image-1.jpg',
+            serverId: 'img_123'
+        },
+        {
+            id: 'existing2',
+            name: 'existing-image-2.jpg', 
+            size: 189432,
+            status: 'success',
+            preview: '/uploads/images/existing-image-2.jpg',
+            url: '/uploads/images/existing-image-2.jpg',
+            serverId: 'img_124'
+        }
+    ];
+    
+    // Set existing images
+    editImageUploader.setImages(existingImages);
+});
+</script>
+
+<!-- ============================================================================ -->
+
+<!-- Example 4: Custom Event Handling -->
+<div class="mb-3">
+    <label class="form-label">Product Images</label>
+    <div id="productImageUploader"></div>
+    <div id="uploadStatus" class="mt-2"></div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const productUploader = new ImageUploadManager('productImageUploader', {
+        maxFiles: 15,
+        theme: 'modern',
+        uploadUrl: '/api/products/images/upload',
+        deleteUrl: '/api/products/images/delete'
+    });
+    
+    // Custom event handling (you can override methods)
+    const originalUploadImage = productUploader.uploadImage;
+    productUploader.uploadImage = async function(imageData) {
+        document.getElementById('uploadStatus').innerHTML = 
+            `<div class="alert alert-info">Uploading ${imageData.name}...</div>`;
+            
+        // Call original upload method
+        await originalUploadImage.call(this, imageData);
+        
+        document.getElementById('uploadStatus').innerHTML = 
+            `<div class="alert alert-success">Upload completed!</div>`;
+            
+        // Hide status after 3 seconds
+        setTimeout(() => {
+            document.getElementById('uploadStatus').innerHTML = '';
+        }, 3000);
+    };
+});
+</script>
+
+<!-- ============================================================================ -->
+
+<!-- Example 5: Backend Integration Helper -->
+<script>
+/**
+ * Helper class for backend integration
+ */
+class ImageUploadBackendHelper {
+    constructor(imageUploader) {
+        this.imageUploader = imageUploader;
+    }
+    
+    // Get data for form submission
+    getFormData() {
+        const uploadedImages = this.imageUploader.getUploadedImages();
+        return {
+            imageUrls: uploadedImages.map(img => img.url),
+            imageIds: uploadedImages.map(img => img.serverId),
+            imageNames: uploadedImages.map(img => img.name)
+        };
+    }
+    
+    // Create hidden inputs for form
+    createHiddenInputs(containerSelector) {
+        const container = document.querySelector(containerSelector);
+        const formData = this.getFormData();
+        
+        container.innerHTML = '';
+        
+        formData.imageUrls.forEach((url, index) => {
+            const input = document.createElement('input');
+            input.type = 'hidden';
+            input.name = `images[${index}].url`;
+            input.value = url;
+            container.appendChild(input);
+        });
+        
+        formData.imageIds.forEach((id, index) => {
+            const input = document.createElement('input');
+            input.type = 'hidden';
+            input.name = `images[${index}].id`;
+            input.value = id;
+            container.appendChild(input);
+        });
+    }
+    
+    // Send via AJAX
+    async submitWithImages(formData, url, method = 'POST') {
+        const imageData = this.getFormData();
+        const combinedData = { ...formData, ...imageData };
+        
+        const response = await fetch(url, {
+            method: method,
+            headers: {
+                'Content-Type': 'application/json',
+                'X-Requested-With': 'XMLHttpRequest'
+            },
+            body: JSON.stringify(combinedData)
+        });
+        
+        return response.json();
+    }
+}
+
+// Usage example:
+/*
+const imageUploader = new ImageUploadManager('myUploader');
+const backendHelper = new ImageUploadBackendHelper(imageUploader);
+
+// On form submit
+document.querySelector('form').addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    // Create hidden inputs
+    backendHelper.createHiddenInputs('#hiddenImageInputs');
+    
+    // Or submit via AJAX
+    const formData = new FormData(this);
+    const regularData = Object.fromEntries(formData.entries());
+    
+    backendHelper.submitWithImages(regularData, '/api/ads/create')
+        .then(result => {
+            console.log('Success:', result);
+            // Handle success
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            // Handle error
+        });
+});
+*/
+</script>

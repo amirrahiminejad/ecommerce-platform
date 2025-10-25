@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+</head>
+<body>
+
+<!-- Confirm Modal Component -->
+<div th:fragment="confirm-modal" class="modal fade" id="confirmModal" tabindex="-1" aria-labelledby="confirmModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <!-- Modal Header -->
+            <div class="modal-header border-0 pb-2">
+                <h5 class="modal-title fw-bold text-dark" id="confirmModalLabel">
+                    <i class="bi bi-exclamation-triangle-fill text-warning me-2"></i>
+                    <span id="confirmModalTitle">تایید عملیات</span>
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            
+            <!-- Modal Body -->
+            <div class="modal-body pt-2">
+                <div class="d-flex align-items-start">
+                    <div class="flex-shrink-0 me-3">
+                        <div class="bg-warning bg-opacity-10 rounded-circle p-2">
+                            <i class="bi bi-question-circle-fill text-warning fs-4"></i>
+                        </div>
+                    </div>
+                    <div class="flex-grow-1">
+                        <p class="mb-2 text-dark fw-medium" id="confirmModalMessage">
+                            آیا از انجام این عملیات اطمینان دارید؟
+                        </p>
+                        <p class="text-muted small mb-0" id="confirmModalDescription">
+                            این عملیات قابل بازگشت نیست.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Modal Footer -->
+            <div class="modal-footer border-0 pt-2">
+                <button type="button" class="btn btn-secondary btn-sm px-4" data-bs-dismiss="modal">
+                    <i class="bi bi-x-lg me-1"></i>
+                    انصراف
+                </button>
+                <button type="button" class="btn btn-danger btn-sm px-4" id="confirmModalConfirmBtn">
+                    <i class="bi bi-check-lg me-1"></i>
+                    <span id="confirmModalConfirmText">تایید</span>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Confirm Modal Styles -->
+<style>
+    #confirmModal .modal-content {
+        border-radius: 15px;
+        border: none;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+        font-family: 'Vazir', sans-serif;
+    }
+    
+    #confirmModal .modal-header {
+        background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+        border-radius: 15px 15px 0 0;
+        padding: 1.25rem 1.5rem;
+    }
+    
+    #confirmModal .modal-body {
+        padding: 1.5rem;
+        background: white;
+    }
+    
+    #confirmModal .modal-footer {
+        background: #f8f9fa;
+        border-radius: 0 0 15px 15px;
+        padding: 1rem 1.5rem;
+        gap: 0.5rem;
+    }
+    
+    #confirmModal .btn {
+        border-radius: 8px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        min-width: 90px;
+    }
+    
+    #confirmModal .btn:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+    
+    #confirmModal .btn-secondary {
+        background-color: #6c757d;
+        border-color: #6c757d;
+    }
+    
+    #confirmModal .btn-secondary:hover {
+        background-color: #545b62;
+        border-color: #545b62;
+    }
+    
+    #confirmModal .btn-danger {
+        background-color: #dc3545;
+        border-color: #dc3545;
+    }
+    
+    #confirmModal .btn-danger:hover {
+        background-color: #c82333;
+        border-color: #bd2130;
+    }
+    
+    #confirmModal .bg-warning {
+        background-color: rgba(255, 193, 7, 0.1) !important;
+    }
+    
+    #confirmModal .text-warning {
+        color: #f0ad4e !important;
+    }
+    
+    /* Animation for modal */
+    #confirmModal.fade .modal-dialog {
+        transform: scale(0.8) translateY(-20px);
+        transition: all 0.3s ease;
+    }
+    
+    #confirmModal.show .modal-dialog {
+        transform: scale(1) translateY(0);
+    }
+</style>
+
+<!-- Confirm Modal JavaScript -->
+<script th:fragment="confirm-modal-js">
+/**
+ * ConfirmModal Class - کامپوننت Modal تایید
+ */
+class ConfirmModal {
+    constructor() {
+        this.modal = null;
+        this.confirmCallback = null;
+        this.cancelCallback = null;
+        this.init();
+    }
+    
+    init() {
+        // دریافت modal element
+        this.modal = new bootstrap.Modal(document.getElementById('confirmModal'), {
+            keyboard: true,
+            backdrop: true,
+            focus: true
+        });
+        
+        // تنظیم event listeners
+        this.setupEventListeners();
+    }
+    
+    setupEventListeners() {
+        const confirmBtn = document.getElementById('confirmModalConfirmBtn');
+        const modalElement = document.getElementById('confirmModal');
+        
+        // رویداد کلیک دکمه تایید
+        confirmBtn?.addEventListener('click', () => {
+            this.hide();
+            if (this.confirmCallback && typeof this.confirmCallback === 'function') {
+                this.confirmCallback();
+            }
+        });
+        
+        // رویداد بسته شدن modal
+        modalElement?.addEventListener('hidden.bs.modal', () => {
+            if (this.cancelCallback && typeof this.cancelCallback === 'function') {
+                this.cancelCallback();
+            }
+            this.reset();
+        });
+    }
+    
+    /**
+     * نمایش modal تایید
+     * @param {Object} options - تنظیمات modal
+     */
+    show(options = {}) {
+        const {
+            title = 'تایید عملیات',
+            message = 'آیا از انجام این عملیات اطمینان دارید؟',
+            description = 'این عملیات قابل بازگشت نیست.',
+            confirmText = 'تایید',
+            confirmClass = 'btn-danger',
+            onConfirm = null,
+            onCancel = null
+        } = options;
+        
+        // تنظیم محتوای modal
+        this.setContent(title, message, description, confirmText, confirmClass);
+        
+        // تنظیم callback ها
+        this.confirmCallback = onConfirm;
+        this.cancelCallback = onCancel;
+        
+        // نمایش modal
+        this.modal.show();
+    }
+    
+    /**
+     * تنظیم محتوای modal
+     */
+    setContent(title, message, description, confirmText, confirmClass) {
+        document.getElementById('confirmModalTitle').textContent = title;
+        document.getElementById('confirmModalMessage').textContent = message;
+        document.getElementById('confirmModalDescription').textContent = description;
+        document.getElementById('confirmModalConfirmText').textContent = confirmText;
+        
+        // تنظیم کلاس دکمه تایید
+        const confirmBtn = document.getElementById('confirmModalConfirmBtn');
+        confirmBtn.className = `btn btn-sm px-4 ${confirmClass}`;
+    }
+    
+    /**
+     * مخفی کردن modal
+     */
+    hide() {
+        this.modal.hide();
+    }
+    
+    /**
+     * ریست کردن وضعیت modal
+     */
+    reset() {
+        this.confirmCallback = null;
+        this.cancelCallback = null;
+    }
+}
+
+// ایجاد instance سراسری
+let confirmModal;
+
+// مقداردهی اولیه پس از بارگذاری DOM
+document.addEventListener('DOMContentLoaded', function() {
+    if (typeof bootstrap !== 'undefined' && document.getElementById('confirmModal')) {
+        confirmModal = new ConfirmModal();
+    }
+});
+
+/**
+ * تابع کمکی برای نمایش سریع modal تایید
+ * @param {string} message - پیام تایید
+ * @param {Function} onConfirm - تابع پس از تایید
+ * @param {Object} options - تنظیمات اضافی
+ */
+function showConfirm(message, onConfirm, options = {}) {
+    if (!confirmModal) {
+        console.error('ConfirmModal is not initialized');
+        return;
+    }
+    
+    confirmModal.show({
+        message: message,
+        onConfirm: onConfirm,
+        ...options
+    });
+}
+
+/**
+ * تابع کمکی برای تایید حذف
+ * @param {string} itemName - نام آیتم برای حذف
+ * @param {Function} onConfirm - تابع حذف
+ */
+function confirmDelete(itemName, onConfirm) {
+    showConfirm(
+        `آیا از حذف "${itemName}" اطمینان دارید؟`,
+        onConfirm,
+        {
+            title: 'تایید حذف',
+            description: 'این عملیات قابل بازگشت نیست و تمام اطلاعات مرتبط حذف خواهد شد.',
+            confirmText: 'حذف کن',
+            confirmClass: 'btn-danger'
+        }
+    );
+}
+
+/**
+ * تابع کمکی برای تایید عملیات خروج
+ * @param {Function} onConfirm - تابع خروج
+ */
+function confirmLogout(onConfirm) {
+    showConfirm(
+        'آیا می‌خواهید از حساب کاربری خود خارج شوید؟',
+        onConfirm,
+        {
+            title: 'خروج از حساب',
+            description: 'باید مجدداً وارد سیستم شوید.',
+            confirmText: 'خروج',
+            confirmClass: 'btn-warning'
+        }
+    );
+}
+</script>
+
+</body>
+</html>

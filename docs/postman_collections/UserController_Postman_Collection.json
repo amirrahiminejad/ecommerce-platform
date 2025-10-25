@@ -1,0 +1,450 @@
+{
+    "info": {
+        "name": "UserController API",
+        "description": "Postman collection for User Management API endpoints - CRUD operations, role management, password management",
+        "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+    },
+    "item": [
+        {
+            "name": "Get All Users",
+            "request": {
+                "method": "GET",
+                "header": [
+                    {
+                        "key": "Authorization",
+                        "value": "Bearer {{jwt_token}}"
+                    }
+                ],
+                "url": {
+                    "raw": "{{baseUrl}}/api/acl/users?page=0&size=10",
+                    "host": [
+                        "{{baseUrl}}"
+                    ],
+                    "path": [
+                        "api",
+                        "acl",
+                        "users"
+                    ],
+                    "query": [
+                        {
+                            "key": "page",
+                            "value": "0"
+                        },
+                        {
+                            "key": "size",
+                            "value": "10"
+                        }
+                    ]
+                },
+                "description": "Get paginated list of all users (Admin only)"
+            }
+        },
+        {
+            "name": "Get User By ID",
+            "request": {
+                "method": "GET",
+                "header": [
+                    {
+                        "key": "Authorization",
+                        "value": "Bearer {{jwt_token}}"
+                    }
+                ],
+                "url": {
+                    "raw": "{{baseUrl}}/api/acl/users/{{userId}}",
+                    "host": [
+                        "{{baseUrl}}"
+                    ],
+                    "path": [
+                        "api",
+                        "acl",
+                        "users",
+                        "{{userId}}"
+                    ]
+                },
+                "description": "Get specific user by ID"
+            }
+        },
+        {
+            "name": "Create New User",
+            "request": {
+                "method": "POST",
+                "header": [
+                    {
+                        "key": "Authorization",
+                        "value": "Bearer {{jwt_token}}"
+                    },
+                    {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                    }
+                ],
+                "body": {
+                    "mode": "raw",
+                    "raw": "{\n    \"username\": \"testuser\",\n    \"email\": \"testuser@example.com\",\n    \"password\": \"password123\",\n    \"firstName\": \"Test\",\n    \"lastName\": \"User\"\n}"
+                },
+                "url": {
+                    "raw": "{{baseUrl}}/api/acl/users",
+                    "host": [
+                        "{{baseUrl}}"
+                    ],
+                    "path": [
+                        "api",
+                        "acl",
+                        "users"
+                    ]
+                },
+                "description": "Create a new user (Admin only)"
+            }
+        },
+        {
+            "name": "Update User",
+            "request": {
+                "method": "PUT",
+                "header": [
+                    {
+                        "key": "Authorization",
+                        "value": "Bearer {{jwt_token}}"
+                    },
+                    {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                    }
+                ],
+                "body": {
+                    "mode": "raw",
+                    "raw": "{\n    \"email\": \"updated@example.com\",\n    \"firstName\": \"Updated\",\n    \"lastName\": \"User\",\n    \"status\": \"ACTIVE\"\n}"
+                },
+                "url": {
+                    "raw": "{{baseUrl}}/api/acl/users/{{userId}}",
+                    "host": [
+                        "{{baseUrl}}"
+                    ],
+                    "path": [
+                        "api",
+                        "acl",
+                        "users",
+                        "{{userId}}"
+                    ]
+                },
+                "description": "Update user information"
+            }
+        },
+        {
+            "name": "Assign Roles to User",
+            "request": {
+                "method": "POST",
+                "header": [
+                    {
+                        "key": "Authorization",
+                        "value": "Bearer {{jwt_token}}"
+                    },
+                    {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                    }
+                ],
+                "body": {
+                    "mode": "raw",
+                    "raw": "[\"CUSTOMER\", \"SELLER\"]"
+                },
+                "url": {
+                    "raw": "{{baseUrl}}/api/acl/users/{{userId}}/roles",
+                    "host": [
+                        "{{baseUrl}}"
+                    ],
+                    "path": [
+                        "api",
+                        "acl",
+                        "users",
+                        "{{userId}}",
+                        "roles"
+                    ]
+                },
+                "description": "Assign multiple roles to user (Admin only)"
+            }
+        },
+        {
+            "name": "Add Single Role to User",
+            "request": {
+                "method": "POST",
+                "header": [
+                    {
+                        "key": "Authorization",
+                        "value": "Bearer {{jwt_token}}"
+                    }
+                ],
+                "url": {
+                    "raw": "{{baseUrl}}/api/acl/users/{{userId}}/roles/CUSTOMER",
+                    "host": [
+                        "{{baseUrl}}"
+                    ],
+                    "path": [
+                        "api",
+                        "acl",
+                        "users",
+                        "{{userId}}",
+                        "roles",
+                        "CUSTOMER"
+                    ]
+                },
+                "description": "Add single role to user (Admin only)"
+            }
+        },
+        {
+            "name": "Remove Role from User",
+            "request": {
+                "method": "DELETE",
+                "header": [
+                    {
+                        "key": "Authorization",
+                        "value": "Bearer {{jwt_token}}"
+                    }
+                ],
+                "url": {
+                    "raw": "{{baseUrl}}/api/acl/users/{{userId}}/roles/CUSTOMER",
+                    "host": [
+                        "{{baseUrl}}"
+                    ],
+                    "path": [
+                        "api",
+                        "acl",
+                        "users",
+                        "{{userId}}",
+                        "roles",
+                        "CUSTOMER"
+                    ]
+                },
+                "description": "Remove role from user (Admin only)"
+            }
+        },
+        {
+            "name": "Change User Password",
+            "request": {
+                "method": "POST",
+                "header": [
+                    {
+                        "key": "Authorization",
+                        "value": "Bearer {{jwt_token}}"
+                    },
+                    {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                    }
+                ],
+                "body": {
+                    "mode": "raw",
+                    "raw": "{\n    \"currentPassword\": \"oldpassword\",\n    \"newPassword\": \"newpassword123\"\n}"
+                },
+                "url": {
+                    "raw": "{{baseUrl}}/api/acl/users/{{userId}}/change-password",
+                    "host": [
+                        "{{baseUrl}}"
+                    ],
+                    "path": [
+                        "api",
+                        "acl",
+                        "users",
+                        "{{userId}}",
+                        "change-password"
+                    ]
+                },
+                "description": "Change user password (requires current password)"
+            }
+        },
+        {
+            "name": "Reset User Password (Admin)",
+            "request": {
+                "method": "POST",
+                "header": [
+                    {
+                        "key": "Authorization",
+                        "value": "Bearer {{jwt_token}}"
+                    },
+                    {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                    }
+                ],
+                "body": {
+                    "mode": "raw",
+                    "raw": "{\n    \"newPassword\": \"resetpassword123\"\n}"
+                },
+                "url": {
+                    "raw": "{{baseUrl}}/api/acl/users/{{userId}}/reset-password",
+                    "host": [
+                        "{{baseUrl}}"
+                    ],
+                    "path": [
+                        "api",
+                        "acl",
+                        "users",
+                        "{{userId}}",
+                        "reset-password"
+                    ]
+                },
+                "description": "Reset user password (Admin only)"
+            }
+        },
+        {
+            "name": "Verify User Email",
+            "request": {
+                "method": "POST",
+                "header": [
+                    {
+                        "key": "Authorization",
+                        "value": "Bearer {{jwt_token}}"
+                    },
+                    {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                    }
+                ],
+                "body": {
+                    "mode": "raw",
+                    "raw": "{\n    \"verificationCode\": \"123456\"\n}"
+                },
+                "url": {
+                    "raw": "{{baseUrl}}/api/acl/users/{{userId}}/verify-email",
+                    "host": [
+                        "{{baseUrl}}"
+                    ],
+                    "path": [
+                        "api",
+                        "acl",
+                        "users",
+                        "{{userId}}",
+                        "verify-email"
+                    ]
+                },
+                "description": "Verify user email with verification code"
+            }
+        },
+        {
+            "name": "Verify User Phone",
+            "request": {
+                "method": "POST",
+                "header": [
+                    {
+                        "key": "Authorization",
+                        "value": "Bearer {{jwt_token}}"
+                    },
+                    {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                    }
+                ],
+                "body": {
+                    "mode": "raw",
+                    "raw": "{\n    \"verificationCode\": \"123456\"\n}"
+                },
+                "url": {
+                    "raw": "{{baseUrl}}/api/acl/users/{{userId}}/verify-phone",
+                    "host": [
+                        "{{baseUrl}}"
+                    ],
+                    "path": [
+                        "api",
+                        "acl",
+                        "users",
+                        "{{userId}}",
+                        "verify-phone"
+                    ]
+                },
+                "description": "Verify user phone with verification code"
+            }
+        },
+        {
+            "name": "Get Users By Role",
+            "request": {
+                "method": "GET",
+                "header": [
+                    {
+                        "key": "Authorization",
+                        "value": "Bearer {{jwt_token}}"
+                    }
+                ],
+                "url": {
+                    "raw": "{{baseUrl}}/api/acl/users/role/CUSTOMER",
+                    "host": [
+                        "{{baseUrl}}"
+                    ],
+                    "path": [
+                        "api",
+                        "acl",
+                        "users",
+                        "role",
+                        "CUSTOMER"
+                    ]
+                },
+                "description": "Get all users with specific role"
+            }
+        },
+        {
+            "name": "Get Users By Status",
+            "request": {
+                "method": "GET",
+                "header": [
+                    {
+                        "key": "Authorization",
+                        "value": "Bearer {{jwt_token}}"
+                    }
+                ],
+                "url": {
+                    "raw": "{{baseUrl}}/api/acl/users/status/ACTIVE",
+                    "host": [
+                        "{{baseUrl}}"
+                    ],
+                    "path": [
+                        "api",
+                        "acl",
+                        "users",
+                        "status",
+                        "ACTIVE"
+                    ]
+                },
+                "description": "Get all users with specific status"
+            }
+        },
+        {
+            "name": "Check User Permission",
+            "request": {
+                "method": "GET",
+                "header": [
+                    {
+                        "key": "Authorization",
+                        "value": "Bearer {{jwt_token}}"
+                    }
+                ],
+                "url": {
+                    "raw": "{{baseUrl}}/api/acl/users/{{userId}}/permissions/user/read",
+                    "host": [
+                        "{{baseUrl}}"
+                    ],
+                    "path": [
+                        "api",
+                        "acl",
+                        "users",
+                        "{{userId}}",
+                        "permissions",
+                        "user",
+                        "read"
+                    ]
+                },
+                "description": "Check if user has specific permission for resource and action"
+            }
+        }
+    ],
+    "variable": [
+        {
+            "key": "baseUrl",
+            "value": "http://localhost:8005",
+            "type": "string"
+        },
+        {
+            "key": "userId",
+            "value": "1",
+            "type": "string",
+            "description": "User ID for testing"
+        }
+    ]
+}

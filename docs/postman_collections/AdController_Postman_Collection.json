@@ -1,0 +1,271 @@
+{
+    "info": {
+        "name": "AdController API",
+        "description": "Postman collection for Advertisement Management API endpoints - Create, read, update, delete ads",
+        "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+    },
+    "item": [
+        {
+            "name": "Create New Ad",
+            "request": {
+                "method": "POST",
+                "header": [
+                    {
+                        "key": "Authorization",
+                        "value": "Bearer {{jwt_token}}"
+                    },
+                    {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                    }
+                ],
+                "body": {
+                    "mode": "raw",
+                    "raw": "{\n    \"categoryId\": 1,\n    \"title\": \"فروش خودرو پراید مدل 1400\",\n    \"description\": \"خودرو در حالت عالی، کم کارکرد، رنگ سفید، بیمه تا پایان سال\",\n    \"price\": 45000000,\n    \"location\": \"تهران، منطقه 3\",\n    \"tags\": [\"خودرو\", \"پراید\", \"1400\"]\n}"
+                },
+                "url": {
+                    "raw": "{{baseUrl}}/api/ads",
+                    "host": [
+                        "{{baseUrl}}"
+                    ],
+                    "path": [
+                        "api",
+                        "ads"
+                    ]
+                },
+                "description": "Create a new advertisement"
+            }
+        },
+        {
+            "name": "Update Ad",
+            "request": {
+                "method": "PUT",
+                "header": [
+                    {
+                        "key": "Authorization",
+                        "value": "Bearer {{jwt_token}}"
+                    },
+                    {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                    }
+                ],
+                "body": {
+                    "mode": "raw",
+                    "raw": "{\n    \"title\": \"فروش خودرو پراید مدل 1400 (به‌روزرسانی شده)\",\n    \"description\": \"خودرو در حالت عالی، کم کارکرد، رنگ سفید، بیمه تا پایان سال - قیمت قابل مذاکره\",\n    \"price\": 43000000,\n    \"location\": \"تهران، منطقه 3\"\n}"
+                },
+                "url": {
+                    "raw": "{{baseUrl}}/api/ads/{{adId}}",
+                    "host": [
+                        "{{baseUrl}}"
+                    ],
+                    "path": [
+                        "api",
+                        "ads",
+                        "{{adId}}"
+                    ]
+                },
+                "description": "Update existing advertisement (only owner or admin)"
+            }
+        },
+        {
+            "name": "Get Ad By ID",
+            "request": {
+                "method": "GET",
+                "header": [
+                    {
+                        "key": "Authorization",
+                        "value": "Bearer {{jwt_token}}"
+                    }
+                ],
+                "url": {
+                    "raw": "{{baseUrl}}/api/ads/{{adId}}",
+                    "host": [
+                        "{{baseUrl}}"
+                    ],
+                    "path": [
+                        "api",
+                        "ads",
+                        "{{adId}}"
+                    ]
+                },
+                "description": "Get specific advertisement by ID"
+            }
+        },
+        {
+            "name": "Get All Ads",
+            "request": {
+                "method": "GET",
+                "header": [
+                    {
+                        "key": "Authorization",
+                        "value": "Bearer {{jwt_token}}"
+                    }
+                ],
+                "url": {
+                    "raw": "{{baseUrl}}/api/ads?page=0&size=20",
+                    "host": [
+                        "{{baseUrl}}"
+                    ],
+                    "path": [
+                        "api",
+                        "ads"
+                    ],
+                    "query": [
+                        {
+                            "key": "page",
+                            "value": "0"
+                        },
+                        {
+                            "key": "size",
+                            "value": "20"
+                        }
+                    ]
+                },
+                "description": "Get paginated list of all advertisements"
+            }
+        },
+        {
+            "name": "Search Ads with Filters",
+            "request": {
+                "method": "GET",
+                "header": [
+                    {
+                        "key": "Authorization",
+                        "value": "Bearer {{jwt_token}}"
+                    }
+                ],
+                "url": {
+                    "raw": "{{baseUrl}}/api/ads?category=1&minPrice=30000000&maxPrice=50000000&location=تهران&page=0&size=20",
+                    "host": [
+                        "{{baseUrl}}"
+                    ],
+                    "path": [
+                        "api",
+                        "ads"
+                    ],
+                    "query": [
+                        {
+                            "key": "category",
+                            "value": "1"
+                        },
+                        {
+                            "key": "minPrice",
+                            "value": "30000000"
+                        },
+                        {
+                            "key": "maxPrice",
+                            "value": "50000000"
+                        },
+                        {
+                            "key": "location",
+                            "value": "تهران"
+                        },
+                        {
+                            "key": "page",
+                            "value": "0"
+                        },
+                        {
+                            "key": "size",
+                            "value": "20"
+                        }
+                    ]
+                },
+                "description": "Search advertisements with various filters"
+            }
+        },
+        {
+            "name": "Get User's Ads",
+            "request": {
+                "method": "GET",
+                "header": [
+                    {
+                        "key": "Authorization",
+                        "value": "Bearer {{jwt_token}}"
+                    }
+                ],
+                "url": {
+                    "raw": "{{baseUrl}}/api/ads/user/{{userId}}",
+                    "host": [
+                        "{{baseUrl}}"
+                    ],
+                    "path": [
+                        "api",
+                        "ads",
+                        "user",
+                        "{{userId}}"
+                    ]
+                },
+                "description": "Get all advertisements created by specific user"
+            }
+        },
+        {
+            "name": "Get My Ads",
+            "request": {
+                "method": "GET",
+                "header": [
+                    {
+                        "key": "Authorization",
+                        "value": "Bearer {{jwt_token}}"
+                    }
+                ],
+                "url": {
+                    "raw": "{{baseUrl}}/api/ads/user/me",
+                    "host": [
+                        "{{baseUrl}}"
+                    ],
+                    "path": [
+                        "api",
+                        "ads",
+                        "user",
+                        "me"
+                    ]
+                },
+                "description": "Get all advertisements created by current user"
+            }
+        },
+        {
+            "name": "Delete Ad",
+            "request": {
+                "method": "DELETE",
+                "header": [
+                    {
+                        "key": "Authorization",
+                        "value": "Bearer {{jwt_token}}"
+                    }
+                ],
+                "url": {
+                    "raw": "{{baseUrl}}/api/ads/{{adId}}",
+                    "host": [
+                        "{{baseUrl}}"
+                    ],
+                    "path": [
+                        "api",
+                        "ads",
+                        "{{adId}}"
+                    ]
+                },
+                "description": "Delete advertisement (only owner or admin)"
+            }
+        }
+    ],
+    "variable": [
+        {
+            "key": "baseUrl",
+            "value": "http://localhost:8005",
+            "type": "string"
+        },
+        {
+            "key": "adId",
+            "value": "1",
+            "type": "string",
+            "description": "Advertisement ID for testing"
+        },
+        {
+            "key": "userId",
+            "value": "1",
+            "type": "string",
+            "description": "User ID for testing"
+        }
+    ]
+}

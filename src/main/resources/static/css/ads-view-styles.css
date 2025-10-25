@@ -1,0 +1,571 @@
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: #f8f9fa;
+}
+
+.navbar {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.navbar-brand {
+    font-weight: bold;
+    font-size: 1.5rem;
+    color: white !important;
+}
+
+.breadcrumb-custom {
+    background: white;
+    border-radius: 15px;
+    padding: 1rem 1.5rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+}
+
+.breadcrumb-custom .breadcrumb-item + .breadcrumb-item::before {
+    content: "→";
+}
+
+.ad-detail-card {
+    background: white;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    overflow: hidden;
+    margin-bottom: 2rem;
+}
+
+.image-slider {
+    position: relative;
+    height: 400px;
+    overflow: hidden;
+}
+
+.carousel-item img {
+    width: 100%;
+    height: 400px;
+    object-fit: cover;
+}
+
+.carousel-control-prev,
+.carousel-control-next {
+    width: 5%;
+    background: rgba(0,0,0,0.3);
+}
+
+.carousel-indicators {
+    bottom: 20px;
+}
+
+.carousel-indicators button {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    margin: 0 3px;
+}
+
+.no-image-placeholder {
+    height: 400px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 4rem;
+}
+
+.ad-content {
+    padding: 2rem;
+}
+
+.ad-title {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #2c3e50;
+    margin-bottom: 1rem;
+}
+
+.ad-price {
+    font-size: 2.5rem;
+    font-weight: 800;
+    color: #27ae60;
+    margin-bottom: 1rem;
+}
+
+.negotiable-badge {
+    background: #f39c12;
+    color: white;
+    padding: 0.3rem 0.8rem;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    margin-right: 1rem;
+}
+
+.ad-meta {
+    background: #f8f9fa;
+    border-radius: 15px;
+    padding: 1.5rem;
+    margin: 2rem 0;
+}
+
+.meta-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem 0;
+    border-bottom: 1px solid #e9ecef;
+}
+
+.meta-item:last-child {
+    border-bottom: none;
+}
+
+.meta-label {
+    font-weight: 600;
+    color: #6c757d;
+}
+
+.meta-value {
+    font-weight: 600;
+    color: #495057;
+}
+
+.ad-description {
+    line-height: 1.8;
+    font-size: 1.1rem;
+    color: #495057;
+    white-space: pre-line;
+}
+
+.user-info-card {
+    background: white;
+    border-radius: 20px;
+    padding: 2rem;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+    margin-bottom: 2rem;
+}
+
+.user-avatar {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 2rem;
+    font-weight: bold;
+    margin-bottom: 1rem;
+}
+
+.user-name {
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: #2c3e50;
+    margin-bottom: 0.5rem;
+}
+
+.user-join-date {
+    color: #6c757d;
+    font-size: 0.9rem;
+}
+
+.contact-buttons {
+    margin-top: 2rem;
+}
+
+.btn-contact {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border: none;
+    border-radius: 15px;
+    padding: 1rem 2rem;
+    color: white;
+    font-weight: 600;
+    transition: all 0.3s;
+    margin-bottom: 1rem;
+    width: 100%;
+}
+
+.btn-contact:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
+    color: white;
+}
+
+.btn-phone {
+    background: #28a745;
+    border: none;
+    border-radius: 15px;
+    padding: 1rem 2rem;
+    color: white;
+    font-weight: 600;
+    transition: all 0.3s;
+    width: 100%;
+}
+
+.btn-phone:hover {
+    background: #218838;
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px rgba(40, 167, 69, 0.3);
+    color: white;
+}
+
+.status-badge {
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+.status-approved {
+    background: #d4edda;
+    color: #155724;
+}
+
+.status-pending {
+    background: #fff3cd;
+    color: #856404;
+}
+
+.status-rejected {
+    background: #f8d7da;
+    color: #721c24;
+}
+
+.views-count {
+    color: #6c757d;
+    font-size: 0.9rem;
+}
+
+.back-button {
+    background: #6c757d;
+    border: none;
+    border-radius: 15px;
+    padding: 0.75rem 1.5rem;
+    color: white;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.3s;
+}
+
+.back-button:hover {
+    background: #5a6268;
+    transform: translateY(-2px);
+    color: white;
+}
+
+.similar-ads {
+    background: white;
+    border-radius: 20px;
+    padding: 2rem;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+}
+
+.similar-ad-item {
+    border-bottom: 1px solid #e9ecef;
+    padding: 1rem 0;
+    transition: all 0.3s;
+}
+
+.similar-ad-item:last-child {
+    border-bottom: none;
+}
+
+.similar-ad-item:hover {
+    background: #f8f9fa;
+    border-radius: 10px;
+    padding: 1rem;
+    margin: 0 -1rem;
+}
+
+.similar-ad-title {
+    font-weight: 600;
+    color: #2c3e50;
+    text-decoration: none;
+    font-size: 1rem;
+}
+
+.similar-ad-price {
+    font-weight: 700;
+    color: #27ae60;
+    font-size: 1.1rem;
+}
+
+/* Email Button */
+.btn-email {
+    background: linear-gradient(135deg, #ea4335 0%, #d33b2c 100%);
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 10px;
+    font-weight: 600;
+    width: 100%;
+    margin-top: 10px;
+    transition: all 0.3s ease;
+}
+
+.btn-email:hover {
+    background: linear-gradient(135deg, #d33b2c 0%, #b52d20 100%);
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(234, 67, 53, 0.4);
+}
+
+/* Social Media Section */
+.social-media-section {
+    margin-top: 20px;
+    padding: 20px;
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    border-radius: 15px;
+    border: 1px solid #dee2e6;
+}
+
+.social-media-section .section-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: #495057;
+    margin-bottom: 15px;
+    text-align: center;
+}
+
+.social-links {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.social-link {
+    display: flex;
+    align-items: center;
+    padding: 12px 15px;
+    border-radius: 10px;
+    text-decoration: none;
+    color: white;
+    font-weight: 500;
+    font-size: 14px;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.social-link::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+    transition: left 0.5s;
+}
+
+.social-link:hover::before {
+    left: 100%;
+}
+
+.social-link i {
+    margin-right: 10px;
+    font-size: 16px;
+}
+
+.social-link.linkedin {
+    background: linear-gradient(135deg, #0077b5 0%, #005885 100%);
+}
+
+.social-link.linkedin:hover {
+    background: linear-gradient(135deg, #005885 0%, #004060 100%);
+    color: white;
+    transform: translateX(5px);
+}
+
+.social-link.facebook {
+    background: linear-gradient(135deg, #4267B2 0%, #365899 100%);
+}
+
+.social-link.facebook:hover {
+    background: linear-gradient(135deg, #365899 0%, #2d4373 100%);
+    color: white;
+    transform: translateX(5px);
+}
+
+.social-link.instagram {
+    background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
+}
+
+.social-link.instagram:hover {
+    background: linear-gradient(45deg, #e6683c 0%, #dc2743 25%, #cc2366 50%, #bc1888 75%, #8c0a60 100%);
+    color: white;
+    transform: translateX(5px);
+}
+
+.social-link.whatsapp {
+    background: linear-gradient(45deg, #25D366 0%, #128C7E 100%);
+}
+
+.social-link.whatsapp:hover {
+    background: linear-gradient(45deg, #128C7E 0%, #0D7A6B 100%);
+    color: white;
+    transform: translateX(5px);
+}
+
+.social-link.telegram {
+    background: linear-gradient(45deg, #0088cc 0%, #005580 100%);
+}
+
+.social-link.telegram:hover {
+    background: linear-gradient(45deg, #005580 0%, #003d5c 100%);
+    color: white;
+    transform: translateX(5px);
+}
+
+/* Contact Information Section */
+.contact-info-section {
+    margin-top: 20px;
+    padding: 20px;
+    background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+    border-radius: 15px;
+    border: 1px solid #dee2e6;
+}
+
+.contact-info-section .section-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: #495057;
+    margin-bottom: 15px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #e9ecef;
+}
+
+.contact-info {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.contact-item {
+    display: flex;
+    align-items: center;
+    padding: 10px 0;
+    font-size: 13px;
+}
+
+.contact-item i {
+    color: #6c757d;
+    margin-right: 10px;
+    width: 16px;
+    font-size: 14px;
+}
+
+.contact-label {
+    font-weight: 600;
+    color: #495057;
+    margin-right: 8px;
+    min-width: 70px;
+}
+
+.contact-value {
+    color: #6c757d;
+    flex: 1;
+}
+
+.contact-value.phone-hidden {
+    color: #007bff;
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+.contact-value.phone-hidden:hover {
+    color: #0056b3;
+}
+
+.contact-value.phone-revealed {
+    color: #28a745;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.contact-value.phone-revealed:hover {
+    color: #1e7e34;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .social-links {
+        gap: 8px;
+    }
+    
+    .social-link {
+        padding: 10px 12px;
+        font-size: 13px;
+    }
+    
+    .contact-info-section,
+    .social-media-section {
+        padding: 15px;
+        margin-top: 15px;
+    }
+    
+    .contact-item {
+        font-size: 12px;
+    }
+    
+    .contact-label {
+        min-width: 60px;
+    }
+}
+
+/* Favorite Button Styles */
+.btn-favorite {
+    background: linear-gradient(135deg, #e91e63 0%, #c2185b 100%);
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 10px;
+    font-weight: 600;
+    transition: all 0.3s;
+    width: 100%;
+    margin-top: 10px;
+}
+
+.btn-favorite:hover {
+    background: linear-gradient(135deg, #c2185b 0%, #ad1457 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px rgba(233, 30, 99, 0.3);
+    color: white;
+}
+
+.btn-favorite.favorited {
+    background: linear-gradient(135deg, #f44336 0%, #d32f2f 100%);
+}
+
+.btn-favorite.favorited:hover {
+    background: linear-gradient(135deg, #d32f2f 0%, #c62828 100%);
+    box-shadow: 0 10px 25px rgba(244, 67, 54, 0.3);
+}
+
+.btn-favorite .bi-heart-fill {
+    color: white;
+}
+
+/* Loading state for favorite button */
+.btn-favorite.loading {
+    opacity: 0.7;
+    pointer-events: none;
+}
+
+.btn-favorite.loading::after {
+    content: "";
+    width: 16px;
+    height: 16px;
+    margin-left: 10px;
+    border: 2px solid transparent;
+    border-top: 2px solid white;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    display: inline-block;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}

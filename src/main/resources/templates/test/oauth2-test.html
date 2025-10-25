@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تست OAuth2 - تاپ کالا</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+    <style>
+        body { font-family: 'Tahoma', sans-serif; background-color: #f8f9fa; }
+        .card { box-shadow: 0 0.125rem 0.25rem rgba(0,0,0,0.075); border: 1px solid rgba(0,0,0,0.125); }
+        .btn-google { background: #4285f4; color: white; border: none; }
+        .btn-google:hover { background: #357ae8; color: white; }
+        .status-success { color: #198754; }
+        .status-error { color: #dc3545; }
+        .test-result { padding: 10px; margin: 5px 0; border-radius: 5px; }
+        .test-success { background: #d1edff; border: 1px solid #b6d7ff; }
+        .test-error { background: #f8d7da; border: 1px solid #f5c6cb; }
+    </style>
+</head>
+<body>
+    <div class="container mt-4">
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header bg-primary text-white">
+                        <h4 class="mb-0">
+                            <i class="bi bi-google me-2"></i>
+                            تست سیستم ورود با Gmail
+                        </h4>
+                    </div>
+                    <div class="card-body">
+                        
+                        <!-- OAuth2 Login Test -->
+                        <div class="row mb-4">
+                            <div class="col-md-6">
+                                <h5>تست ورود با Gmail</h5>
+                                <p class="text-muted">برای تست ورود با Gmail روی دکمه زیر کلیک کنید:</p>
+                                <a href="/oauth2/authorization/google" class="btn btn-google btn-lg">
+                                    <i class="bi bi-google me-2"></i>
+                                    ورود با Gmail
+                                </a>
+                            </div>
+                            <div class="col-md-6">
+                                <h5>لینک‌های مفید</h5>
+                                <ul class="list-unstyled">
+                                    <li><a href="/auth/login" class="btn btn-outline-primary btn-sm mb-2">صفحه ورود عادی</a></li>
+                                    <li><a href="/profile" class="btn btn-outline-success btn-sm mb-2">پروفایل کاربر</a></li>
+                                    <li><a href="/" class="btn btn-outline-secondary btn-sm mb-2">صفحه اصلی</a></li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <hr>
+
+                        <!-- Configuration Test -->
+                        <div class="mb-4">
+                            <h5>تست تنظیمات</h5>
+                            <button class="btn btn-info" onclick="testConfig()">بررسی تنظیمات OAuth2</button>
+                            <div id="configResult" class="mt-3"></div>
+                        </div>
+
+                        <hr>
+
+                        <!-- OAuth2 Users Test -->
+                        <div class="mb-4">
+                            <h5>کاربران OAuth2</h5>
+                            <button class="btn btn-warning" onclick="testUsers()">مشاهده کاربران Gmail</button>
+                            <div id="usersResult" class="mt-3"></div>
+                        </div>
+
+                        <hr>
+
+                        <!-- Current User Info -->
+                        <div class="mb-4">
+                            <h5>اطلاعات کاربر فعلی</h5>
+                            <div class="alert alert-info">
+                                <div th:if="${#authentication.authenticated}">
+                                    <strong>وضعیت:</strong> وارد شده<br>
+                                    <strong>نام کاربری:</strong> <span th:text="${#authentication.name}">-</span><br>
+                                    <strong>نوع احراز هویت:</strong> 
+                                    <span th:if="${isOAuth2User}" class="badge bg-success">OAuth2 (Gmail)</span>
+                                    <span th:unless="${isOAuth2User}" class="badge bg-primary">عادی</span>
+                                </div>
+                                <div th:unless="${#authentication.authenticated}">
+                                    <strong>وضعیت:</strong> وارد نشده
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Environment Variables Check -->
+                        <div class="mb-4">
+                            <h5>بررسی متغیرهای محیطی</h5>
+                            <div class="alert alert-warning">
+                                <p><strong>توجه:</strong> اطمینان حاصل کنید که متغیرهای زیر تنظیم شده‌اند:</p>
+                                <ul>
+                                    <li><code>GOOGLE_CLIENT_ID</code></li>
+                                    <li><code>GOOGLE_CLIENT_SECRET</code></li>
+                                </ul>
+                                <p>برای اطلاعات بیشتر <a href="/docs/OAUTH2_SETUP.md" target="_blank">مستندات تنظیم</a> را مطالعه کنید.</p>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        async function testConfig() {
+            const resultDiv = document.getElementById('configResult');
+            resultDiv.innerHTML = '<div class="spinner-border spinner-border-sm" role="status"></div> در حال بررسی...';
+            
+            try {
+                const response = await fetch('/api/oauth2/config');
+                const data = await response.json();
+                
+                let html = '<div class="test-result test-success">';
+                html += '<h6><i class="bi bi-check-circle text-success"></i> تنظیمات OAuth2</h6>';
+                html += '<ul>';
+                html += `<li>وضعیت: ${data.oauth2Enabled ? 'فعال' : 'غیرفعال'}</li>`;
+                html += `<li>ارائه‌دهندگان پشتیبانی شده: ${data.supportedProviders.join(', ')}</li>`;
+                html += `<li>URL ورود: ${data.loginUrl}</li>`;
+                html += `<li>URL خروج: ${data.logoutUrl}</li>`;
+                html += '</ul>';
+                html += '</div>';
+                
+                resultDiv.innerHTML = html;
+            } catch (error) {
+                resultDiv.innerHTML = `<div class="test-result test-error">
+                    <h6><i class="bi bi-x-circle text-danger"></i> خطا در بررسی تنظیمات</h6>
+                    <p>Error: ${error.message}</p>
+                </div>`;
+            }
+        }
+
+        async function testUsers() {
+            const resultDiv = document.getElementById('usersResult');
+            resultDiv.innerHTML = '<div class="spinner-border spinner-border-sm" role="status"></div> در حال بارگذاری...';
+            
+            try {
+                const response = await fetch('/api/oauth2/users');
+                const data = await response.json();
+                
+                let html = '<div class="test-result test-success">';
+                html += `<h6><i class="bi bi-people text-success"></i> کاربران OAuth2 (${data.count} نفر)</h6>`;
+                
+                if (data.count === 0) {
+                    html += '<p class="text-muted">هنوز کاربری با Gmail وارد نشده است.</p>';
+                } else {
+                    html += '<div class="table-responsive">';
+                    html += '<table class="table table-sm">';
+                    html += '<thead><tr><th>ID</th><th>ایمیل</th><th>نام</th><th>ارائه‌دهنده</th><th>تأیید شده</th></tr></thead>';
+                    html += '<tbody>';
+                    data.users.forEach(user => {
+                        html += `<tr>`;
+                        html += `<td>${user.id}</td>`;
+                        html += `<td>${user.email}</td>`;
+                        html += `<td>${user.name}</td>`;
+                        html += `<td><span class="badge bg-primary">${user.provider}</span></td>`;
+                        html += `<td>${user.verified ? '<i class="bi bi-check-circle text-success"></i>' : '<i class="bi bi-x-circle text-danger"></i>'}</td>`;
+                        html += `</tr>`;
+                    });
+                    html += '</tbody></table>';
+                    html += '</div>';
+                }
+                
+                html += '</div>';
+                resultDiv.innerHTML = html;
+            } catch (error) {
+                resultDiv.innerHTML = `<div class="test-result test-error">
+                    <h6><i class="bi bi-x-circle text-danger"></i> خطا در بارگذاری کاربران</h6>
+                    <p>Error: ${error.message}</p>
+                </div>`;
+            }
+        }
+
+        // Auto test on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            testConfig();
+        });
+    </script>
+</body>
+</html>

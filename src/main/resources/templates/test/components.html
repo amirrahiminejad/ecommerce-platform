@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تست کامپوننت‌ها - تاپ کالا</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+    
+    <link href="/css/test-components-styles.css" rel="stylesheet">
+</head>
+<body>
+
+<div class="container-fluid">
+    <div class="test-container">
+        
+        <!-- Page Header -->
+        <div class="page-header">
+            <h1>
+                <i class="bi bi-gear-fill"></i>
+                تست کامپوننت‌های سیستم
+            </h1>
+            <p>صفحه تست و نمایش کامپوننت‌های قابل استفاده مجدد در پروژه تاپ کالا</p>
+        </div>
+        
+        <!-- Component 1: Confirm Modal -->
+        <div class="component-section">
+            <h3 class="component-title">
+                <i class="bi bi-exclamation-triangle-fill"></i>
+                کامپوننت Modal تایید (Confirm Modal)
+            </h3>
+            
+            <div class="description">
+                <i class="bi bi-info-circle"></i>
+                <strong>توضیح:</strong> یک modal قابل استفاده مجدد برای تایید عملیات‌های مختلف مانند حذف، خروج، ارسال و غیره.
+            </div>
+            
+            <div class="test-buttons">
+                <button type="button" class="btn btn-primary btn-test" onclick="testSimpleConfirm()">
+                    <i class="bi bi-check-circle me-2"></i>
+                    تایید ساده
+                </button>
+                
+                <button type="button" class="btn btn-danger btn-test" onclick="testDeleteConfirm()">
+                    <i class="bi bi-trash me-2"></i>
+                    تایید حذف
+                </button>
+                
+                <button type="button" class="btn btn-warning btn-test" onclick="testLogoutConfirm()">
+                    <i class="bi bi-box-arrow-right me-2"></i>
+                    تایید خروج
+                </button>
+                
+                <button type="button" class="btn btn-success btn-test" onclick="testCustomConfirm()">
+                    <i class="bi bi-gear me-2"></i>
+                    تایید سفارشی
+                </button>
+                
+                <button type="button" class="btn btn-info btn-test" onclick="testAdvancedConfirm()">
+                    <i class="bi bi-lightning me-2"></i>
+                    تایید پیشرفته
+                </button>
+            </div>
+            
+            <div class="code-example">
+<span class="comment">// مثال استفاده از تایید ساده</span>
+<span class="function">showConfirm</span>(<span class="string">'آیا از این عملیات اطمینان دارید؟'</span>, <span class="function">function</span>() {
+    <span class="function">console.log</span>(<span class="string">'کاربر تایید کرد!'</span>);
+});
+
+<span class="comment">// مثال تایید حذف</span>
+<span class="function">confirmDelete</span>(<span class="string">'آگهی پراید 131'</span>, <span class="function">function</span>() {
+    <span class="function">deleteItem</span>(123);
+});
+
+<span class="comment">// مثال تایید خروج</span>
+<span class="function">confirmLogout</span>(<span class="function">function</span>() {
+    window.location.href = <span class="string">'/auth/logout'</span>;
+});
+            </div>
+        </div>
+        
+        <!-- Component 2: Future Components Section -->
+        <div class="component-section">
+            <h3 class="component-title">
+                <i class="bi bi-plus-circle-fill"></i>
+                کامپوننت‌های آینده
+            </h3>
+            
+            <div class="description">
+                <i class="bi bi-clock"></i>
+                <strong>در حال توسعه:</strong> کامپوننت‌های جدید به مرور به این صفحه اضافه خواهند شد.
+            </div>
+            
+            <div class="row g-3">
+                <div class="col-md-3">
+                    <div class="stats-card">
+                        <div class="stats-number">1</div>
+                        <div class="stats-label">کامپوننت آماده</div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="stats-card">
+                        <div class="stats-number">5</div>
+                        <div class="stats-label">در دست توسعه</div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="stats-card">
+                        <div class="stats-number">∞</div>
+                        <div class="stats-label">ایده‌های جدید</div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="stats-card">
+                        <div class="stats-number">100%</div>
+                        <div class="stats-label">قابل استفاده مجدد</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="mt-3 text-center">
+                <button type="button" class="btn btn-outline-secondary" disabled>
+                    <i class="bi bi-hourglass-split me-2"></i>
+                    کامپوننت‌های بیشتر به زودی...
+                </button>
+            </div>
+        </div>
+        
+        <!-- Back to Home -->
+        <div class="text-center">
+            <a href="/" class="btn btn-outline-primary btn-lg">
+                <i class="bi bi-house me-2"></i>
+                بازگشت به صفحه اصلی
+            </a>
+        </div>
+        
+    </div>
+</div>
+
+<!-- Add Confirm Modal Component -->
+<div th:replace="~{components/confirm-modal :: confirm-modal}"></div>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- Confirm Modal JS -->
+<script th:replace="~{components/confirm-modal :: confirm-modal-js}"></script>
+
+<!-- Test Functions -->
+<script>
+// تابع تست تایید ساده
+function testSimpleConfirm() {
+    showConfirm('این یک تست ساده برای modal تایید است. آیا ادامه می‌دهید؟', function() {
+        alert('✅ تایید شد! کامپوننت به درستی کار می‌کند.');
+        console.log('Simple confirm test passed');
+    });
+}
+
+// تابع تست تایید حذف
+function testDeleteConfirm() {
+    confirmDelete('آگهی تست "فروش خودرو پراید 131"', function() {
+        alert('🗑️ عملیات حذف شبیه‌سازی شد!');
+        console.log('Delete confirm test passed');
+    });
+}
+
+// تابع تست تایید خروج
+function testLogoutConfirm() {
+    confirmLogout(function() {
+        alert('👋 شبیه‌سازی خروج از سیستم');
+        console.log('Logout confirm test passed');
+    });
+}
+
+// تابع تست تایید سفارشی
+function testCustomConfirm() {
+    showConfirm(
+        'آیا می‌خواهید تنظیمات جدید را اعمال کنید؟',
+        function() {
+            alert('⚙️ تنظیمات اعمال شد!');
+            console.log('Custom confirm test passed');
+        },
+        {
+            title: 'اعمال تنظیمات',
+            description: 'تغییرات بلافاصله اعمال خواهند شد.',
+            confirmText: 'اعمال کن',
+            confirmClass: 'btn-success'
+        }
+    );
+}
+
+// تابع تست تایید پیشرفته
+function testAdvancedConfirm() {
+    confirmModal.show({
+        title: 'عملیات پیچیده',
+        message: 'این عملیات ممکن است زمان‌بر باشد و منابع سیستم را مصرف کند.',
+        description: 'آیا مطمئن هستید که می‌خواهید ادامه دهید؟ این فرآیند قابل لغو نیست.',
+        confirmText: 'شروع عملیات',
+        confirmClass: 'btn-info',
+        onConfirm: function() {
+            // شبیه‌سازی عملیات طولانی
+            alert('🚀 عملیات پیچیده شروع شد!');
+            
+            setTimeout(() => {
+                alert('✨ عملیات با موفقیت تکمیل شد!');
+                console.log('Advanced confirm test passed');
+            }, 1000);
+        },
+        onCancel: function() {
+            console.log('Advanced confirm cancelled');
+        }
+    });
+}
+
+// نمایش پیام خوش آمدگویی
+document.addEventListener('DOMContentLoaded', function() {
+    setTimeout(() => {
+        console.log('🎉 صفحه تست کامپوننت‌ها آماده است!');
+        console.log('💡 برای تست هر کامپوننت روی دکمه‌های مربوطه کلیک کنید.');
+    }, 500);
+});
+</script>
+
+</body>
+</html>

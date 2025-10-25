@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ثبت محصول جدید - تاپ کالا</title>
+    
+    <!-- Bootstrap RTL CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.rtl.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <!-- Quill Rich Text Editor -->
+    <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+    <link href="/css/admin-product-create-styles.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <img src="/images/logo-persia-bazaar-small.png" alt="تاپ کالا" height="100" style="margin-bottom: 10px;">
+        </div>
+        
+        <ul class="sidebar-menu">
+            <li>
+                <a href="/admin/dashboard" th:href="@{/admin/dashboard}">
+                    <i class="fas fa-home"></i>
+                    <span>داشبورد</span>
+                </a>
+            </li>
+            <li>
+                <a href="/admin/users" th:href="@{/admin/users}">
+                    <i class="fas fa-users"></i>
+                    <span>کاربران</span>
+                </a>
+            </li>
+            <li>
+                <a href="/admin/products" th:href="@{/admin/products}" class="active">
+                    <i class="fas fa-box"></i>
+                    <span>محصولات</span>
+                </a>
+            </li>
+            <li>
+                <a href="/admin/ads" th:href="@{/admin/ads}">
+                    <i class="fas fa-bullhorn"></i>
+                    <span>آگهی‌ها</span>
+                </a>
+            </li>
+            <li>
+                <a href="/admin/settings" th:href="@{/admin/settings}">
+                    <i class="fas fa-cog"></i>
+                    <span>تنظیمات</span>
+                </a>
+            </li>
+            <li>
+                <a href="/admin/logout" th:href="@{/admin/logout}">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span>خروج</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+    
+    <!-- Main Content -->
+    <div class="main-content" id="main-content">
+        <!-- Top Navbar -->
+        <div class="top-navbar">
+            <div class="d-flex align-items-center">
+                <button class="sidebar-toggle" id="sidebar-toggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <div class="navbar-brand">ثبت محصول جدید</div>
+            </div>
+            
+            <div class="navbar-actions">
+                <div class="user-info">
+                    <div class="user-avatar">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <span>مدیر سیستم</span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Content Area -->
+        <div class="content-area">
+            <!-- Alert Messages -->
+            <div th:if="${successMessage}" class="alert alert-success alert-dismissible fade show">
+                <i class="fas fa-check-circle me-2"></i>
+                <span th:text="${successMessage}"></span>
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+            
+            <div th:if="${errorMessage}" class="alert alert-danger alert-dismissible fade show">
+                <i class="fas fa-exclamation-circle me-2"></i>
+                <span th:text="${errorMessage}"></span>
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+            
+            <!-- Create Form -->
+            <div class="form-container fade-in">
+                <div class="form-header">
+                    <h2 class="form-title">ثبت محصول جدید</h2>
+                    <p class="form-subtitle">اطلاعات محصول جدید را وارد کنید</p>
+                </div>
+                
+                <form th:action="@{/admin/products/create}" method="POST" enctype="multipart/form-data">
+                    <!-- Tab Navigation -->
+                    <div class="nav-tabs-container">
+                        <ul class="nav nav-tabs" id="productTabs" role="tablist">
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link active" id="basic-tab" data-bs-toggle="tab" data-bs-target="#basic" type="button" role="tab">
+                                    <i class="fas fa-info-circle"></i>
+                                    اطلاعات اصلی
+                                </button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="pricing-tab" data-bs-toggle="tab" data-bs-target="#pricing" type="button" role="tab">
+                                    <i class="fas fa-money-bill-wave"></i>
+                                    قیمت و موجودی
+                                </button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="dimensions-tab" data-bs-toggle="tab" data-bs-target="#dimensions" type="button" role="tab">
+                                    <i class="fas fa-cube"></i>
+                                    ابعاد و وزن
+                                </button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="images-tab" data-bs-toggle="tab" data-bs-target="#images" type="button" role="tab">
+                                    <i class="fas fa-images"></i>
+                                    تصاویر
+                                </button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="description-tab" data-bs-toggle="tab" data-bs-target="#description" type="button" role="tab">
+                                    <i class="fas fa-file-alt"></i>
+                                    توضیحات
+                                </button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="seo-tab" data-bs-toggle="tab" data-bs-target="#seo" type="button" role="tab">
+                                    <i class="fas fa-search"></i>
+                                    SEO
+                                </button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="settings-tab" data-bs-toggle="tab" data-bs-target="#settings" type="button" role="tab">
+                                    <i class="fas fa-cog"></i>
+                                    تنظیمات
+                                </button>
+                            </li>
+                        </ul>
+                    </div>
+                    
+                    <!-- Tab Content -->
+                    <div class="tab-content" id="productTabsContent">
+                        <!-- اطلاعات اصلی -->
+                        <div class="tab-pane fade show active" id="basic" role="tabpanel">
+                            <div class="form-section">
+                                <div class="form-grid">
+                                    <div class="form-group">
+                                        <label for="name" class="form-label">نام محصول <span class="required">*</span></label>
+                                        <input type="text" class="form-control" id="name" name="name" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="sku" class="form-label">کد محصول (SKU)</label>
+                                        <input type="text" class="form-control" id="sku" name="sku">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="category" class="form-label">دسته‌بندی <span class="required">*</span></label>
+                                        <select class="form-control" id="category" name="category.id" required>
+                                            <option value="">انتخاب دسته‌بندی</option>
+                                            <option th:each="category : ${categories}" 
+                                                    th:value="${category.id}" 
+                                                    th:text="${category.name}">دسته‌بندی</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="seller" class="form-label">فروشنده <span class="required">*</span></label>
+                                        <select class="form-control" id="seller" name="seller.id" required>
+                                            <option value="">انتخاب فروشنده</option>
+                                            <option th:each="user : ${users}" 
+                                                    th:value="${user.id}" 
+                                                    th:text="${user.firstName + ' ' + user.lastName}">فروشنده</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="status" class="form-label">وضعیت <span class="required">*</span></label>
+                                        <select class="form-control" id="status" name="status" required>
+                                            <option th:each="status : ${statuses}" 
+                                                    th:value="${status.name()}"
+                                                    th:text="${status.getDisplayName()}">وضعیت</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group full-width">
+                                        <label for="shortDescription" class="form-label">خلاصه محصول</label>
+                                        <textarea class="form-control" id="shortDescription" name="shortDescription" rows="3" placeholder="توضیح کوتاه در مورد محصول..."></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- قیمت و موجودی -->
+                        <div class="tab-pane fade" id="pricing" role="tabpanel">
+                            <div class="form-section">
+                                <div class="form-grid">
+                                    <div class="form-group">
+                                        <label for="price" class="form-label">قیمت (تومان) <span class="required">*</span></label>
+                                        <input type="number" class="form-control" id="price" name="price" min="0" step="1000" required placeholder="0">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="discountPrice" class="form-label">قیمت تخفیف (تومان)</label>
+                                        <input type="number" class="form-control" id="discountPrice" name="discountPrice" min="0" step="1000" placeholder="0">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="stockQuantity" class="form-label">موجودی <span class="required">*</span></label>
+                                        <input type="number" class="form-control" id="stockQuantity" name="stockQuantity" min="0" required placeholder="0">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="minStockLevel" class="form-label">حداقل موجودی</label>
+                                        <input type="number" class="form-control" id="minStockLevel" name="minStockLevel" min="0" value="5" placeholder="5">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- ابعاد و وزن -->
+                        <div class="tab-pane fade" id="dimensions" role="tabpanel">
+                            <div class="form-section">
+                                <div class="form-grid">
+                                    <div class="form-group">
+                                        <label for="weight" class="form-label">وزن (کیلوگرم)</label>
+                                        <input type="number" class="form-control" id="weight" name="weight" min="0" step="0.01" placeholder="0.00">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="length" class="form-label">طول (سانتی‌متر)</label>
+                                        <input type="number" class="form-control" id="length" name="length" min="0" step="0.1" placeholder="0.0">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="width" class="form-label">عرض (سانتی‌متر)</label>
+                                        <input type="number" class="form-control" id="width" name="width" min="0" step="0.1" placeholder="0.0">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="height" class="form-label">ارتفاع (سانتی‌متر)</label>
+                                        <input type="number" class="form-control" id="height" name="height" min="0" step="0.1" placeholder="0.0">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- تصاویر -->
+                        <div class="tab-pane fade" id="images" role="tabpanel">
+                            <div class="form-section">
+                                <div class="form-group">
+                                    <label for="images" class="form-label">تصاویر محصول</label>
+                                    <input type="file" class="form-control" id="images" name="images" multiple accept="image/*">
+                                    <div class="form-text">می‌توانید چندین تصویر انتخاب کنید. حداکثر حجم هر تصویر: 5MB</div>
+                                </div>
+                                
+                                <!-- Image Preview Container -->
+                                <div id="imagePreviewContainer" class="image-preview-container">
+                                    <!-- تصاویر انتخاب شده اینجا نمایش داده می‌شوند -->
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- توضیحات -->
+                        <div class="tab-pane fade" id="description" role="tabpanel">
+                            <div class="form-section">
+                                <div class="form-group">
+                                    <label for="description" class="form-label">توضیحات کامل محصول</label>
+                                    <div id="editor"></div>
+                                    <textarea class="form-control d-none" id="description" name="description"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- SEO -->
+                        <div class="tab-pane fade" id="seo" role="tabpanel">
+                            <div class="form-section">
+                                <div class="form-grid">
+                                    <div class="form-group">
+                                        <label for="metaTitle" class="form-label">عنوان SEO</label>
+                                        <input type="text" class="form-control" id="metaTitle" name="metaTitle" placeholder="عنوان برای موتورهای جستجو">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="slug" class="form-label">Slug</label>
+                                        <input type="text" class="form-control" id="slug" name="slug" placeholder="product-url-slug">
+                                    </div>
+                                    <div class="form-group full-width">
+                                        <label for="metaDescription" class="form-label">توضیحات SEO</label>
+                                        <textarea class="form-control" id="metaDescription" name="metaDescription" rows="3" placeholder="توضیحات برای موتورهای جستجو..."></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- تنظیمات -->
+                        <div class="tab-pane fade" id="settings" role="tabpanel">
+                            <div class="form-section">
+                                <div class="form-grid">
+                                    <div class="form-group">
+                                        <div class="form-check">
+                                            <input type="checkbox" class="form-check-input" id="isActive" name="isActive" checked>
+                                            <label class="form-check-label" for="isActive">فعال</label>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="form-check">
+                                            <input type="checkbox" class="form-check-input" id="isFeatured" name="isFeatured">
+                                            <label class="form-check-label" for="isFeatured">محصول ویژه</label>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="form-check">
+                                            <input type="checkbox" class="form-check-input" id="isDigital" name="isDigital">
+                                            <label class="form-check-label" for="isDigital">محصول دیجیتال</label>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="form-check">
+                                            <input type="checkbox" class="form-check-input" id="manageStock" name="manageStock" checked>
+                                            <label class="form-check-label" for="manageStock">مدیریت موجودی</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- دکمه‌های عملیات -->
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save me-2"></i>
+                            ثبت محصول
+                        </button>
+                        <a href="/admin/products" th:href="@{/admin/products}" class="btn btn-secondary">
+                            <i class="fas fa-arrow-right me-2"></i>
+                            انصراف
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Bootstrap JS -->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.quilljs.com/1.3.6/quill.min.js"></script>
+    
+    <script>
+        // Initialize when DOM is ready
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize Quill editor
+            var quill = new Quill('#editor', {
+                theme: 'snow',
+                direction: 'rtl',
+                modules: {
+                    toolbar: [
+                        [{ 'header': [1, 2, 3, false] }],
+                        ['bold', 'italic', 'underline', 'strike'],
+                        [{ 'color': [] }, { 'background': [] }],
+                        [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+                        [{ 'indent': '-1'}, { 'indent': '+1' }],
+                        [{ 'align': [] }],
+                        ['blockquote', 'code-block'],
+                        ['link', 'image'],
+                        ['clean']
+                    ]
+                },
+                placeholder: 'توضیحات کامل محصول را وارد کنید...'
+            });
+
+            // Sync Quill content with hidden textarea
+            quill.on('text-change', function() {
+                document.getElementById('description').value = quill.root.innerHTML;
+            });
+            
+            // Make quill globally accessible for form submission
+            window.productQuill = quill;
+
+            // Trigger stock status update
+            document.getElementById('stock').dispatchEvent(new Event('input'));
+        });
+
+        // Image preview functionality
+        function previewImages() {
+            const input = document.getElementById('images');
+            const previewContainer = document.getElementById('imagePreview');
+            
+            // Clear previous previews
+            previewContainer.innerHTML = '';
+            
+            if (input.files) {
+                Array.from(input.files).forEach((file, index) => {
+                    if (file.type.startsWith('image/')) {
+                        const reader = new FileReader();
+                        
+                        reader.onload = function(e) {
+                            const previewDiv = document.createElement('div');
+                            previewDiv.className = 'image-preview-item';
+                            
+                            previewDiv.innerHTML = `
+                                <img src="${e.target.result}" alt="Preview ${index + 1}">
+                                <div class="image-info">
+                                    <small>${file.name}</small>
+                                    <small>${(file.size / 1024).toFixed(1)} KB</small>
+                                </div>
+                                <button type="button" class="btn-remove" onclick="removeImage(${index})">
+                                    <i class="bi bi-x"></i>
+                                </button>
+                            `;
+                            
+                            previewContainer.appendChild(previewDiv);
+                        };
+                        
+                        reader.readAsDataURL(file);
+                    }
+                });
+            }
+        }
+
+        // Remove image from preview
+        function removeImage(index) {
+            const input = document.getElementById('images');
+            const dt = new DataTransfer();
+            
+            Array.from(input.files).forEach((file, i) => {
+                if (i !== index) {
+                    dt.items.add(file);
+                }
+            });
+            
+            input.files = dt.files;
+            previewImages(); // Refresh preview
+        }
+
+        // Form validation before submit
+        document.getElementById('productForm').addEventListener('submit', function(e) {
+            // Update description from Quill
+            if (window.productQuill) {
+                document.getElementById('description').value = window.productQuill.root.innerHTML;
+            }
+            
+            // Basic validation
+            const requiredFields = ['name', 'category', 'price'];
+            let hasError = false;
+            
+            requiredFields.forEach(fieldName => {
+                const field = document.getElementById(fieldName);
+                if (!field.value.trim()) {
+                    field.classList.add('is-invalid');
+                    hasError = true;
+                } else {
+                    field.classList.remove('is-invalid');
+                }
+            });
+            
+            if (hasError) {
+                e.preventDefault();
+                // Show first tab with error
+                const firstTab = document.querySelector('.nav-tabs .nav-link');
+                firstTab.click();
+                
+                // Show error message
+                const toast = document.createElement('div');
+                toast.className = 'toast align-items-center text-bg-danger border-0 position-fixed top-0 end-0 m-3';
+                toast.setAttribute('role', 'alert');
+                toast.style.zIndex = '9999';
+                toast.innerHTML = `
+                    <div class="d-flex">
+                        <div class="toast-body">
+                            لطفاً فیلدهای ضروری را تکمیل کنید
+                        </div>
+                        <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+                    </div>
+                `;
+                document.body.appendChild(toast);
+                const toastBootstrap = new bootstrap.Toast(toast);
+                toastBootstrap.show();
+                
+                // Remove toast after it's hidden
+                toast.addEventListener('hidden.bs.toast', () => {
+                    toast.remove();
+                });
+            }
+        });
+
+        // Auto-generate slug from product name
+        document.getElementById('name').addEventListener('input', function() {
+            const name = this.value;
+            const slug = name.toLowerCase()
+                .replace(/[ضصثقفغعهخحجچپژکگلآشيئدذرزطظتنبمو]/g, function(match) {
+                    const map = {
+                        'ض': 'z', 'ص': 's', 'ث': 's', 'ق': 'gh', 'ف': 'f',
+                        'غ': 'gh', 'ع': 'a', 'ه': 'h', 'خ': 'kh', 'ح': 'h',
+                        'ج': 'j', 'چ': 'ch', 'پ': 'p', 'ژ': 'zh', 'ک': 'k',
+                        'گ': 'g', 'ل': 'l', 'آ': 'a', 'ش': 'sh', 'ي': 'y',
+                        'ئ': 'y', 'د': 'd', 'ذ': 'z', 'ر': 'r', 'ز': 'z',
+                        'ط': 't', 'ظ': 'z', 'ت': 't', 'ن': 'n', 'ب': 'b',
+                        'م': 'm', 'و': 'v'
+                    };
+                    return map[match] || match;
+                })
+                .replace(/\s+/g, '-')
+                .replace(/[^a-zA-Z0-9\-]/g, '');
+            
+            document.getElementById('slug').value = slug;
+        });
+
+        // Real-time stock status update
+        document.getElementById('stock').addEventListener('input', function() {
+            const stock = parseInt(this.value) || 0;
+            const statusElement = document.getElementById('stockStatus');
+            
+            if (stock <= 0) {
+                statusElement.textContent = 'ناموجود';
+                statusElement.className = 'badge bg-danger';
+            } else if (stock <= 5) {
+                statusElement.textContent = 'کم موجود';
+                statusElement.className = 'badge bg-warning';
+            } else {
+                statusElement.textContent = 'موجود';
+                statusElement.className = 'badge bg-success';
+            }
+        });
+
+        // Price formatting
+        document.getElementById('price').addEventListener('input', function() {
+            let value = this.value.replace(/[^\d]/g, '');
+            if (value) {
+                this.value = parseInt(value).toLocaleString('fa-IR');
+            }
+        });
+
+        document.getElementById('comparePrice').addEventListener('input', function() {
+            let value = this.value.replace(/[^\d]/g, '');
+            if (value) {
+                this.value = parseInt(value).toLocaleString('fa-IR');
+            }
+        });
+
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            // Trigger stock status update
+            document.getElementById('stock').dispatchEvent(new Event('input'));
+        });
+    </script>
+</body>
+</html>
+    
+    <script>
+        // Sidebar Toggle
+        document.getElementById('sidebar-toggle').addEventListener('click', function() {
+            const sidebar = document.getElementById('sidebar');
+            const mainContent = document.getElementById('main-content');
+            
+            if (window.innerWidth > 768) {
+                sidebar.classList.toggle('collapsed');
+                mainContent.classList.toggle('expanded');
+            } else {
+                sidebar.classList.toggle('show');
+            }
+        });
+        
+        // Auto generate slug from name
+        document.getElementById('name').addEventListener('input', function() {
+            const name = this.value;
+            const slug = name
+                .toLowerCase()
+                .replace(/[^\u0600-\u06FF\w\s-]/g, '') // حفظ حروف فارسی و انگلیسی
+                .replace(/\s+/g, '-')
+                .replace(/-+/g, '-')
+                .trim('-');
+            
+            document.getElementById('slug').value = slug;
+            
+            // Auto fill meta title
+            if (name && !document.getElementById('metaTitle').value) {
+                document.getElementById('metaTitle').value = name;
+            }
+        });
+        
+        // Validate discount price
+        document.getElementById('discountPrice').addEventListener('input', function() {
+            const price = parseFloat(document.getElementById('price').value) || 0;
+            const discountPrice = parseFloat(this.value) || 0;
+            
+            if (discountPrice > price) {
+                this.setCustomValidity('قیمت تخفیف نمی‌تواند بیشتر از قیمت اصلی باشد');
+            } else {
+                this.setCustomValidity('');
+            }
+        });
+        
+        // Responsive sidebar
+        window.addEventListener('resize', function() {
+            const sidebar = document.getElementById('sidebar');
+            
+            if (window.innerWidth > 768) {
+                sidebar.classList.remove('show');
+            }
+        });
+        
+        // Form validation
+        document.getElementById('productForm').addEventListener('submit', function(e) {
+            const requiredFields = this.querySelectorAll('[required]');
+            let isValid = true;
+            
+            requiredFields.forEach(field => {
+                if (!field.value.trim()) {
+                    field.classList.add('is-invalid');
+                    isValid = false;
+                } else {
+                    field.classList.remove('is-invalid');
+                }
+            });
+            
+            if (!isValid) {
+                e.preventDefault();
+                alert('لطفاً تمام فیلدهای الزامی را پر کنید');
+            }
+        });
+    </script>
+</body>
+</html>

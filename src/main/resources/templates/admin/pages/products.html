@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مدیریت محصولات - تاپ کالا</title>
+    
+    <!-- Bootstrap RTL CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.rtl.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="/css/admin-products-styles.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <img src="/images/logo-persia-bazaar-small.png" alt="تاپ کالا" height="100" style="margin-bottom: 10px;">
+        </div>
+        
+        <ul class="sidebar-menu">
+            <li>
+                <a href="/admin/dashboard" th:href="@{/admin/dashboard}">
+                    <i class="fas fa-home"></i>
+                    <span>داشبورد</span>
+                </a>
+            </li>
+            <li>
+                <a href="/admin/users" th:href="@{/admin/users}">
+                    <i class="fas fa-users"></i>
+                    <span>کاربران</span>
+                </a>
+            </li>
+            <li>
+                <a href="/admin/products" th:href="@{/admin/products}" class="active">
+                    <i class="fas fa-box"></i>
+                    <span>محصولات</span>
+                </a>
+            </li>
+            <li>
+                <a href="/admin/ads" th:href="@{/admin/ads}">
+                    <i class="fas fa-bullhorn"></i>
+                    <span>آگهی‌ها</span>
+                </a>
+            </li>
+            <li>
+                <a href="/admin/settings" th:href="@{/admin/settings}">
+                    <i class="fas fa-cog"></i>
+                    <span>تنظیمات</span>
+                </a>
+            </li>
+            <li>
+                <a href="/admin/logout" th:href="@{/admin/logout}">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span>خروج</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+    
+    <!-- Main Content -->
+    <div class="main-content" id="main-content">
+        <!-- Top Navbar -->
+        <div class="top-navbar">
+            <div class="d-flex align-items-center">
+                <button class="sidebar-toggle" id="sidebar-toggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <div class="navbar-brand">مدیریت محصولات</div>
+            </div>
+            
+            <div class="navbar-actions">
+                <div class="user-info">
+                    <div class="user-avatar">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <span>مدیر سیستم</span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Content Area -->
+        <div class="content-area">
+            <!-- Success/Error Messages -->
+            <div th:if="${successMessage}" class="alert alert-success alert-dismissible fade show">
+                <i class="fas fa-check-circle me-2"></i>
+                <span th:text="${successMessage}">پیام موفقیت</span>
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+            
+            <div th:if="${errorMessage}" class="alert alert-danger alert-dismissible fade show">
+                <i class="fas fa-exclamation-circle me-2"></i>
+                <span th:text="${errorMessage}">پیام خطا</span>
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+            
+
+            <!-- Search and Filter Section -->
+            <div class="filter-section">
+                <h5 class="filter-title">
+                    <i class="fas fa-search"></i>
+                    جستجو و فیلتر محصولات
+                </h5>
+                
+                <form method="GET" th:action="@{/admin/products}">
+                    <div class="row">
+                        <div class="col-md-3 mb-3">
+                            <label class="form-label">جستجو در نام، SKU یا توضیحات</label>
+                            <input type="text" class="form-control" name="search" 
+                                   th:value="${search}" placeholder="جستجو...">
+                        </div>
+                        <div class="col-md-2 mb-3">
+                            <label class="form-label">وضعیت</label>
+                            <select class="form-select" name="status">
+                                <option value="">همه وضعیت‌ها</option>
+                                <option th:each="status : ${statuses}" 
+                                        th:value="${status.name()}"
+                                        th:selected="${selectedStatus != null and selectedStatus.name() == status.name()}"
+                                        th:text="${status.getDisplayName()}">وضعیت</option>
+                            </select>
+                        </div>
+                        <div class="col-md-2 mb-3">
+                            <label class="form-label">دسته‌بندی</label>
+                            <select class="form-select" name="categoryId">
+                                <option value="">همه دسته‌ها</option>
+                                <option th:each="category : ${categories}" 
+                                        th:value="${category.id}"
+                                        th:selected="${selectedCategoryId != null and selectedCategoryId == category.id}"
+                                        th:text="${category.name}">دسته‌بندی</option>
+                            </select>
+                        </div>
+                        <div class="col-md-2 mb-3">
+                            <label class="form-label">وضعیت فعالیت</label>
+                            <select class="form-select" name="isActive">
+                                <option value="">همه</option>
+                                <option value="true" th:selected="${selectedIsActive != null and selectedIsActive}">فعال</option>
+                                <option value="false" th:selected="${selectedIsActive != null and !selectedIsActive}">غیرفعال</option>
+                            </select>
+                        </div>
+                        <div class="col-md-2 mb-3">
+                            <label class="form-label">محصولات ویژه</label>
+                            <select class="form-select" name="isFeatured">
+                                <option value="">همه</option>
+                                <option value="true" th:selected="${selectedIsFeatured != null and selectedIsFeatured}">ویژه</option>
+                                <option value="false" th:selected="${selectedIsFeatured != null and !selectedIsFeatured}">عادی</option>
+                            </select>
+                        </div>
+                        <div class="col-md-1 mb-3 d-flex align-items-end">
+                            <button type="submit" class="btn btn-primary w-100">
+                                <i class="fas fa-search"></i>
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            
+            <!-- Products Table -->
+            <div class="products-table">
+                <div class="d-flex justify-content-between align-items-center p-3 border-bottom">
+                    <h5 class="mb-0">
+                        <i class="fas fa-list me-2"></i>
+                        لیست محصولات
+                        <span class="badge bg-primary ms-2" th:text="${products.totalElements}">0</span>
+                    </h5>
+                    <a href="/admin/products/create" th:href="@{/admin/products/create}" class="btn btn-success">
+                        <i class="fas fa-plus me-2"></i>
+                        افزودن محصول جدید
+                    </a>
+                </div>
+                
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>شناسه</th>
+                                <th>تصویر</th>
+                                <th>نام محصول</th>
+                                <th>دسته‌بندی</th>
+                                <th>قیمت</th>
+                                <th>موجودی</th>
+                                <th>وضعیت</th>
+                                <th>فعالیت</th>
+                                <th>عملیات</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="product : ${products.content}">
+                                <td th:text="${product.id}">1</td>
+                                <td>
+                                    <img class="product-image" 
+                                         th:src="${!product.images.isEmpty() ? product.images[0].image.url : '/images/no-image.png'}"
+                                         th:alt="${product.name}"
+                                         src="/images/no-image.png" alt="بدون تصویر">
+                                </td>
+                                <td>
+                                    <div>
+                                        <strong th:text="${product.name}">نام محصول</strong>
+                                        <br>
+                                        <small class="text-muted" th:text="${product.sku}">SKU</small>
+                                    </div>
+                                </td>
+                                <td th:text="${product.category.name}">دسته‌بندی</td>
+                                <td>
+                                    <div class="price" th:if="${product.discountPrice != null and product.discountPrice.compareTo(product.price) < 0}">
+                                        <span th:text="${#numbers.formatDecimal(product.discountPrice, 0, 'COMMA', 0, 'POINT')} + ' تومان'">قیمت تخفیف</span>
+                                        <br>
+                                        <span class="discount-price" th:text="${#numbers.formatDecimal(product.price, 0, 'COMMA', 0, 'POINT')} + ' تومان'">قیمت اصلی</span>
+                                    </div>
+                                    <div class="price" th:unless="${product.discountPrice != null and product.discountPrice.compareTo(product.price) < 0}">
+                                        <span th:text="${#numbers.formatDecimal(product.price, 0, 'COMMA', 0, 'POINT')} + ' تومان'">قیمت</span>
+                                    </div>
+                                </td>
+                                <td>
+                                    <span class="stock" 
+                                          th:classappend="${product.stockQuantity == 0 ? 'stock-out' : 
+                                                         (product.stockQuantity <= product.minStockLevel ? 'stock-low' : 'stock-normal')}"
+                                          th:text="${product.stockQuantity}">0</span>
+                                </td>
+                                <td>
+                                    <span class="status-badge" 
+                                          th:classappend="'status-' + ${#strings.toLowerCase(product.status.name())}"
+                                          th:text="${product.status.getDisplayName()}">وضعیت</span>
+                                </td>
+                                <td>
+                                    <span class="active-badge" 
+                                          th:classappend="'active-' + ${product.isActive}"
+                                          th:text="${product.isActive ? 'فعال' : 'غیرفعال'}">فعال</span>
+                                </td>
+                                <td>
+                                    <div class="action-buttons">
+                                        <a th:href="@{/admin/products/{id}(id=${product.id})}" 
+                                           class="btn-action btn-view" title="مشاهده">
+                                            <i class="fas fa-eye"></i>
+                                        </a>
+                                        <a th:href="@{/admin/products/edit(id=${product.id})}" 
+                                           class="btn-action btn-edit" title="ویرایش">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+                                        <button type="button" class="btn-action btn-delete" 
+                                                th:data-product-id="${product.id}"
+                                                th:data-product-name="${product.name}"
+                                                onclick="showDeleteModal(this)" title="حذف">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                            
+                            <tr th:if="${products.empty}">
+                                <td colspan="9" class="text-center py-4">
+                                    <i class="fas fa-box-open text-muted fa-3x mb-3"></i>
+                                    <p class="text-muted">هیچ محصولی یافت نشد</p>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                
+                <!-- Pagination -->
+                <div class="pagination-wrapper" th:if="${products.totalPages > 1}">
+                    <div>
+                        نمایش <span th:text="${products.size * products.number + 1}">1</span> 
+                        تا <span th:text="${products.size * products.number + products.numberOfElements}">10</span> 
+                        از <span th:text="${products.totalElements}">100</span> محصول
+                    </div>
+                    
+                    <nav>
+                        <ul class="pagination mb-0">
+                            <li class="page-item" th:classappend="${products.first} ? 'disabled'">
+                                <a class="page-link" th:href="@{/admin/products(page=${products.number - 1}, size=${products.size}, search=${search}, status=${selectedStatus}, categoryId=${selectedCategoryId}, isActive=${selectedIsActive}, isFeatured=${selectedIsFeatured})}">
+                                    <i class="fas fa-chevron-right"></i>
+                                </a>
+                            </li>
+                            
+                            <li class="page-item" 
+                                th:each="pageNum : ${#numbers.sequence(0, products.totalPages - 1)}"
+                                th:if="${pageNum >= products.number - 2 and pageNum <= products.number + 2}"
+                                th:classappend="${pageNum == products.number} ? 'active'">
+                                <a class="page-link" 
+                                   th:href="@{/admin/products(page=${pageNum}, size=${products.size}, search=${search}, status=${selectedStatus}, categoryId=${selectedCategoryId}, isActive=${selectedIsActive}, isFeatured=${selectedIsFeatured})}"
+                                   th:text="${pageNum + 1}">1</a>
+                            </li>
+                            
+                            <li class="page-item" th:classappend="${products.last} ? 'disabled'">
+                                <a class="page-link" th:href="@{/admin/products(page=${products.number + 1}, size=${products.size}, search=${search}, status=${selectedStatus}, categoryId=${selectedCategoryId}, isActive=${selectedIsActive}, isFeatured=${selectedIsFeatured})}">
+                                    <i class="fas fa-chevron-left"></i>
+                                </a>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Delete Modal -->
+    <div class="modal fade" id="deleteModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">تأیید حذف محصول</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="alert alert-warning">
+                        <i class="fas fa-exclamation-triangle me-2"></i>
+                        آیا از حذف محصول <strong id="productName">نام محصول</strong> اطمینان دارید؟
+                        <br>
+                        <small>این عمل قابل بازگشت نیست.</small>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">انصراف</button>
+                    <form method="POST" th:action="@{/admin/products/delete}" style="display: inline;">
+                        <input type="hidden" name="id" id="deleteProductId">
+                        <button type="submit" class="btn btn-danger">حذف محصول</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        // Sidebar Toggle
+        document.getElementById('sidebar-toggle').addEventListener('click', function() {
+            const sidebar = document.getElementById('sidebar');
+            const mainContent = document.getElementById('main-content');
+            
+            if (window.innerWidth > 768) {
+                sidebar.classList.toggle('collapsed');
+                mainContent.classList.toggle('expanded');
+            } else {
+                sidebar.classList.toggle('show');
+            }
+        });
+        
+        // Delete Modal
+        let deleteModal;
+        
+        function showDeleteModal(button) {
+            const productId = button.getAttribute('data-product-id');
+            const productName = button.getAttribute('data-product-name');
+            
+            document.getElementById('deleteProductId').value = productId;
+            document.getElementById('productName').textContent = productName;
+            
+            if (!deleteModal) {
+                deleteModal = new bootstrap.Modal(document.getElementById('deleteModal'));
+            }
+            deleteModal.show();
+        }
+        
+        // Responsive sidebar
+        window.addEventListener('resize', function() {
+            const sidebar = document.getElementById('sidebar');
+            
+            if (window.innerWidth > 768) {
+                sidebar.classList.remove('show');
+            }
+        });
+        
+        // Auto-hide alerts
+        setTimeout(function() {
+            const alerts = document.querySelectorAll('.alert');
+            alerts.forEach(function(alert) {
+                const bsAlert = new bootstrap.Alert(alert);
+                bsAlert.close();
+            });
+        }, 5000);
+    </script>
+</body>
+</html>

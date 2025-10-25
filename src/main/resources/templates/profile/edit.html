@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Profile - Persia Bazaar</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+    <!-- Inter Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Universal Styles -->
+    <link href="/css/universal-styles.css" rel="stylesheet">
+    <link href="/css/profile-edit-styles.css" rel="stylesheet">
+
+</head>
+<body class="profile-page">
+    <div class="container my-4">
+        <!-- Breadcrumb -->
+        <div class="breadcrumb-universal">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="/">Home</a></li>
+                    <li class="breadcrumb-item"><a href="/profile">My Profile</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Edit Profile</li>
+                </ol>
+            </nav>
+        </div>
+
+        <!-- Success/Error Messages -->
+        <div th:if="${success}" class="alert-universal alert-success fade-in">
+            <i class="bi bi-check-circle-fill"></i>
+            <span th:text="${success}">Success message</span>
+        </div>
+        
+        <div th:if="${error}" class="alert-universal alert-error fade-in">
+            <i class="bi bi-exclamation-triangle-fill"></i>
+            <span th:text="${error}">Error message</span>
+        </div>
+
+        <!-- Page Header -->
+        <div class="page-header-universal">
+            <div class="container">
+                <div class="row align-items-center">
+                    <div class="col-md-8">
+                        <h1>
+                            <i class="bi bi-pencil-square me-2"></i>
+                            Edit Profile
+                        </h1>
+                        <p>Update your personal information</p>
+                    </div>
+                    <div class="col-md-4 text-end">
+                        <a href="/profile" class="btn-universal btn-secondary">
+                            <i class="bi bi-arrow-left"></i>
+                            Back to Profile
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="card-universal slide-up">
+                    <div class="card-body">
+                        <form method="post" action="/profile/update" class="form-universal">
+                            <!-- Profile Picture Section -->
+                            <div class="text-center mb-4">
+                                <div class="profile-avatar-universal mx-auto" 
+                                     th:text="${user.firstName != null and user.firstName != '' ? #strings.substring(user.firstName, 0, 1).toUpperCase() : #strings.substring(user.username, 0, 1).toUpperCase()}">
+                                    U
+                                </div>
+                                <h6 class="text-muted">Profile Picture</h6>
+                                <small class="text-muted">Profile picture change is currently not available</small>
+                            </div>
+
+                            <!-- Personal Information Section -->
+                            <div class="mb-4">
+                                <h5 class="text-gradient mb-3">
+                                    <i class="bi bi-person me-2"></i>
+                                    Personal Information
+                                </h5>
+                                
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="firstName" class="form-label">First Name *</label>
+                                            <input type="text" class="form-control" id="firstName" name="firstName" 
+                                                   th:value="${user.firstName}" required>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="lastName" class="form-label">Last Name *</label>
+                                            <input type="text" class="form-control" id="lastName" name="lastName" 
+                                                   th:value="${user.lastName}" required>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="username" class="form-label">Username</label>
+                                    <input type="text" class="form-control" id="username" 
+                                           th:value="${user.username}" readonly disabled>
+                                    <small class="text-muted">Username cannot be changed</small>
+                            </div>
+                        </div>
+
+                        <!-- Contact Information Section -->
+                        <div class="form-section">
+                            <h5 class="section-title">
+                                <i class="bi bi-telephone"></i>
+                                Contact Information
+                            </h5>
+                            
+                            <div class="mb-3">
+                                <label for="email" class="form-label required-field">Email</label>
+                                <input type="email" class="form-control" id="email" name="email" 
+                                       th:value="${user.email}" required>
+                                <small class="text-muted">
+                                    <i class="bi bi-info-circle me-1"></i>
+                                    Email is used for password recovery and notifications
+                                </small>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="phoneNumber" class="form-label">Phone Number</label>
+                                <input type="tel" class="form-control" id="phoneNumber" name="phoneNumber" 
+                                       th:value="${user.phoneNumber}" placeholder="09123456789">
+                                <small class="text-muted">
+                                    <i class="bi bi-info-circle me-1"></i>
+                                    Phone number is used for buyer contact
+                                </small>
+                            </div>
+                        </div>
+
+                        <!-- Social Media Section -->
+                        <div class="form-section">
+                            <h5 class="section-title">
+                                <i class="bi bi-share"></i>
+                                Social Media Links
+                            </h5>
+                            
+                            <div class="mb-3">
+                                <label for="linkdin" class="form-label">LinkedIn Profile</label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-primary text-white">
+                                        <i class="bi bi-linkedin"></i>
+                                    </span>
+                                    <input type="url" class="form-control" id="linkdin" name="linkdin" 
+                                           th:value="${user.linkdin}" 
+                                           placeholder="https://linkedin.com/in/your-profile">
+                                </div>
+                                <small class="text-muted">
+                                    <i class="bi bi-info-circle me-1"></i>
+                                    Your professional LinkedIn profile URL
+                                </small>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="facebook" class="form-label">Facebook Profile</label>
+                                <div class="input-group">
+                                    <span class="input-group-text text-white" style="background-color: #4267B2;">
+                                        <i class="bi bi-facebook"></i>
+                                    </span>
+                                    <input type="url" class="form-control" id="facebook" name="facebook" 
+                                           th:value="${user.facebook}" 
+                                           placeholder="https://facebook.com/your-profile">
+                                </div>
+                                <small class="text-muted">
+                                    <i class="bi bi-info-circle me-1"></i>
+                                    Your Facebook profile or page URL
+                                </small>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="instagram" class="form-label">Instagram Profile</label>
+                                <div class="input-group">
+                                    <span class="input-group-text text-white" style="background: linear-gradient(45deg, #f09433 0%,#e6683c 25%,#dc2743 50%,#cc2366 75%,#bc1888 100%);">
+                                        <i class="bi bi-instagram"></i>
+                                    </span>
+                                    <input type="url" class="form-control" id="instagram" name="instagram" 
+                                           th:value="${user.instagram}" 
+                                           placeholder="https://instagram.com/your-profile">
+                                </div>
+                                <small class="text-muted">
+                                    <i class="bi bi-info-circle me-1"></i>
+                                    Your Instagram profile URL
+                                </small>
+                            </div>
+
+                            <!-- WhatsApp -->
+                            <div class="mb-3">
+                                <label for="whatsapp" class="form-label">WhatsApp</label>
+                                <div class="input-group">
+                                    <span class="input-group-text">
+                                        <i class="bi bi-whatsapp"></i>
+                                    </span>
+                                    <input type="text" class="form-control" id="whatsapp" name="whatsapp" 
+                                           th:value="${user.whatsapp}" 
+                                           placeholder="+989123456789 or username">
+                                </div>
+                                <small class="text-muted">
+                                    <i class="bi bi-info-circle me-1"></i>
+                                    Your WhatsApp number (with country code) or username
+                                </small>
+                            </div>
+
+                            <!-- Telegram -->
+                            <div class="mb-3">
+                                <label for="telegram" class="form-label">Telegram</label>
+                                <div class="input-group">
+                                    <span class="input-group-text">
+                                        <i class="bi bi-telegram"></i>
+                                    </span>
+                                    <input type="text" class="form-control" id="telegram" name="telegram" 
+                                           th:value="${user.telegram}" 
+                                           placeholder="@username or https://t.me/username">
+                                </div>
+                                <small class="text-muted">
+                                    <i class="bi bi-info-circle me-1"></i>
+                                    Your Telegram username (with or without @)
+                                </small>
+                            </div>
+                            
+                            <div class="alert alert-info">
+                                <i class="bi bi-lightbulb me-2"></i>
+
+                                <strong>Tip:</strong> Adding your social media links increases buyers’ trust and helps them get to know your profile better.
+
+                            </div>
+                        </div>
+
+                        <!-- Account Status Section -->
+                        <div class="form-section">
+                            <h5 class="section-title">
+                                <i class="bi bi-shield-check"></i>
+                                Account Status
+                            </h5>
+                            
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="d-flex align-items-center mb-2">
+                                        <i class="bi bi-envelope me-2" 
+                                           th:class="${user.emailVerified} ? 'text-success' : 'text-warning'"></i>
+                                        <span>Email Status:</span>
+                                        <span class="badge ms-2" 
+                                              th:class="${user.emailVerified} ? 'bg-success' : 'bg-warning'"
+                                              th:text="${user.emailVerified} ? 'Verified' : 'Unverified'">
+                                            Unverified
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="d-flex align-items-center mb-2">
+                                        <i class="bi bi-phone me-2" 
+                                           th:class="${user.phoneVerified} ? 'text-success' : 'text-warning'"></i>
+                                        <span>Phone Status:</span>
+                                        <span class="badge ms-2" 
+                                              th:class="${user.phoneVerified} ? 'bg-success' : 'bg-warning'"
+                                              th:text="${user.phoneVerified} ? 'Verified' : 'Unverified'">
+                                            Unverified
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="text-muted small">
+                                <i class="bi bi-lightbulb me-1"></i>
+                                Verifying contact information increases buyer trust
+                            </div>
+                        </div>
+
+                            <!-- Form Actions -->
+                            <div class="d-flex justify-content-between pt-4 mt-4 border-top">
+                                <a href="/profile" class="btn-universal btn-outline-secondary">
+                                    <i class="bi bi-x-lg"></i>
+                                    Cancel
+                                </a>
+                                <button type="submit" class="btn-universal btn-primary">
+                                    <i class="bi bi-check-lg"></i>
+                                    Save Changes
+                                </button>
+
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        // Form validation
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.querySelector('form');
+            const firstName = document.getElementById('firstName');
+            const lastName = document.getElementById('lastName');
+            const email = document.getElementById('email');
+            const linkdin = document.getElementById('linkdin');
+            const facebook = document.getElementById('facebook');
+            const instagram = document.getElementById('instagram');
+            const whatsapp = document.getElementById('whatsapp');
+            const telegram = document.getElementById('telegram');
+
+            // URL validation function
+            function isValidURL(string) {
+                if (!string || string.trim() === '') return true; // Empty is valid
+                try {
+                    const url = new URL(string);
+                    return url.protocol === 'http:' || url.protocol === 'https:';
+                } catch (_) {
+                    return false;
+                }
+            }
+
+            // Platform-specific URL validation
+            function isValidLinkedIn(url) {
+                if (!url || url.trim() === '') return true;
+                return isValidURL(url) && (url.includes('linkedin.com') || url.includes('linkedin.in'));
+            }
+
+            function isValidFacebook(url) {
+                if (!url || url.trim() === '') return true;
+                return isValidURL(url) && (url.includes('facebook.com') || url.includes('fb.com'));
+            }
+
+            function isValidInstagram(url) {
+                if (!url || url.trim() === '') return true;
+                return isValidURL(url) && url.includes('instagram.com');
+            }
+
+            function isValidWhatsApp(input) {
+                if (!input || input.trim() === '') return true;
+                // Check if it's a phone number or WhatsApp link
+                const phoneRegex = /^[+]?[0-9\s\-()]+$/;
+                const waLinkRegex = /^(https?:\/\/)?(wa\.me\/|whatsapp\.com\/)/i;
+                return phoneRegex.test(input) || waLinkRegex.test(input) || isValidURL(input);
+            }
+
+            function isValidTelegram(input) {
+                if (!input || input.trim() === '') return true;
+                // Check if it's a username or Telegram link
+                const usernameRegex = /^@?[a-zA-Z0-9_]{5,32}$/;
+                const tgLinkRegex = /^(https?:\/\/)?(t\.me\/|telegram\.me\/)/i;
+                return usernameRegex.test(input) || tgLinkRegex.test(input) || isValidURL(input);
+            }
+
+            // Real-time validation feedback
+            linkdin.addEventListener('blur', function() {
+                if (!isValidLinkedIn(this.value)) {
+                    this.classList.add('is-invalid');
+                    showFieldError(this, 'لطفاً یک لینک معتبر LinkedIn وارد کنید');
+                } else {
+                    this.classList.remove('is-invalid');
+                    hideFieldError(this);
+                }
+            });
+
+            facebook.addEventListener('blur', function() {
+                if (!isValidFacebook(this.value)) {
+                    this.classList.add('is-invalid');
+                    showFieldError(this, 'لطفاً یک لینک معتبر Facebook وارد کنید');
+                } else {
+                    this.classList.remove('is-invalid');
+                    hideFieldError(this);
+                }
+            });
+
+            instagram.addEventListener('blur', function() {
+                if (!isValidInstagram(this.value)) {
+                    this.classList.add('is-invalid');
+                    showFieldError(this, 'لطفاً یک لینک معتبر Instagram وارد کنید');
+                } else {
+                    this.classList.remove('is-invalid');
+                    hideFieldError(this);
+                }
+            });
+
+            whatsapp.addEventListener('blur', function() {
+                if (!isValidWhatsApp(this.value)) {
+                    this.classList.add('is-invalid');
+                    showFieldError(this, 'لطفاً شماره واتساپ یا لینک معتبر وارد کنید (مثال: +989123456789)');
+                } else {
+                    this.classList.remove('is-invalid');
+                    hideFieldError(this);
+                }
+            });
+
+            telegram.addEventListener('blur', function() {
+                if (!isValidTelegram(this.value)) {
+                    this.classList.add('is-invalid');
+                    showFieldError(this, 'لطفاً نام کاربری یا لینک معتبر تلگرام وارد کنید (مثال: @username)');
+                } else {
+                    this.classList.remove('is-invalid');
+                    hideFieldError(this);
+                }
+            });
+
+            function showFieldError(field, message) {
+                hideFieldError(field); // Remove existing error first
+                const errorDiv = document.createElement('div');
+                errorDiv.className = 'invalid-feedback d-block';
+                errorDiv.textContent = message;
+                field.parentNode.appendChild(errorDiv);
+            }
+
+            function hideFieldError(field) {
+                const existingError = field.parentNode.querySelector('.invalid-feedback');
+                if (existingError) {
+                    existingError.remove();
+                }
+            }
+
+            form.addEventListener('submit', function(e) {
+                let isValid = true;
+                
+                // Reset previous validation styles
+                [firstName, lastName, email, linkdin, facebook, instagram].forEach(field => {
+                    field.classList.remove('is-invalid');
+                    hideFieldError(field);
+                });
+
+                // Validate first name
+                if (firstName.value.trim().length < 2) {
+                    firstName.classList.add('is-invalid');
+                    showFieldError(firstName, 'نام باید حداقل 2 کاراکتر باشد');
+                    isValid = false;
+                }
+
+                // Validate last name
+                if (lastName.value.trim().length < 2) {
+                    lastName.classList.add('is-invalid');
+                    showFieldError(lastName, 'نام خانوادگی باید حداقل 2 کاراکتر باشد');
+                    isValid = false;
+                }
+
+                // Validate email
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                if (!emailRegex.test(email.value)) {
+                    email.classList.add('is-invalid');
+                    showFieldError(email, 'لطفاً یک ایمیل معتبر وارد کنید');
+                    isValid = false;
+                }
+
+                // Validate social media URLs
+                if (!isValidLinkedIn(linkdin.value)) {
+                    linkdin.classList.add('is-invalid');
+                    showFieldError(linkdin, 'لطفاً یک لینک معتبر LinkedIn وارد کنید');
+                    isValid = false;
+                }
+
+                if (!isValidFacebook(facebook.value)) {
+                    facebook.classList.add('is-invalid');
+                    showFieldError(facebook, 'لطفاً یک لینک معتبر Facebook وارد کنید');
+                    isValid = false;
+                }
+
+                if (!isValidInstagram(instagram.value)) {
+                    instagram.classList.add('is-invalid');
+                    showFieldError(instagram, 'لطفاً یک لینک معتبر Instagram وارد کنید');
+                    isValid = false;
+                }
+
+                if (!isValid) {
+                    e.preventDefault();
+                }
+            });
+        });
+    </script>
+</body>
+</html>

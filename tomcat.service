@@ -1,0 +1,30 @@
+[Unit]
+Description=Apache Tomcat Web Application Container
+After=network.target
+
+[Service]
+Type=forking
+User=tomcat
+Group=tomcat
+
+Environment="JAVA_HOME=/usr/lib/jvm/java-17-openjdk"
+Environment="JAVA_OPTS=-Xms512m -Xmx2g -Dspring.profiles.active=prod"
+Environment="CATALINA_BASE=/opt/tomcat"
+Environment="CATALINA_HOME=/opt/tomcat"
+Environment="CATALINA_PID=/opt/tomcat/temp/tomcat.pid"
+Environment="CATALINA_OPTS=-Xms512M -Xmx2G -server -XX:+UseParallelGC"
+
+# Iran Bazaar specific environment variables
+Environment="DB_PASSWORD=5Azar1360"
+Environment="JWT_SECRET=mySecretKey123456789MySecretKey123456789ProductionSecureKey"
+Environment="UPLOAD_DIR=/opt/iran-bazaar/uploads/"
+Environment="LOG_FILE=/opt/iran-bazaar/logs/application.log"
+
+ExecStart=/opt/tomcat/bin/startup.sh
+ExecStop=/opt/tomcat/bin/shutdown.sh
+
+RestartSec=10
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

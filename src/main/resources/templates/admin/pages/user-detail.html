@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مشاهده کاربر - تاپ کالا</title>
+    
+    <!-- Bootstrap RTL CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.rtl.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="/css/admin-user-detail-styles.css" rel="stylesheet">
+
+</head>
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <img src="/images/logo-persia-bazaar-small.png" alt="تاپ کالا" height="100" style="margin-bottom: 10px;">
+        </div>
+        
+        <ul class="sidebar-menu">
+            <li>
+                <a href="/admin/dashboard" th:href="@{/admin/dashboard}">
+                    <i class="fas fa-home"></i>
+                    <span>داشبورد</span>
+                </a>
+            </li>
+            <li>
+                <a href="/admin/users" th:href="@{/admin/users}" class="active">
+                    <i class="fas fa-users"></i>
+                    <span>کاربران</span>
+                </a>
+            </li>
+            <li>
+                <a href="/admin/products" th:href="@{/admin/products}">
+                    <i class="fas fa-box"></i>
+                    <span>محصولات</span>
+                </a>
+            </li>
+            <li>
+                <a href="/admin/ads" th:href="@{/admin/ads}">
+                    <i class="fas fa-bullhorn"></i>
+                    <span>آگهی‌ها</span>
+                </a>
+            </li>
+            <li>
+                <a href="/admin/settings" th:href="@{/admin/settings}">
+                    <i class="fas fa-cog"></i>
+                    <span>تنظیمات</span>
+                </a>
+            </li>
+            <li>
+                <a href="/admin/logout" th:href="@{/admin/logout}">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span>خروج</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+    
+    <!-- Main Content -->
+    <div class="main-content" id="main-content">
+        <!-- Top Navbar -->
+        <div class="top-navbar">
+            <div class="d-flex align-items-center">
+                <button class="sidebar-toggle" id="sidebar-toggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <div class="navbar-brand">مشاهده کاربر</div>
+            </div>
+            
+            <div class="navbar-actions">
+                <div class="user-info">
+                    <div class="user-avatar">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <span>مدیر سیستم</span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Content Area -->
+        <div class="content-area">
+            <!-- Profile Card -->
+            <div class="profile-card fade-in">
+                <div class="profile-header">
+                    <div class="profile-avatar" th:text="${#strings.substring(user.username, 0, 1).toUpperCase()}">U</div>
+                    <h2 class="profile-title" th:text="${user.firstName + ' ' + user.lastName}">نام کامل کاربر</h2>
+                    <p class="profile-subtitle">@<span th:text="${user.username}">username</span></p>
+                </div>
+                
+                <!-- اطلاعات شخصی -->
+                <div class="info-section">
+                    <h3 class="section-title">
+                        <i class="fas fa-user"></i>
+                        اطلاعات شخصی
+                    </h3>
+                    <div class="info-grid">
+                        <div class="info-item">
+                            <span class="info-label">شناسه کاربر:</span>
+                            <span class="info-value" th:text="${user.id}">1</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">نام کاربری:</span>
+                            <span class="info-value" th:text="${user.username}">username</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">نام:</span>
+                            <span class="info-value" th:text="${user.firstName ?: '-'}">نام</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">نام خانوادگی:</span>
+                            <span class="info-value" th:text="${user.lastName ?: '-'}">نام خانوادگی</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">ایمیل:</span>
+                            <span class="info-value" th:text="${user.email}">email@example.com</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">شماره تلفن:</span>
+                            <span class="info-value" th:text="${user.phoneNumber ?: '-'}">09123456789</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- وضعیت حساب -->
+                <div class="info-section">
+                    <h3 class="section-title">
+                        <i class="fas fa-shield-alt"></i>
+                        وضعیت حساب کاربری
+                    </h3>
+                    <div class="info-grid">
+                        <div class="info-item">
+                            <span class="info-label">وضعیت:</span>
+                            <span class="info-value">
+                                <span class="status-badge" 
+                                      th:classappend="${user.status.name() == 'ACTIVE' ? 'status-active' : 
+                                                       user.status.name() == 'INACTIVE' ? 'status-inactive' :
+                                                       user.status.name() == 'SUSPENDED' ? 'status-suspended' :
+                                                       user.status.name() == 'BANNED' ? 'status-banned' : 'status-pending'}"
+                                      th:text="${user.status.getPersianName()}">فعال</span>
+                            </span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">تأیید ایمیل:</span>
+                            <span class="info-value">
+                                <span class="verification-badge" 
+                                      th:classappend="${user.emailVerified != null and user.emailVerified ? 'verified' : 'not-verified'}">
+                                    <i th:class="${user.emailVerified != null and user.emailVerified ? 'fas fa-check' : 'fas fa-times'}"></i>
+                                    <span th:text="${user.emailVerified != null and user.emailVerified ? 'تأیید شده' : 'تأیید نشده'}">تأیید شده</span>
+                                </span>
+                            </span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">تأیید تلفن:</span>
+                            <span class="info-value">
+                                <span class="verification-badge" 
+                                      th:classappend="${user.phoneVerified != null and user.phoneVerified ? 'verified' : 'not-verified'}">
+                                    <i th:class="${user.phoneVerified != null and user.phoneVerified ? 'fas fa-check' : 'fas fa-times'}"></i>
+                                    <span th:text="${user.phoneVerified != null and user.phoneVerified ? 'تأیید شده' : 'تأیید نشده'}">تأیید نشده</span>
+                                </span>
+                            </span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">تاریخ عضویت:</span>
+                            <span class="info-value" th:text="${#temporals.format(user.createdAt, 'yyyy/MM/dd HH:mm')}">1403/06/15</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">آخرین ورود:</span>
+                            <span class="info-value" th:text="${user.lastLogin != null ? #temporals.format(user.lastLogin, 'yyyy/MM/dd HH:mm') : 'هرگز'}">-</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">آخرین بروزرسانی:</span>
+                            <span class="info-value" th:text="${#temporals.format(user.updatedAt, 'yyyy/MM/dd HH:mm')}">1403/06/15</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- نقش‌ها و دسترسی‌ها -->
+                <div class="info-section">
+                    <h3 class="section-title">
+                        <i class="fas fa-users-cog"></i>
+                        نقش‌ها و دسترسی‌ها
+                    </h3>
+                    <div class="info-item">
+                        <span class="info-label">نقش‌های کاربر:</span>
+                        <div class="info-value">
+                            <div class="roles-list">
+                                <span th:each="role : ${user.roles}" 
+                                      class="role-badge" 
+                                      th:text="${role.roleName.name()}">CUSTOMER</span>
+                                <span th:if="${#lists.isEmpty(user.roles)}" class="text-muted">بدون نقش</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- اطلاعات تکمیلی -->
+                <div class="info-section" th:if="${user.nationalCode != null or user.gender != null or user.dateOfBirth != null}">
+                    <h3 class="section-title">
+                        <i class="fas fa-id-card"></i>
+                        اطلاعات تکمیلی
+                    </h3>
+                    <div class="info-grid">
+                        <div class="info-item" th:if="${user.nationalCode != null}">
+                            <span class="info-label">کد ملی:</span>
+                            <span class="info-value" th:text="${user.nationalCode}">-</span>
+                        </div>
+                        <div class="info-item" th:if="${user.gender != null}">
+                            <span class="info-label">جنسیت:</span>
+                            <span class="info-value" th:text="${user.gender.getPersianName()}">-</span>
+                        </div>
+                        <div class="info-item" th:if="${user.dateOfBirth != null}">
+                            <span class="info-label">تاریخ تولد:</span>
+                            <span class="info-value" th:text="${#temporals.format(user.dateOfBirth, 'yyyy/MM/dd')}">-</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- دکمه‌های عملیات -->
+                <div class="action-buttons">
+                    <a th:href="@{/admin/users/edit(id=${user.id})}" class="btn btn-warning">
+                        <i class="fas fa-edit me-2"></i>
+                        ویرایش کاربر
+                    </a>
+                    <button type="button" class="btn btn-primary" onclick="showPasswordModal()">
+                        <i class="fas fa-key me-2"></i>
+                        تغییر رمز عبور
+                    </button>
+                    <a href="/admin/users" th:href="@{/admin/users}" class="btn btn-secondary">
+                        <i class="fas fa-arrow-right me-2"></i>
+                        بازگشت به لیست
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Password Change Modal -->
+    <div class="modal fade" id="passwordModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">تغییر رمز عبور</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <form th:action="@{/admin/users/reset-password}" method="POST">
+                    <div class="modal-body">
+                        <input type="hidden" name="userId" th:value="${user.id}">
+                        
+                        <div class="alert alert-warning">
+                            <i class="fas fa-exclamation-triangle me-2"></i>
+                            شما در حال تغییر رمز عبور کاربر <strong th:text="${user.username}">username</strong> هستید.
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="newPassword" class="form-label">رمز عبور جدید</label>
+                            <input type="password" 
+                                   class="form-control" 
+                                   id="newPassword" 
+                                   name="newPassword"
+                                   placeholder="رمز عبور جدید را وارد کنید"
+                                   required>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="confirmNewPassword" class="form-label">تأیید رمز عبور جدید</label>
+                            <input type="password" 
+                                   class="form-control" 
+                                   id="confirmNewPassword" 
+                                   name="confirmNewPassword"
+                                   placeholder="رمز عبور جدید را مجدداً وارد کنید"
+                                   required>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">انصراف</button>
+                        <button type="submit" class="btn btn-primary">تغییر رمز عبور</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        // Sidebar Toggle
+        document.getElementById('sidebar-toggle').addEventListener('click', function() {
+            const sidebar = document.getElementById('sidebar');
+            const mainContent = document.getElementById('main-content');
+            
+            if (window.innerWidth > 768) {
+                sidebar.classList.toggle('collapsed');
+                mainContent.classList.toggle('expanded');
+            } else {
+                sidebar.classList.toggle('show');
+            }
+        });
+        
+        // Password Modal
+        let passwordModal;
+        
+        function showPasswordModal() {
+            if (!passwordModal) {
+                passwordModal = new bootstrap.Modal(document.getElementById('passwordModal'));
+            }
+            passwordModal.show();
+        }
+        
+        // Password confirmation validation
+        const newPassword = document.getElementById('newPassword');
+        const confirmNewPassword = document.getElementById('confirmNewPassword');
+        
+        function validatePassword() {
+            if (newPassword.value !== confirmNewPassword.value) {
+                confirmNewPassword.setCustomValidity('رمز عبور و تأیید آن یکسان نیستند');
+            } else {
+                confirmNewPassword.setCustomValidity('');
+            }
+        }
+        
+        newPassword.addEventListener('change', validatePassword);
+        confirmNewPassword.addEventListener('keyup', validatePassword);
+        
+        // Responsive sidebar
+        window.addEventListener('resize', function() {
+            const sidebar = document.getElementById('sidebar');
+            
+            if (window.innerWidth > 768) {
+                sidebar.classList.remove('show');
+            }
+        });
+    </script>
+</body>
+</html>

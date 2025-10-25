@@ -1,0 +1,146 @@
+{
+    "info": {
+        "name": "LocationController API",
+        "description": "Postman collection for Location Management API endpoints - CRUD operations for locations",
+        "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+    },
+    "item": [
+        {
+            "name": "Get All Locations",
+            "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                    "raw": "{{baseUrl}}/api/locations",
+                    "host": [
+                        "{{baseUrl}}"
+                    ],
+                    "path": [
+                        "api",
+                        "locations"
+                    ]
+                },
+                "description": "Get list of all locations"
+            }
+        },
+        {
+            "name": "Get Location By ID",
+            "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                    "raw": "{{baseUrl}}/api/locations/{{locationId}}",
+                    "host": [
+                        "{{baseUrl}}"
+                    ],
+                    "path": [
+                        "api",
+                        "locations",
+                        "{{locationId}}"
+                    ]
+                },
+                "description": "Get specific location by ID"
+            }
+        },
+        {
+            "name": "Create New Location",
+            "request": {
+                "method": "POST",
+                "header": [
+                    {
+                        "key": "Authorization",
+                        "value": "Bearer {{jwt_token}}"
+                    },
+                    {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                    }
+                ],
+                "body": {
+                    "mode": "raw",
+                    "raw": "{\n    \"name\": \"تهران، منطقه 1\",\n    \"code\": \"TEH_01\",\n    \"parentId\": null,\n    \"latitude\": 35.6892,\n    \"longitude\": 51.3890\n}"
+                },
+                "url": {
+                    "raw": "{{baseUrl}}/api/locations",
+                    "host": [
+                        "{{baseUrl}}"
+                    ],
+                    "path": [
+                        "api",
+                        "locations"
+                    ]
+                },
+                "description": "Create a new location (Admin only)"
+            }
+        },
+        {
+            "name": "Update Location",
+            "request": {
+                "method": "PUT",
+                "header": [
+                    {
+                        "key": "Authorization",
+                        "value": "Bearer {{jwt_token}}"
+                    },
+                    {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                    }
+                ],
+                "body": {
+                    "mode": "raw",
+                    "raw": "{\n    \"name\": \"تهران، منطقه 1 (به‌روزرسانی شده)\",\n    \"code\": \"TEH_01_UPDATED\",\n    \"latitude\": 35.6892,\n    \"longitude\": 51.3890\n}"
+                },
+                "url": {
+                    "raw": "{{baseUrl}}/api/locations/{{locationId}}",
+                    "host": [
+                        "{{baseUrl}}"
+                    ],
+                    "path": [
+                        "api",
+                        "locations",
+                        "{{locationId}}"
+                    ]
+                },
+                "description": "Update existing location (Admin only)"
+            }
+        },
+        {
+            "name": "Delete Location",
+            "request": {
+                "method": "DELETE",
+                "header": [
+                    {
+                        "key": "Authorization",
+                        "value": "Bearer {{jwt_token}}"
+                    }
+                ],
+                "url": {
+                    "raw": "{{baseUrl}}/api/locations/{{locationId}}",
+                    "host": [
+                        "{{baseUrl}}"
+                    ],
+                    "path": [
+                        "api",
+                        "locations",
+                        "{{locationId}}"
+                    ]
+                },
+                "description": "Delete location (Admin only)"
+            }
+        }
+    ],
+    "variable": [
+        {
+            "key": "baseUrl",
+            "value": "http://localhost:8005",
+            "type": "string"
+        },
+        {
+            "key": "locationId",
+            "value": "1",
+            "type": "string",
+            "description": "Location ID for testing"
+        }
+    ]
+}

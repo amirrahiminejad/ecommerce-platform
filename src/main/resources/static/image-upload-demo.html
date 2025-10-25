@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Upload Component Demo</title>
+    
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" rel="stylesheet">
+    <!-- Inter Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body class="bg-light">
+    <div class="container py-5">
+        <div class="row">
+            <div class="col-lg-8 mx-auto">
+                <h1 class="text-center mb-5">Image Upload & Management Component</h1>
+                
+                <!-- Example 1: Default Theme -->
+                <div class="card mb-5">
+                    <div class="card-header">
+                        <h5 class="mb-0">Example 1: Default Theme</h5>
+                    </div>
+                    <div class="card-body">
+                        <div id="imageUploader1"></div>
+                    </div>
+                </div>
+                
+                <!-- Example 2: Modern Theme with Custom Options -->
+                <div class="card mb-5">
+                    <div class="card-header">
+                        <h5 class="mb-0">Example 2: Modern Theme (Max 5 files, 2MB limit)</h5>
+                    </div>
+                    <div class="card-body">
+                        <div id="imageUploader2"></div>
+                    </div>
+                </div>
+                
+                <!-- Example 3: Minimal Theme -->
+                <div class="card mb-5">
+                    <div class="card-header">
+                        <h5 class="mb-0">Example 3: Minimal Theme (Read-only mode)</h5>
+                    </div>
+                    <div class="card-body">
+                        <div id="imageUploader3"></div>
+                    </div>
+                </div>
+                
+                <!-- Example 4: Auto-Initialize with Data Attributes -->
+                <div class="card mb-5">
+                    <div class="card-header">
+                        <h5 class="mb-0">Example 4: Auto-Initialize with Data Attributes</h5>
+                    </div>
+                    <div class="card-body">
+                        <div id="imageUploader4" data-image-upload='{"maxFiles": 3, "theme": "modern", "maxFileSize": 1048576}'></div>
+                    </div>
+                </div>
+                
+                <!-- API Demonstration -->
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="mb-0">API Methods</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="btn-group mb-3" role="group">
+                            <button type="button" class="btn btn-outline-primary" onclick="getImages()">Get All Images</button>
+                            <button type="button" class="btn btn-outline-success" onclick="getUploadedImages()">Get Uploaded Images</button>
+                            <button type="button" class="btn btn-outline-warning" onclick="clearAll()">Clear All</button>
+                            <button type="button" class="btn btn-outline-info" onclick="loadSampleImages()">Load Sample Images</button>
+                        </div>
+                        <div id="apiResult" class="alert alert-info" style="display: none;"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Bootstrap 5 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Image Upload Component -->
+    <script src="js/image-upload-component.js"></script>
+    
+    <script>
+        // Global variable to store component instances
+        let imageUploader1, imageUploader2, imageUploader3;
+        
+        // Initialize components when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            // Example 1: Default settings
+            imageUploader1 = new ImageUploadManager('imageUploader1', {
+                uploadUrl: '/api/images/upload',
+                deleteUrl: '/api/images/delete'
+            });
+            
+            // Example 2: Modern theme with custom settings
+            imageUploader2 = new ImageUploadManager('imageUploader2', {
+                theme: 'modern',
+                maxFiles: 5,
+                maxFileSize: 2 * 1024 * 1024, // 2MB
+                uploadUrl: '/api/images/upload',
+                deleteUrl: '/api/images/delete'
+            });
+            
+            // Example 3: Minimal theme, read-only
+            imageUploader3 = new ImageUploadManager('imageUploader3', {
+                theme: 'minimal',
+                maxFiles: 8,
+                allowDelete: false,
+                allowReorder: false,
+                uploadUrl: null // No upload, preview only
+            });
+            
+            // Load some sample images in the third uploader
+            setTimeout(() => {
+                loadSampleImagesForDemo();
+            }, 1000);
+        });
+        
+        // API method demonstrations
+        function getImages() {
+            const images = imageUploader1.getImages();
+            showApiResult(`Total images: ${images.length}`, images);
+        }
+        
+        function getUploadedImages() {
+            const uploadedImages = imageUploader1.getUploadedImages();
+            showApiResult(`Uploaded images: ${uploadedImages.length}`, uploadedImages);
+        }
+        
+        function clearAll() {
+            imageUploader1.clearAll();
+            showApiResult('All images cleared', []);
+        }
+        
+        function loadSampleImages() {
+            // This would typically load from your backend
+            const sampleImages = [
+                {
+                    id: 'sample1',
+                    name: 'sample-image-1.jpg',
+                    size: 245760,
+                    status: 'success',
+                    preview: 'https://picsum.photos/300/200?random=1',
+                    url: 'https://picsum.photos/300/200?random=1'
+                },
+                {
+                    id: 'sample2', 
+                    name: 'sample-image-2.jpg',
+                    size: 189432,
+                    status: 'success',
+                    preview: 'https://picsum.photos/300/200?random=2',
+                    url: 'https://picsum.photos/300/200?random=2'
+                }
+            ];
+            
+            imageUploader1.setImages(sampleImages);
+            showApiResult('Sample images loaded', sampleImages);
+        }
+        
+        function loadSampleImagesForDemo() {
+            const sampleImages = [
+                {
+                    id: 'demo1',
+                    name: 'architecture-photo.jpg',
+                    size: 567890,
+                    status: 'success',
+                    preview: 'https://picsum.photos/300/200?random=10',
+                    url: 'https://picsum.photos/300/200?random=10'
+                },
+                {
+                    id: 'demo2', 
+                    name: 'landscape-view.jpg',
+                    size: 432100,
+                    status: 'success',
+                    preview: 'https://picsum.photos/300/200?random=11',
+                    url: 'https://picsum.photos/300/200?random=11'
+                },
+                {
+                    id: 'demo3',
+                    name: 'city-lights.jpg',
+                    size: 789123,
+                    status: 'success',
+                    preview: 'https://picsum.photos/300/200?random=12',
+                    url: 'https://picsum.photos/300/200?random=12'
+                }
+            ];
+            
+            imageUploader3.setImages(sampleImages);
+        }
+        
+        function showApiResult(message, data) {
+            const resultDiv = document.getElementById('apiResult');
+            resultDiv.style.display = 'block';
+            resultDiv.innerHTML = `
+                <strong>${message}</strong><br>
+                <pre class="mt-2 mb-0"><code>${JSON.stringify(data, null, 2)}</code></pre>
+            `;
+            
+            // Hide after 10 seconds
+            setTimeout(() => {
+                resultDiv.style.display = 'none';
+            }, 10000);
+        }
+    </script>
+</body>
+</html>

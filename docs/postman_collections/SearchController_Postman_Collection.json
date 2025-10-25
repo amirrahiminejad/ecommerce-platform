@@ -1,0 +1,948 @@
+{
+  "info": {
+    "name": "Persia Bazaar - Search API",
+    "description": "مجموعه کامل API های جستجوی آگهی‌ها و محصولات در پلتفرم پرشیا بازار",
+    "version": "1.0.0",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8080",
+      "type": "string"
+    },
+    {
+      "key": "apiPath",
+      "value": "/api/search",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "Ad Search",
+      "item": [
+        {
+          "name": "Search Ads - Basic",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}{{apiPath}}/ads?keyword=موبایل&page=0&size=20",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "search", "ads"],
+              "query": [
+                {
+                  "key": "keyword",
+                  "value": "موبایل",
+                  "description": "کلمه کلیدی جستجو"
+                },
+                {
+                  "key": "page",
+                  "value": "0",
+                  "description": "شماره صفحه"
+                },
+                {
+                  "key": "size",
+                  "value": "20",
+                  "description": "تعداد آیتم در صفحه"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Search Ads - Advanced Filters",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}{{apiPath}}/ads?keyword=خودرو&categoryId=1&locationId=1&minPrice=100000&maxPrice=10000000&sortBy=PRICE_ASC&featuredOnly=false&activeOnly=true",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "search", "ads"],
+              "query": [
+                {
+                  "key": "keyword",
+                  "value": "خودرو",
+                  "description": "کلمه کلیدی جستجو"
+                },
+                {
+                  "key": "categoryId",
+                  "value": "1",
+                  "description": "شناسه دسته‌بندی"
+                },
+                {
+                  "key": "locationId",
+                  "value": "1",
+                  "description": "شناسه موقعیت"
+                },
+                {
+                  "key": "minPrice",
+                  "value": "100000",
+                  "description": "حداقل قیمت"
+                },
+                {
+                  "key": "maxPrice",
+                  "value": "10000000",
+                  "description": "حداکثر قیمت"
+                },
+                {
+                  "key": "sortBy",
+                  "value": "PRICE_ASC",
+                  "description": "نوع مرتب‌سازی"
+                },
+                {
+                  "key": "featuredOnly",
+                  "value": "false",
+                  "description": "فقط آگهی‌های ویژه"
+                },
+                {
+                  "key": "activeOnly",
+                  "value": "true",
+                  "description": "فقط آگهی‌های فعال"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Search Ads - Sort by Date",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}{{apiPath}}/ads?sortBy=DATE_DESC&daysBack=7&page=0&size=10",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "search", "ads"],
+              "query": [
+                {
+                  "key": "sortBy",
+                  "value": "DATE_DESC",
+                  "description": "مرتب‌سازی بر اساس تاریخ"
+                },
+                {
+                  "key": "daysBack",
+                  "value": "7",
+                  "description": "آگهی‌های 7 روز اخیر"
+                },
+                {
+                  "key": "page",
+                  "value": "0"
+                },
+                {
+                  "key": "size",
+                  "value": "10"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Search Ads - Sort by Popularity",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}{{apiPath}}/ads?sortBy=POPULARITY&categoryId=1&size=15",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "search", "ads"],
+              "query": [
+                {
+                  "key": "sortBy",
+                  "value": "POPULARITY",
+                  "description": "مرتب‌سازی بر اساس محبوبیت"
+                },
+                {
+                  "key": "categoryId",
+                  "value": "1"
+                },
+                {
+                  "key": "size",
+                  "value": "15"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Popular Ads",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}{{apiPath}}/ads/popular?categoryId=1&limit=10",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "search", "ads", "popular"],
+              "query": [
+                {
+                  "key": "categoryId",
+                  "value": "1",
+                  "description": "شناسه دسته‌بندی"
+                },
+                {
+                  "key": "limit",
+                  "value": "10",
+                  "description": "تعداد نتایج"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Recent Ads",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}{{apiPath}}/ads/recent?limit=10",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "search", "ads", "recent"],
+              "query": [
+                {
+                  "key": "limit",
+                  "value": "10",
+                  "description": "تعداد نتایج"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Similar Ads",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}{{apiPath}}/ads/1/similar?limit=5",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "search", "ads", "1", "similar"],
+              "query": [
+                {
+                  "key": "limit",
+                  "value": "5",
+                  "description": "تعداد نتایج"
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Product Search",
+      "item": [
+        {
+          "name": "Search Products - Basic",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}{{apiPath}}/products?keyword=گوشی&page=0&size=20",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "search", "products"],
+              "query": [
+                {
+                  "key": "keyword",
+                  "value": "گوشی",
+                  "description": "کلمه کلیدی جستجو"
+                },
+                {
+                  "key": "page",
+                  "value": "0",
+                  "description": "شماره صفحه"
+                },
+                {
+                  "key": "size",
+                  "value": "20",
+                  "description": "تعداد آیتم در صفحه"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Search Products - Advanced Filters",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}{{apiPath}}/products?keyword=لپتاپ&categoryId=2&minPrice=5000000&maxPrice=25000000&sortBy=PRICE_ASC&featuredOnly=false&activeOnly=true&inStockOnly=true",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "search", "products"],
+              "query": [
+                {
+                  "key": "keyword",
+                  "value": "لپتاپ",
+                  "description": "کلمه کلیدی جستجو"
+                },
+                {
+                  "key": "categoryId",
+                  "value": "2",
+                  "description": "شناسه دسته‌بندی"
+                },
+                {
+                  "key": "minPrice",
+                  "value": "5000000",
+                  "description": "حداقل قیمت"
+                },
+                {
+                  "key": "maxPrice",
+                  "value": "25000000",
+                  "description": "حداکثر قیمت"
+                },
+                {
+                  "key": "sortBy",
+                  "value": "PRICE_ASC",
+                  "description": "نوع مرتب‌سازی"
+                },
+                {
+                  "key": "featuredOnly",
+                  "value": "false"
+                },
+                {
+                  "key": "activeOnly",
+                  "value": "true"
+                },
+                {
+                  "key": "inStockOnly",
+                  "value": "true",
+                  "description": "فقط محصولات موجود"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Search Products - Sort by Sales",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}{{apiPath}}/products?sortBy=SALES&categoryId=1&size=10",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "search", "products"],
+              "query": [
+                {
+                  "key": "sortBy",
+                  "value": "SALES",
+                  "description": "مرتب‌سازی بر اساس تعداد فروش"
+                },
+                {
+                  "key": "categoryId",
+                  "value": "1"
+                },
+                {
+                  "key": "size",
+                  "value": "10"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Search Products - With Brands Filter",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}{{apiPath}}/products?keyword=موبایل&brands=Samsung&brands=Apple&brands=Xiaomi&sortBy=POPULARITY",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "search", "products"],
+              "query": [
+                {
+                  "key": "keyword",
+                  "value": "موبایل"
+                },
+                {
+                  "key": "brands",
+                  "value": "Samsung",
+                  "description": "فیلتر برند"
+                },
+                {
+                  "key": "brands",
+                  "value": "Apple",
+                  "description": "فیلتر برند"
+                },
+                {
+                  "key": "brands",
+                  "value": "Xiaomi",
+                  "description": "فیلتر برند"
+                },
+                {
+                  "key": "sortBy",
+                  "value": "POPULARITY"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Best Selling Products",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}{{apiPath}}/products/bestsellers?categoryId=1&limit=10",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "search", "products", "bestsellers"],
+              "query": [
+                {
+                  "key": "categoryId",
+                  "value": "1"
+                },
+                {
+                  "key": "limit",
+                  "value": "10"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Featured Products",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}{{apiPath}}/products/featured?limit=10",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "search", "products", "featured"],
+              "query": [
+                {
+                  "key": "limit",
+                  "value": "10"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Discounted Products",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}{{apiPath}}/products/discounted?categoryId=1&limit=10",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "search", "products", "discounted"],
+              "query": [
+                {
+                  "key": "categoryId",
+                  "value": "1"
+                },
+                {
+                  "key": "limit",
+                  "value": "10"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Recent Products",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}{{apiPath}}/products/recent?limit=10",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "search", "products", "recent"],
+              "query": [
+                {
+                  "key": "limit",
+                  "value": "10"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Similar Products",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}{{apiPath}}/products/1/similar?limit=5",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "search", "products", "1", "similar"],
+              "query": [
+                {
+                  "key": "limit",
+                  "value": "5"
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Combined Search",
+      "item": [
+        {
+          "name": "Search All - Combined",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"keyword\": \"سامسونگ\",\n  \"categoryId\": null,\n  \"minPrice\": 100000,\n  \"maxPrice\": 15000000,\n  \"sortBy\": \"RELEVANCE\",\n  \"page\": 0,\n  \"size\": 10,\n  \"featuredOnly\": false,\n  \"activeOnly\": true,\n  \"accuracy\": \"PARTIAL\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}{{apiPath}}/all",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "search", "all"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Search All - Category Specific",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"keyword\": \"موبایل\",\n  \"categoryId\": 1,\n  \"minPrice\": 1000000,\n  \"maxPrice\": 20000000,\n  \"sortBy\": \"POPULARITY\",\n  \"page\": 0,\n  \"size\": 20,\n  \"featuredOnly\": false,\n  \"activeOnly\": true,\n  \"daysBack\": 30,\n  \"brands\": [\"Samsung\", \"Apple\"],\n  \"tags\": [\"جدید\", \"گارانتی\"]\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}{{apiPath}}/all",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "search", "all"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Search Suggestions",
+      "item": [
+        {
+          "name": "Get Suggestions - All",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}{{apiPath}}/suggestions?keyword=موبای&type=all",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "search", "suggestions"],
+              "query": [
+                {
+                  "key": "keyword",
+                  "value": "موبای",
+                  "description": "کلمه ناقص برای پیشنهاد"
+                },
+                {
+                  "key": "type",
+                  "value": "all",
+                  "description": "نوع پیشنهاد"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Suggestions - Ads Only",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}{{apiPath}}/suggestions?keyword=خودر&type=ads",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "search", "suggestions"],
+              "query": [
+                {
+                  "key": "keyword",
+                  "value": "خودر"
+                },
+                {
+                  "key": "type",
+                  "value": "ads"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Suggestions - Products Only",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}{{apiPath}}/suggestions?keyword=لپ&type=products",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "search", "suggestions"],
+              "query": [
+                {
+                  "key": "keyword",
+                  "value": "لپ"
+                },
+                {
+                  "key": "type",
+                  "value": "products"
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Analytics & Statistics",
+      "item": [
+        {
+          "name": "Get Search Statistics",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}{{apiPath}}/statistics",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "search", "statistics"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Popular Categories",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}{{apiPath}}/categories/popular?limit=10",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "search", "categories", "popular"],
+              "query": [
+                {
+                  "key": "limit",
+                  "value": "10"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Trending Keywords",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}{{apiPath}}/keywords/trending?limit=10",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "search", "keywords", "trending"],
+              "query": [
+                {
+                  "key": "limit",
+                  "value": "10"
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Performance Tests",
+      "item": [
+        {
+          "name": "Large Result Set Test",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}{{apiPath}}/products?size=100&sortBy=RELEVANCE",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "search", "products"],
+              "query": [
+                {
+                  "key": "size",
+                  "value": "100",
+                  "description": "حداکثر تعداد مجاز"
+                },
+                {
+                  "key": "sortBy",
+                  "value": "RELEVANCE"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Complex Filter Test",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}{{apiPath}}/products?keyword=گوشی&categoryId=1&minPrice=1000000&maxPrice=15000000&featuredOnly=false&activeOnly=true&inStockOnly=true&brands=Samsung&brands=Apple&sortBy=POPULARITY&page=0&size=50",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "search", "products"],
+              "query": [
+                {
+                  "key": "keyword",
+                  "value": "گوشی"
+                },
+                {
+                  "key": "categoryId",
+                  "value": "1"
+                },
+                {
+                  "key": "minPrice",
+                  "value": "1000000"
+                },
+                {
+                  "key": "maxPrice",
+                  "value": "15000000"
+                },
+                {
+                  "key": "featuredOnly",
+                  "value": "false"
+                },
+                {
+                  "key": "activeOnly",
+                  "value": "true"
+                },
+                {
+                  "key": "inStockOnly",
+                  "value": "true"
+                },
+                {
+                  "key": "brands",
+                  "value": "Samsung"
+                },
+                {
+                  "key": "brands",
+                  "value": "Apple"
+                },
+                {
+                  "key": "sortBy",
+                  "value": "POPULARITY"
+                },
+                {
+                  "key": "page",
+                  "value": "0"
+                },
+                {
+                  "key": "size",
+                  "value": "50"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Empty Keyword Test",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}{{apiPath}}/ads?categoryId=1&sortBy=DATE_DESC&size=20",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "search", "ads"],
+              "query": [
+                {
+                  "key": "categoryId",
+                  "value": "1"
+                },
+                {
+                  "key": "sortBy",
+                  "value": "DATE_DESC"
+                },
+                {
+                  "key": "size",
+                  "value": "20"
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Error Scenarios",
+      "item": [
+        {
+          "name": "Invalid Page Size",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}{{apiPath}}/products?size=150",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "search", "products"],
+              "query": [
+                {
+                  "key": "size",
+                  "value": "150",
+                  "description": "بیش از حداکثر مجاز (100)"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Invalid Sort Field",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}{{apiPath}}/ads?sortBy=INVALID_SORT",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "search", "ads"],
+              "query": [
+                {
+                  "key": "sortBy",
+                  "value": "INVALID_SORT",
+                  "description": "فیلد مرتب‌سازی نامعتبر"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Very Long Keyword",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}{{apiPath}}/products?keyword=این_یک_کلمه_کلیدی_بسیار_طولانی_است_که_باید_در_validation_رد_شود_چون_بیش_از_حد_مجاز_کاراکتر_دارد_و_ممکن_است_باعث_مشکل_شود",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "search", "products"],
+              "query": [
+                {
+                  "key": "keyword",
+                  "value": "این_یک_کلمه_کلیدی_بسیار_طولانی_است_که_باید_در_validation_رد_شود_چون_بیش_از_حد_مجاز_کاراکتر_دارد_و_ممکن_است_باعث_مشکل_شود",
+                  "description": "کلمه کلیدی بیش از حد طولانی"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Invalid Price Range",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}{{apiPath}}/products?minPrice=10000000&maxPrice=5000000",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "search", "products"],
+              "query": [
+                {
+                  "key": "minPrice",
+                  "value": "10000000",
+                  "description": "حداقل قیمت بیشتر از حداکثر"
+                },
+                {
+                  "key": "maxPrice",
+                  "value": "5000000"
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          "// Pre-request script برای تنظیم متغیرها",
+          "console.log('Running search API request...');",
+          "",
+          "// تنظیم timestamp برای tracking",
+          "pm.globals.set('requestTimestamp', new Date().toISOString());"
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          "// Test script برای بررسی پاسخ‌ها",
+          "pm.test('Status code is 200', function () {",
+          "    pm.response.to.have.status(200);",
+          "});",
+          "",
+          "pm.test('Response time is less than 3000ms', function () {",
+          "    pm.expect(pm.response.responseTime).to.be.below(3000);",
+          "});",
+          "",
+          "pm.test('Response has valid JSON', function () {",
+          "    pm.response.to.be.json;",
+          "});",
+          "",
+          "// بررسی ساختار پاسخ برای search results",
+          "if (pm.request.url.path.includes('search')) {",
+          "    pm.test('Search response has required fields', function () {",
+          "        const jsonData = pm.response.json();",
+          "        pm.expect(jsonData).to.have.property('items');",
+          "        pm.expect(jsonData).to.have.property('totalCount');",
+          "        pm.expect(jsonData).to.have.property('currentPage');",
+          "        pm.expect(jsonData).to.have.property('pageSize');",
+          "    });",
+          "}",
+          "",
+          "// لاگ response time",
+          "console.log('Response time: ' + pm.response.responseTime + 'ms');"
+        ]
+      }
+    }
+  ]
+}

@@ -1,0 +1,329 @@
+/* 
+ * Additional CSS for Image Upload Component
+ * Optional styling enhancements and custom themes
+ */
+
+/* Custom theme: Dark mode */
+.image-upload-manager[data-theme="dark"] {
+    --primary-color: #3b82f6;
+    --secondary-color: #6366f1;
+    --success-color: #10b981;
+    --danger-color: #ef4444;
+    --warning-color: #f59e0b;
+    --border-color: #374151;
+    --bg-light: #1f2937;
+    --text-muted: #9ca3af;
+    --bg-dark: #111827;
+    --text-light: #f9fafb;
+}
+
+.image-upload-manager[data-theme="dark"] .upload-area {
+    background: var(--bg-dark);
+    color: var(--text-light);
+    border-color: var(--border-color);
+}
+
+.image-upload-manager[data-theme="dark"] .upload-area h4 {
+    color: var(--text-light);
+}
+
+.image-upload-manager[data-theme="dark"] .image-item {
+    background: var(--bg-dark);
+    border: 1px solid var(--border-color);
+}
+
+.image-upload-manager[data-theme="dark"] .image-name {
+    color: var(--text-light);
+}
+
+.image-upload-manager[data-theme="dark"] .upload-progress {
+    background: var(--bg-dark);
+    border-color: var(--border-color);
+}
+
+/* Custom theme: Colorful */
+.image-upload-manager[data-theme="colorful"] {
+    --primary-color: #ff6b6b;
+    --secondary-color: #4ecdc4;
+    --success-color: #51cf66;
+    --danger-color: #ff6b6b;
+    --warning-color: #ffd43b;
+    --border-color: #e9ecef;
+    --bg-light: #f8f9ff;
+    --text-muted: #868e96;
+}
+
+.image-upload-manager[data-theme="colorful"] .upload-area {
+    background: linear-gradient(135deg, #ff6b6b15, #4ecdc415);
+    border: 2px dashed var(--primary-color);
+}
+
+.image-upload-manager[data-theme="colorful"] .upload-btn {
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    border-radius: 25px;
+    padding: 12px 24px;
+}
+
+.image-upload-manager[data-theme="colorful"] .image-item {
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 4px 20px rgba(255, 107, 107, 0.1);
+}
+
+/* Compact layout */
+.image-upload-manager.compact .upload-area {
+    padding: 20px;
+}
+
+.image-upload-manager.compact .upload-icon {
+    font-size: 2rem;
+}
+
+.image-upload-manager.compact .image-gallery {
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    gap: 10px;
+}
+
+.image-upload-manager.compact .image-preview {
+    height: 100px;
+}
+
+.image-upload-manager.compact .image-info {
+    padding: 8px;
+}
+
+/* Large layout */
+.image-upload-manager.large .upload-area {
+    padding: 60px 40px;
+}
+
+.image-upload-manager.large .upload-icon {
+    font-size: 4rem;
+}
+
+.image-upload-manager.large .image-gallery {
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+}
+
+.image-upload-manager.large .image-preview {
+    height: 200px;
+}
+
+/* Rounded style */
+.image-upload-manager.rounded .upload-area {
+    border-radius: 25px;
+}
+
+.image-upload-manager.rounded .image-item {
+    border-radius: 20px;
+}
+
+.image-upload-manager.rounded .upload-btn {
+    border-radius: 25px;
+}
+
+/* Grid layouts */
+.image-upload-manager.grid-2 .image-gallery {
+    grid-template-columns: repeat(2, 1fr);
+}
+
+.image-upload-manager.grid-3 .image-gallery {
+    grid-template-columns: repeat(3, 1fr);
+}
+
+.image-upload-manager.grid-4 .image-gallery {
+    grid-template-columns: repeat(4, 1fr);
+}
+
+.image-upload-manager.grid-5 .image-gallery {
+    grid-template-columns: repeat(5, 1fr);
+}
+
+/* List view */
+.image-upload-manager.list-view .image-gallery {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.image-upload-manager.list-view .image-item {
+    display: flex;
+    align-items: center;
+    padding: 15px;
+}
+
+.image-upload-manager.list-view .image-preview {
+    width: 80px;
+    height: 60px;
+    margin-right: 15px;
+    border-radius: 8px;
+}
+
+.image-upload-manager.list-view .image-info {
+    flex: 1;
+    padding: 0;
+}
+
+.image-upload-manager.list-view .image-actions {
+    position: static;
+    opacity: 1;
+    margin-left: 15px;
+}
+
+/* Animation enhancements */
+.image-upload-manager.animated .image-item {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.image-upload-manager.animated .image-item:hover {
+    transform: translateY(-5px) scale(1.02);
+}
+
+.image-upload-manager.animated .upload-area {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.image-upload-manager.animated .upload-area:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+}
+
+/* Status indicators */
+.image-status-indicator {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(0,0,0,0.8);
+    color: white;
+    padding: 10px;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    z-index: 10;
+}
+
+.image-status-indicator.uploading::before {
+    content: "⏳ ";
+}
+
+.image-status-indicator.success::before {
+    content: "✅ ";
+}
+
+.image-status-indicator.error::before {
+    content: "❌ ";
+}
+
+/* Loading overlay */
+.image-item.loading::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(255,255,255,0.8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 5;
+}
+
+.image-item.loading::before {
+    content: "⏳";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 2rem;
+    z-index: 6;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    from { transform: translate(-50%, -50%) rotate(0deg); }
+    to { transform: translate(-50%, -50%) rotate(360deg); }
+}
+
+/* Tooltip styles */
+.tooltip-custom {
+    position: absolute;
+    background: rgba(0,0,0,0.8);
+    color: white;
+    padding: 5px 10px;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    pointer-events: none;
+    z-index: 1000;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.tooltip-custom.show {
+    opacity: 1;
+}
+
+/* Mobile optimizations */
+@media (max-width: 576px) {
+    .image-upload-manager .upload-area {
+        padding: 20px 15px;
+    }
+    
+    .image-upload-manager .image-gallery {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 8px;
+    }
+    
+    .image-upload-manager .image-actions {
+        opacity: 1;
+    }
+    
+    .image-upload-manager.list-view .image-item {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .image-upload-manager.list-view .image-preview {
+        margin: 0 0 10px 0;
+    }
+}
+
+/* Print styles */
+@media print {
+    .image-upload-manager .upload-area,
+    .image-upload-manager .image-actions,
+    .image-upload-manager .upload-progress {
+        display: none !important;
+    }
+    
+    .image-upload-manager .image-gallery {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 10px;
+    }
+}
+
+/* High contrast mode */
+@media (prefers-contrast: high) {
+    .image-upload-manager {
+        --border-color: #000000;
+        --text-muted: #000000;
+    }
+    
+    .image-upload-manager .upload-area {
+        border-width: 3px;
+    }
+    
+    .image-upload-manager .image-item {
+        border: 2px solid #000000;
+    }
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+    .image-upload-manager * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}

@@ -1,0 +1,115 @@
+{
+    "info": {
+        "name": "CountryController API",
+        "description": "Postman collection for CountryController API endpoints.",
+        "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+    },
+    "item": [
+        {
+            "name": "Get All Countries",
+            "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                    "raw": "{{baseUrl}}/api/countries",
+                    "host": [
+                        "{{baseUrl}}"
+                    ],
+                    "path": [
+                        "api",
+                        "countries"
+                    ]
+                }
+            }
+        },
+        {
+            "name": "Get Country By ID",
+            "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                    "raw": "{{baseUrl}}/api/countries/:id",
+                    "host": [
+                        "{{baseUrl}}"
+                    ],
+                    "path": [
+                        "api",
+                        "countries",
+                        ":id"
+                    ]
+                }
+            }
+        },
+        {
+            "name": "Create Country",
+            "request": {
+                "method": "POST",
+                "header": [
+                    {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                    }
+                ],
+                "body": {
+                    "mode": "raw",
+                    "raw": "{\n    \"id\": null,\n    \"name\": \"Sample Country\",\n    \"code\": \"SC\"\n}"
+                },
+                "url": {
+                    "raw": "{{baseUrl}}/api/countries",
+                    "host": [
+                        "{{baseUrl}}"
+                    ],
+                    "path": [
+                        "api",
+                        "countries"
+                    ]
+                }
+            }
+        },
+        {
+            "name": "Update Country",
+            "request": {
+                "method": "PUT",
+                "header": [
+                    {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                    }
+                ],
+                "body": {
+                    "mode": "raw",
+                    "raw": "{\n    \"name\": \"Updated Country\",\n    \"code\": \"UC\"\n}"
+                },
+                "url": {
+                    "raw": "{{baseUrl}}/api/countries/:id",
+                    "host": [
+                        "{{baseUrl}}"
+                    ],
+                    "path": [
+                        "api",
+                        "countries",
+                        ":id"
+                    ]
+                }
+            }
+        },
+        {
+            "name": "Delete Country",
+            "request": {
+                "method": "DELETE",
+                "header": [],
+                "url": {
+                    "raw": "{{baseUrl}}/api/countries/:id",
+                    "host": [
+                        "{{baseUrl}}"
+                    ],
+                    "path": [
+                        "api",
+                        "countries",
+                        ":id"
+                    ]
+                }
+            }
+        }
+    ]
+}

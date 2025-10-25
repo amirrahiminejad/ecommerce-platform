@@ -1,0 +1,9 @@
+<svg width="300" height="200" xmlns="http://www.w3.org/2000/svg">
+  <rect width="100%" height="100%" fill="#f8f9fa"/>
+  <rect x="20" y="20" width="260" height="160" fill="none" stroke="#dee2e6" stroke-width="2" stroke-dasharray="5,5"/>
+  <circle cx="140" cy="80" r="15" fill="#dee2e6"/>
+  <polygon points="120,120 140,100 160,120 180,100 200,140 100,140" fill="#dee2e6"/>
+  <text x="50%" y="55%" dominant-baseline="middle" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" fill="#adb5bd">
+    No Image Available
+  </text>
+</svg>

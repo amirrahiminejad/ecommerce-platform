@@ -1,0 +1,259 @@
+/* Auth Pages Styles */
+body.auth-page {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    font-family: 'Inter', sans-serif;
+}
+
+.auth-container {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.auth-card {
+    background: white;
+    border-radius: 20px;
+    padding: 40px;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+    width: 100%;
+    max-width: 450px;
+    margin: 20px;
+}
+
+.auth-header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.auth-header h2 {
+    color: #333;
+    font-weight: 700;
+    margin-bottom: 10px;
+}
+
+.auth-header p {
+    color: #666;
+    font-size: 14px;
+}
+
+.auth-form .form-floating {
+    margin-bottom: 20px;
+}
+
+.auth-form .form-control {
+    border: 2px solid #e0e0e0;
+    border-radius: 10px;
+    padding: 15px;
+    transition: all 0.3s ease;
+}
+
+.auth-form .form-control:focus {
+    border-color: #667eea;
+    box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+}
+
+.btn-login, .btn-register {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border: none;
+    border-radius: 10px;
+    padding: 15px;
+    font-weight: 600;
+    width: 100%;
+    margin-bottom: 20px;
+    transition: all 0.3s ease;
+    color: white;
+}
+
+.btn-login:hover, .btn-register:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+    color: white;
+}
+
+.auth-divider {
+    text-align: center;
+    margin: 30px 0;
+    position: relative;
+}
+
+.auth-divider::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: #e0e0e0;
+}
+
+.auth-divider span {
+    background: white;
+    padding: 0 20px;
+    color: #666;
+    font-size: 14px;
+}
+
+.auth-links {
+    text-align: center;
+}
+
+.auth-links a {
+    color: #667eea;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.auth-links a:hover {
+    text-decoration: underline;
+}
+
+.auth-alert {
+    border-radius: 10px;
+    margin-bottom: 20px;
+}
+
+.remember-me {
+    margin-bottom: 20px;
+}
+
+.forgot-password-link {
+    color: #667eea;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.forgot-password-link:hover {
+    color: #764ba2;
+    text-decoration: underline;
+}
+
+.back-home {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    background: rgba(255,255,255,0.2);
+    border: 1px solid rgba(255,255,255,0.3);
+    color: white;
+    border-radius: 10px;
+    padding: 10px 20px;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.back-home:hover {
+    background: rgba(255,255,255,0.3);
+    color: white;
+    text-decoration: none;
+}
+
+/* Reset Password Specific */
+.reset-form .form-group {
+    margin-bottom: 20px;
+}
+
+.reset-form label {
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 8px;
+}
+
+/* Responsive */
+/* Password Strength */
+.password-strength {
+    font-size: 12px;
+    margin-top: 5px;
+}
+
+.strength-weak { 
+    color: #dc3545; 
+}
+
+.strength-medium { 
+    color: #fd7e14; 
+}
+
+.strength-strong { 
+    color: #198754; 
+}
+
+/* Terms Checkbox */
+.terms-checkbox {
+    margin-bottom: 20px;
+}
+
+/* OAuth2 Buttons */
+.oauth-buttons {
+    margin-bottom: 20px;
+}
+
+.btn-oauth {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    padding: 12px 20px;
+    border: 2px solid #e0e0e0;
+    border-radius: 10px;
+    background: white;
+    color: #333;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 14px;
+    transition: all 0.3s ease;
+    margin-bottom: 10px;
+}
+
+.btn-oauth:hover {
+    background: #f8f9fa;
+    border-color: #ccc;
+    color: #333;
+    text-decoration: none;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+.btn-oauth svg {
+    margin-right: 10px;
+    flex-shrink: 0;
+}
+
+.google-btn:hover {
+    background: #f8f9fa;
+    border-color: #4285f4;
+}
+
+.google-btn:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(66, 133, 244, 0.2);
+}
+
+/* Responsive */
+@media (max-width: 576px) {
+    .auth-card {
+        padding: 30px 20px;
+        margin: 10px;
+    }
+    
+    .back-home {
+        position: relative;
+        top: auto;
+        left: auto;
+        margin-bottom: 20px;
+        display: inline-block;
+    }
+    
+    .btn-oauth {
+        font-size: 13px;
+        padding: 10px 16px;
+    }
+    
+    .btn-oauth svg {
+        width: 18px;
+        height: 18px;
+        margin-right: 8px;
+    }
+}
