@@ -7,7 +7,6 @@ import com.webrayan.store.core.common.entity.Tag;
 import com.webrayan.store.core.common.repository.CountryRepository;
 import com.webrayan.store.core.common.repository.LocationRepository;
 import com.webrayan.store.core.common.repository.SettingRepository;
-import com.webrayan.store.modules.ads.repository.TagRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -24,7 +23,6 @@ public class CommonDataInitializer {
     private final CountryRepository countryRepository;
     private final LocationRepository locationRepository;
     private final SettingRepository settingRepository;
-    private final TagRepository tagRepository;
 
     @Transactional
     public void initialize() {
@@ -178,19 +176,7 @@ public class CommonDataInitializer {
             "Organic", "Handmade", "Export", "Import", "Original",
             "Discounted", "Free", "Fast", "High Quality", "Limited"
         );
-        
-        int createdCount = 0;
-        for (String tagName : tagNames) {
-            if (!tagRepository.existsByName(tagName)) {
-                Tag tag = new Tag();
-                tag.setName(tagName);
-                tagRepository.save(tag);
-                createdCount++;
-                log.debug("Tag {} created", tagName);
-            }
-        }
-        
-        log.info("✅ {} tags created", createdCount);
+
     }
 
 

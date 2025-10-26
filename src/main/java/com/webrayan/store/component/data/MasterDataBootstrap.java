@@ -1,6 +1,5 @@
 package com.webrayan.store.component.data;
 
-import com.webrayan.store.component.data.initializers.AdsDataInitializer;
 import com.webrayan.store.component.data.initializers.CatalogDataInitializer;
 import com.webrayan.store.component.data.initializers.CommonDataInitializer;
 import com.webrayan.store.component.data.initializers.SecurityDataInitializer;
@@ -22,7 +21,6 @@ public class MasterDataBootstrap implements CommandLineRunner {
     private final CommonDataInitializer commonDataInitializer;
     private final SecurityDataInitializer securityDataInitializer;
     private final CatalogDataInitializer catalogDataInitializer;
-    private final AdsDataInitializer adsDataInitializer;
 
     @Override
     @Transactional
@@ -37,8 +35,6 @@ public class MasterDataBootstrap implements CommandLineRunner {
             // 3. داده‌های کاتالوگ (دسته‌بندی محصولات)
             catalogDataInitializer.initialize();
             
-            // 4. داده‌های آگهی (دسته‌بندی آگهی‌ها)
-            adsDataInitializer.initialize();
 
         } catch (Exception e) {
             log.error("❌ Error on create data: {}", e.getMessage(), e);
