@@ -20,12 +20,12 @@
 
 ### 1. کپی فایل‌ها به سرور:
 ```bash
-scp -r iran-commerce/ user@your-server:/opt/
+scp -r iran-store/ user@your-server:/opt/
 ```
 
 ### 2. اجرای اسکریپت setup:
 ```bash
-cd /opt/iran-commerce
+cd /opt/iran-store
 sudo ./server-setup.sh
 ```
 
@@ -64,7 +64,7 @@ sudo ./deploy.sh rollback
 sudo systemctl stop tomcat
 
 # 3. کپی WAR جدید
-sudo cp target/iran-commerce-*.war /opt/tomcat/webapps/iran-commerce.war
+sudo cp target/iran-store-*.war /opt/tomcat/webapps/iran-store.war
 
 # 4. راه‌اندازی Tomcat
 sudo systemctl start tomcat
@@ -113,7 +113,7 @@ GRANT ALL PRIVILEGES ON DATABASE bazaar TO bazaar_user;
 ### لاگ‌های مهم:
 ```bash
 # لاگ برنامه
-tail -f /opt/iran-commerce/logs/application.log
+tail -f /opt/iran-store/logs/application.log
 
 # لاگ Tomcat
 tail -f /opt/tomcat/logs/catalina.out
@@ -136,7 +136,7 @@ systemctl restart nginx
 
 # فضای دیسک
 df -h
-du -sh /opt/iran-commerce/*
+du -sh /opt/iran-store/*
 
 # پردازه‌های Java
 jps -v
@@ -173,13 +173,13 @@ jps -v
 # اسکریپت backup دیتابیس
 #!/bin/bash
 DATE=$(date +%Y%m%d_%H%M%S)
-pg_dump -U postgres commerce > /opt/iran-commerce/backups/db_backup_$DATE.sql
+pg_dump -U postgres store > /opt/iran-store/backups/db_backup_$DATE.sql
 ```
 
 ### Restore:
 ```bash
 # بازگردانی دیتابیس
-psql -U postgres -d commerce < /opt/iran-commerce/backups/db_backup_YYYYMMDD_HHMMSS.sql
+psql -U postgres -d store < /opt/iran-store/backups/db_backup_YYYYMMDD_HHMMSS.sql
 ```
 
 ## 🐛 Troubleshooting
@@ -196,14 +196,14 @@ psql -U postgres -d commerce < /opt/iran-commerce/backups/db_backup_YYYYMMDD_HHM
 2. **خطای دیتابیس**:
    ```bash
    # تست اتصال
-   psql -U postgres -h localhost -d commerce
+   psql -U postgres -h localhost -d store
    ```
 
 3. **خطای فایل upload**:
    ```bash
    # چک مجوزها
-   ls -la /opt/iran-commerce/uploads/
-   chown -R tomcat:tomcat /opt/iran-commerce/uploads/
+   ls -la /opt/iran-store/uploads/
+   chown -R tomcat:tomcat /opt/iran-store/uploads/
    ```
 
 4. **خطای حافظه**:

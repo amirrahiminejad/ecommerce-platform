@@ -75,7 +75,7 @@ cors.allow-credentials=true
 cors.max-age=3600
 
 # Logging
-logging.level.com.webrayan.commerce.core.security=INFO
+logging.level.com.webrayan.store.core.security=INFO
 logging.level.org.springframework.security=WARN
 logging.level.org.hibernate.SQL=WARN
 ```
@@ -109,7 +109,7 @@ cors.allowed-origins=http://localhost:3000,http://127.0.0.1:3000
 cors.allow-credentials=true
 
 # Logging (development)
-logging.level.com.webrayan.commerce=DEBUG
+logging.level.com.webrayan.store=DEBUG
 logging.level.org.springframework.security=DEBUG
 logging.level.org.hibernate.SQL=DEBUG
 logging.level.org.hibernate.type.descriptor.sql.BasicBinder=TRACE
@@ -276,7 +276,7 @@ management.metrics.export.prometheus.enabled=true
             </encoder>
         </appender>
 
-        <logger name="com.webrayan.commerce.core.security" level="INFO"/>
+        <logger name="com.webrayan.store.core.security" level="INFO"/>
         <logger name="org.springframework.security" level="WARN"/>
 
         <root level="INFO">
@@ -291,7 +291,7 @@ management.metrics.export.prometheus.enabled=true
             </encoder>
         </appender>
 
-        <logger name="com.webrayan.commerce" level="DEBUG"/>
+        <logger name="com.webrayan.store" level="DEBUG"/>
         <logger name="org.springframework.security" level="DEBUG"/>
 
         <root level="DEBUG">

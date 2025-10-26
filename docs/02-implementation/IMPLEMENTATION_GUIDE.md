@@ -125,7 +125,7 @@ springdoc.api-docs.path=/v3/api-docs
 ```bash
 # Clone repository
 git clone https://gitlab.com/webrayan/iran-bazaar.git
-cd iran-commerce
+cd iran-store
 
 # Install dependencies & run
 mvn clean install
@@ -506,7 +506,7 @@ public void createUser_WithDuplicateUsername_ThrowsConflictException() {
 #### **1. Logging Configuration:**
 ```properties
 # در application.properties
-logging.level.com.webrayan.commerce=DEBUG
+logging.level.com.webrayan.store=DEBUG
 logging.level.org.springframework.security=DEBUG
 logging.level.org.springframework.web=DEBUG
 ```

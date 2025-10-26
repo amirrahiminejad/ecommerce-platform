@@ -1017,7 +1017,7 @@ spring.cache.cache-names=search-ads,search-products,search-suggestions
 # Logging Configuration
 # ===================================================================
 
-logging.level.com.webrayan.commerce.modules.search=INFO
+logging.level.com.webrayan.store.modules.search=INFO
 logging.level.org.springframework.cache=DEBUG
 logging.level.org.hibernate.SQL=WARN
 logging.level.org.hibernate.type.descriptor.sql.BasicBinder=WARN

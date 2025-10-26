@@ -62,7 +62,7 @@
 #### **1. دریافت پروژه:**
 ```bash
 git clone https://gitlab.com/webrayan/online-store.git
-cd iran-commerce
+cd iran-store
 ```
 
 #### **2. تنظیم دیتابیس:**

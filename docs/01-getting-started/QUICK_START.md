@@ -14,10 +14,10 @@
 ```bash
 # Clone repository
 git clone https://gitlab.com/webrayan/iran-bazaar.git
-cd iran-commerce
+cd iran-store
 
 # ایجاد database
-createdb commerce
+createdb store
 ```
 
 #### **2. تنظیم اولیه:**

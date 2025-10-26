@@ -376,7 +376,7 @@ app:
     storage-type: cloud
     cloud-config:
       provider: aws-s3
-      bucket: prod-iran-commerce-uploads
+      bucket: prod-iran-store-uploads
       region: us-west-2
 ```
 

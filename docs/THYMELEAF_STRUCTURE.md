@@ -41,7 +41,7 @@ src/main/resources/
 ### 📥 **مرحله 1: استخراج قالب**
 ```bash
 # قالب HTML رو در این مسیر قرار بده:
-iran-commerce/temp-template/
+iran-store/temp-template/
 ├── profile.html
 ├── css/
 ├── js/

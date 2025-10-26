@@ -132,7 +132,7 @@ services:
     environment:
       - GOOGLE_CLIENT_ID=${GOOGLE_CLIENT_ID}
       - GOOGLE_CLIENT_SECRET=${GOOGLE_CLIENT_SECRET}
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/commerce
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/store
     depends_on:
       - db
 ```

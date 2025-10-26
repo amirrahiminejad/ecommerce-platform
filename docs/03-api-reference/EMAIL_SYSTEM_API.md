@@ -306,8 +306,8 @@ Import the provided Postman collection for complete API testing.
 
 ### Debug Logging:
 ```properties
-logging.level.com.webrayan.commerce.modules.acl.service.impl.PasswordResetServiceImpl=DEBUG
-logging.level.com.webrayan.commerce.core.service.impl.EmailServiceImpl=DEBUG
+logging.level.com.webrayan.store.modules.acl.service.impl.PasswordResetServiceImpl=DEBUG
+logging.level.com.webrayan.store.core.service.impl.EmailServiceImpl=DEBUG
 ```
 
 ---

@@ -503,8 +503,8 @@ public class FileUploadHealthIndicator implements HealthIndicator {
 
 ```properties
 # application-debug.properties
-logging.level.com.webrayan.commerce.service.FileValidationService=DEBUG
-logging.level.com.webrayan.commerce.service.ImageProcessingService=DEBUG
+logging.level.com.webrayan.store.service.FileValidationService=DEBUG
+logging.level.com.webrayan.store.service.ImageProcessingService=DEBUG
 logging.level.org.springframework.web.multipart=DEBUG
 logging.level.org.apache.tomcat.util.http.fileupload=DEBUG
 

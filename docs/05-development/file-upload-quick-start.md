@@ -370,7 +370,7 @@ curl -X POST \
 
 ```properties
 # در application.properties برای دیباگ
-logging.level.com.webrayan.commerce.service=DEBUG
+logging.level.com.webrayan.store.service=DEBUG
 logging.level.org.springframework.web.multipart=DEBUG
 ```
 

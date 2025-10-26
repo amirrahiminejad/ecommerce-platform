@@ -424,7 +424,7 @@ public ResponseEntity<Order> getOrder(@PathVariable Long targetId) { ... }
 برای debug کردن، سطح لاگ security را فعال کنید:
 ```properties
 logging.level.org.springframework.security=DEBUG
-logging.level.com.webrayan.commerce.core.security=DEBUG
+logging.level.com.webrayan.store.core.security=DEBUG
 ```
 
 ### تست‌های امنیت
