@@ -256,7 +256,7 @@ No qualifying bean of type 'FileValidationService' available
 ```java
 // اطمینان از اسکن component
 @SpringBootApplication
-@ComponentScan(basePackages = "com.webrayan.bazaar")
+@ComponentScan(basePackages = "com.webrayan.commercece")
 public class Application {
     public static void main(String[] args) {
         SpringApplication.run(Application.class, args);
@@ -503,8 +503,8 @@ public class FileUploadHealthIndicator implements HealthIndicator {
 
 ```properties
 # application-debug.properties
-logging.level.com.webrayan.bazaar.service.FileValidationService=DEBUG
-logging.level.com.webrayan.bazaar.service.ImageProcessingService=DEBUG
+logging.level.com.webrayan.commerce.service.FileValidationService=DEBUG
+logging.level.com.webrayan.commerce.service.ImageProcessingService=DEBUG
 logging.level.org.springframework.web.multipart=DEBUG
 logging.level.org.apache.tomcat.util.http.fileupload=DEBUG
 

@@ -1,7 +1,7 @@
 # 📧 Email System & Password Reset API Documentation
 
 ## Overview
-سیستم ایمیل و بازیابی رمز عبور Persia Bazaar که امکان ارسال انواع ایمیل‌ها و فرایند امن بازیابی رمز عبور را فراهم می‌کند.
+سیستم ایمیل و بازیابی رمز عبور Iran ECommerce که امکان ارسال انواع ایمیل‌ها و فرایند امن بازیابی رمز عبور را فراهم می‌کند.
 
 ## Features
 - ✅ ارسال ایمیل با قالب‌های HTML زیبا
@@ -306,8 +306,8 @@ Import the provided Postman collection for complete API testing.
 
 ### Debug Logging:
 ```properties
-logging.level.com.webrayan.bazaar.modules.acl.service.impl.PasswordResetServiceImpl=DEBUG
-logging.level.com.webrayan.bazaar.core.service.impl.EmailServiceImpl=DEBUG
+logging.level.com.webrayan.commerce.modules.acl.service.impl.PasswordResetServiceImpl=DEBUG
+logging.level.com.webrayan.commerce.core.service.impl.EmailServiceImpl=DEBUG
 ```
 
 ---

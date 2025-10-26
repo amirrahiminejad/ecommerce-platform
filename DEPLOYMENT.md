@@ -1,6 +1,6 @@
-# Iran Bazaar - Deployment Guide
+# فروشگاه اینترنتی - Online Store Deployment Guide
 
-این راهنما برای deploy کردن پروژه Iran Bazaar روی سرور Linux با Tomcat طراحی شده است.
+این راهنما برای deploy کردن پروژه فروشگاه اینترنتی روی سرور Linux با Tomcat طراحی شده است.
 
 ## 📋 پیش‌نیازها
 
@@ -20,12 +20,12 @@
 
 ### 1. کپی فایل‌ها به سرور:
 ```bash
-scp -r iran-bazaar/ user@your-server:/opt/
+scp -r iran-commerce/ user@your-server:/opt/
 ```
 
 ### 2. اجرای اسکریپت setup:
 ```bash
-cd /opt/iran-bazaar
+cd /opt/iran-commerce
 sudo ./server-setup.sh
 ```
 
@@ -64,7 +64,7 @@ sudo ./deploy.sh rollback
 sudo systemctl stop tomcat
 
 # 3. کپی WAR جدید
-sudo cp target/iran-bazaar-*.war /opt/tomcat/webapps/iran-bazaar.war
+sudo cp target/iran-commerce-*.war /opt/tomcat/webapps/iran-commerce.war
 
 # 4. راه‌اندازی Tomcat
 sudo systemctl start tomcat
@@ -103,17 +103,17 @@ GRANT ALL PRIVILEGES ON DATABASE bazaar TO bazaar_user;
 
 پس از deployment موفق:
 
-- **برنامه اصلی**: `http://your-server:8080/iran-bazaar`
+- **برنامه اصلی**: `http://your-server:8080/online-store`
 - **از طریق Nginx**: `http://your-server/`
-- **Swagger UI**: `http://your-server:8080/iran-bazaar/swagger-ui.html`
-- **پنل ادمین**: `http://your-server:8080/iran-bazaar/admin`
+- **Swagger UI**: `http://your-server:8080/online-store/swagger-ui.html`
+- **پنل ادمین**: `http://your-server:8080/online-store/admin`
 
 ## 📊 مانیتورینگ و لاگ‌ها
 
 ### لاگ‌های مهم:
 ```bash
 # لاگ برنامه
-tail -f /opt/iran-bazaar/logs/application.log
+tail -f /opt/iran-commerce/logs/application.log
 
 # لاگ Tomcat
 tail -f /opt/tomcat/logs/catalina.out
@@ -136,7 +136,7 @@ systemctl restart nginx
 
 # فضای دیسک
 df -h
-du -sh /opt/iran-bazaar/*
+du -sh /opt/iran-commerce/*
 
 # پردازه‌های Java
 jps -v
@@ -173,13 +173,13 @@ jps -v
 # اسکریپت backup دیتابیس
 #!/bin/bash
 DATE=$(date +%Y%m%d_%H%M%S)
-pg_dump -U postgres bazaar > /opt/iran-bazaar/backups/db_backup_$DATE.sql
+pg_dump -U postgres commerce > /opt/iran-commerce/backups/db_backup_$DATE.sql
 ```
 
 ### Restore:
 ```bash
 # بازگردانی دیتابیس
-psql -U postgres -d bazaar < /opt/iran-bazaar/backups/db_backup_YYYYMMDD_HHMMSS.sql
+psql -U postgres -d commerce < /opt/iran-commerce/backups/db_backup_YYYYMMDD_HHMMSS.sql
 ```
 
 ## 🐛 Troubleshooting
@@ -196,14 +196,14 @@ psql -U postgres -d bazaar < /opt/iran-bazaar/backups/db_backup_YYYYMMDD_HHMMSS.
 2. **خطای دیتابیس**:
    ```bash
    # تست اتصال
-   psql -U postgres -h localhost -d bazaar
+   psql -U postgres -h localhost -d commerce
    ```
 
 3. **خطای فایل upload**:
    ```bash
    # چک مجوزها
-   ls -la /opt/iran-bazaar/uploads/
-   chown -R tomcat:tomcat /opt/iran-bazaar/uploads/
+   ls -la /opt/iran-commerce/uploads/
+   chown -R tomcat:tomcat /opt/iran-commerce/uploads/
    ```
 
 4. **خطای حافظه**:

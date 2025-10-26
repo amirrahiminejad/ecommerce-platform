@@ -1,4 +1,4 @@
-# 🔒 مستندات سیستم امنیت Persia Bazaar
+# 🔒 مستندات سیستم امنیت Iran ECommerce
 
 ## فهرست مطالب
 1. [معرفی کلی](#معرفی-کلی)
@@ -14,7 +14,7 @@
 
 ## معرفی کلی
 
-سیستم امنیت Persia Bazaar بر اساس **Spring Security** و **JWT** پیاده‌سازی شده است. این سیستم شامل:
+سیستم امنیت Iran ECommerce بر اساس **Spring Security** و **JWT** پیاده‌سازی شده است. این سیستم شامل:
 
 - 🔐 **احراز هویت با JWT**
 - 👥 **مدیریت نقش‌ها (Roles)**
@@ -424,7 +424,7 @@ public ResponseEntity<Order> getOrder(@PathVariable Long targetId) { ... }
 برای debug کردن، سطح لاگ security را فعال کنید:
 ```properties
 logging.level.org.springframework.security=DEBUG
-logging.level.com.webrayan.bazaar.core.security=DEBUG
+logging.level.com.webrayan.commerce.core.security=DEBUG
 ```
 
 ### تست‌های امنیت

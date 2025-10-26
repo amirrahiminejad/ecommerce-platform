@@ -1,4 +1,4 @@
-# 📚 مستندات Persia Bazaar - فهرست ک## 📡 مستندات API
+# 📚 مستندات Iran ECommerce - فهرست ک## 📡 مستندات API
 
 **📁 `03-api-reference/`**
 
@@ -9,7 +9,7 @@
 | **[SWAGGER_QUICK_GUIDE.md](03-api-reference/SWAGGER_QUICK_GUIDE.md)** | راهنمای سریع Swagger | 10 دقیقه | API Consumer |
 | **[EMAIL_SYSTEM_API.md](03-api-reference/EMAIL_SYSTEM_API.md)** | 📧 API سیستم ایمیل و بازیابی رمز عبور | 25 دقیقه | Backend/Frontend Developer | 🗂️ ساختار مستندات
 
-مستندات پروژه Persia Bazaar به صورت منطقی در پوشه‌های جداگانه دسته‌بندی شده‌اند:
+مستندات پروژه Iran ECommerce به صورت منطقی در پوشه‌های جداگانه دسته‌بندی شده‌اند:
 
 ```
 docs/

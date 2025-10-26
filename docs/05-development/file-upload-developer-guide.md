@@ -2,7 +2,7 @@
 
 ## Overview
 
-This guide provides technical documentation for developers working with the Persia Bazaar file upload system. It covers architecture, implementation patterns, extension points, and best practices for maintaining and extending the system.
+This guide provides technical documentation for developers working with the Iran ECommerce file upload system. It covers architecture, implementation patterns, extension points, and best practices for maintaining and extending the system.
 
 ## Table of Contents
 
@@ -376,7 +376,7 @@ app:
     storage-type: cloud
     cloud-config:
       provider: aws-s3
-      bucket: prod-iran-bazaar-uploads
+      bucket: prod-iran-commerce-uploads
       region: us-west-2
 ```
 

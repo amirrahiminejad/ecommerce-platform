@@ -8,12 +8,12 @@
 		<version>3.4.4</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>com.webrayan.bazaar</groupId>
-	<artifactId>iran-bazaaar</artifactId>
+	<groupId>com.webrayan.store</groupId>
+	<artifactId>online-store</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>war</packaging>
-	<name>iran-bazaaar</name>
-	<description>Iranian International Bazaar</description>
+	<name>online-store</name>
+	<description>Online E-commerce Store</description>
 	<url/>
 	<licenses>
 		<license/>

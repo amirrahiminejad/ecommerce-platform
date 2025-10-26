@@ -1,5 +1,5 @@
 -- Database Indexes for Search Performance Optimization
--- Persia Bazaar Project - Search Module
+-- Iran ECommerce Project - Search Module
 
 -- ====================================
 -- FULL-TEXT SEARCH INDEXES

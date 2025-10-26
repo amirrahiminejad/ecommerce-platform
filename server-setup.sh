@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Iran Bazaar Server Setup Script
+# Online Store Server Setup Script
 # This script prepares the server for deployment
 
 set -e
@@ -23,7 +23,7 @@ if [[ $EUID -ne 0 ]]; then
     exit 1
 fi
 
-log_info "🚀 Setting up Iran Bazaar deployment environment..."
+log_info "🚀 Setting up Online Store deployment environment..."
 
 # Update system
 log_info "Updating system packages..."
@@ -58,13 +58,13 @@ fi
 
 # Create application directories
 log_info "Creating application directories..."
-mkdir -p /opt/iran-bazaar/{uploads,logs,backups,temp}
-chown -R tomcat:tomcat /opt/iran-bazaar
-chmod -R 755 /opt/iran-bazaar
+mkdir -p /opt/iran-commerce/{uploads,logs,backups,temp}
+chown -R tomcat:tomcat /opt/iran-commerce
+chmod -R 755 /opt/iran-commerce
 
 # Setup PostgreSQL
 log_info "Setting up PostgreSQL..."
-sudo -u postgres psql -c "CREATE DATABASE IF NOT EXISTS bazaar;" 2>/dev/null || true
+sudo -u postgres psql -c "CREATE DATABASE IF NOT EXISTS online_store;" 2>/dev/null || true
 sudo -u postgres psql -c "ALTER USER postgres PASSWORD '5Azar1360';" 2>/dev/null || true
 
 # Install systemd service
@@ -96,13 +96,13 @@ ufw --force enable
 
 # Setup nginx (optional reverse proxy)
 log_info "Setting up nginx reverse proxy..."
-cat > /etc/nginx/sites-available/iran-bazaar << 'EOF'
+cat > /etc/nginx/sites-available/iran-commerce << 'EOF'
 server {
     listen 80;
     server_name _;
     
     location / {
-        proxy_pass http://localhost:8080/iran-bazaar;
+        proxy_pass http://localhost:8080/online-store;
         proxy_set_header Host $host;
         proxy_set_header X-Real-IP $remote_addr;
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
@@ -110,28 +110,28 @@ server {
     }
     
     # Static files
-    location /iran-bazaar/css/ {
-        proxy_pass http://localhost:8080/iran-bazaar/css/;
+    location /online-store/css/ {
+        proxy_pass http://localhost:8080/online-store/css/;
     }
     
-    location /iran-bazaar/js/ {
-        proxy_pass http://localhost:8080/iran-bazaar/js/;
+    location /online-store/js/ {
+        proxy_pass http://localhost:8080/online-store/js/;
     }
     
-    location /iran-bazaar/images/ {
-        proxy_pass http://localhost:8080/iran-bazaar/images/;
+    location /online-store/images/ {
+        proxy_pass http://localhost:8080/online-store/images/;
     }
 }
 EOF
 
-ln -sf /etc/nginx/sites-available/iran-bazaar /etc/nginx/sites-enabled/
+ln -sf /etc/nginx/sites-available/iran-commerce /etc/nginx/sites-enabled/
 rm -f /etc/nginx/sites-enabled/default
 nginx -t && systemctl restart nginx
 
 # Set up log rotation
 log_info "Setting up log rotation..."
-cat > /etc/logrotate.d/iran-bazaar << 'EOF'
-/opt/iran-bazaar/logs/*.log {
+cat > /etc/logrotate.d/iran-commerce << 'EOF'
+/opt/online-store/logs/*.log {
     daily
     missingok
     rotate 30
@@ -147,23 +147,23 @@ EOF
 
 # Create maintenance script
 log_info "Creating maintenance scripts..."
-cat > /opt/iran-bazaar/maintenance.sh << 'EOF'
+cat > /opt/iran-commerce/maintenance.sh << 'EOF'
 #!/bin/bash
 
-# Iran Bazaar Maintenance Script
+# Online Store Maintenance Script
 
 log_info() { echo -e "\033[0;34m[INFO]\033[0m $1"; }
 
-log_info "Running Iran Bazaar maintenance..."
+log_info "Running Online Store maintenance..."
 
 # Clean up old logs
-find /opt/iran-bazaar/logs/ -name "*.log.*" -mtime +30 -delete
+find /opt/online-store/logs/ -name "*.log.*" -mtime +30 -delete
 
 # Clean up old backups
-find /opt/iran-bazaar/backups/ -name "*.backup.*" -mtime +7 -delete
+find /opt/online-store/backups/ -name "*.backup.*" -mtime +7 -delete
 
 # Clean up temp files
-find /opt/iran-bazaar/temp/ -type f -mtime +1 -delete
+find /opt/online-store/temp/ -type f -mtime +1 -delete
 
 # Database maintenance (optional)
 # sudo -u postgres vacuumdb bazaar
@@ -171,32 +171,32 @@ find /opt/iran-bazaar/temp/ -type f -mtime +1 -delete
 log_info "Maintenance completed"
 EOF
 
-chmod +x /opt/iran-bazaar/maintenance.sh
+chmod +x /opt/iran-commerce/maintenance.sh
 
 # Set up cron job for maintenance
-echo "0 2 * * * root /opt/iran-bazaar/maintenance.sh >> /opt/iran-bazaar/logs/maintenance.log 2>&1" > /etc/cron.d/iran-bazaar-maintenance
+echo "0 2 * * * root /opt/online-store/maintenance.sh >> /opt/online-store/logs/maintenance.log 2>&1" > /etc/cron.d/online-store-maintenance
 
 # Create deployment info
-cat > /opt/iran-bazaar/deployment-info.txt << EOF
-Iran Bazaar Deployment Information
-=================================
+cat > /opt/online-store/deployment-info.txt << EOF
+Online Store Deployment Information
+===================================
 
 Deployment Date: $(date)
 Tomcat Home: /opt/tomcat
-Application Directory: /opt/iran-bazaar
-Upload Directory: /opt/iran-bazaar/uploads
-Log Directory: /opt/iran-bazaar/logs
-Backup Directory: /opt/iran-bazaar/backups
+Application Directory: /opt/online-store
+Upload Directory: /opt/online-store/uploads
+Log Directory: /opt/online-store/logs
+Backup Directory: /opt/online-store/backups
 
 Application URLs:
-- Main Application: http://localhost:8080/iran-bazaar
+- Main Application: http://localhost:8080/online-store
 - Through Nginx: http://localhost/
-- Swagger UI: http://localhost:8080/iran-bazaar/swagger-ui.html
-- Admin Panel: http://localhost:8080/iran-bazaar/admin
+- Swagger UI: http://localhost:8080/online-store/swagger-ui.html
+- Admin Panel: http://localhost:8080/online-store/admin
 
 Database:
 - PostgreSQL on localhost:5432
-- Database: bazaar
+- Database: online_store
 - User: postgres
 
 Services:
@@ -211,7 +211,7 @@ Deployment Commands:
 - Status: sudo ./deploy.sh status
 
 Log Files:
-- Application: /opt/iran-bazaar/logs/application.log
+- Application: /opt/online-store/logs/application.log
 - Tomcat: /opt/tomcat/logs/catalina.out
 - Nginx: /var/log/nginx/access.log
 

@@ -376,8 +376,8 @@ public class EmailServiceHealthIndicator implements HealthIndicator {
 environment:
   - MAIL_USERNAME=${MAIL_USERNAME}
   - MAIL_PASSWORD=${MAIL_PASSWORD}
-  - BASE_URL=https://iran-bazaar.com
-  - FRONTEND_URL=https://iran-bazaar.com
+  - BASE_URL=https://iran-commerce.com
+  - FRONTEND_URL=https://iran-commerce.com
 ```
 
 ### Production Settings:

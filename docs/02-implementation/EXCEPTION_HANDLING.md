@@ -11,7 +11,7 @@
 
 ## معرفی
 
-سیستم Exception Handling و Validation در پروژه Persia Bazaar برای ارائه تجربه کاربری بهتر و مدیریت یکپارچه خطاها طراحی شده است.
+سیستم Exception Handling و Validation در پروژه Iran ECommerce برای ارائه تجربه کاربری بهتر و مدیریت یکپارچه خطاها طراحی شده است.
 
 ### ویژگی‌های کلیدی:
 - **Global Exception Handler**: مدیریت مرکزی تمام خطاها

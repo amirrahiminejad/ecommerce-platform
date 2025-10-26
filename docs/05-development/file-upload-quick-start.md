@@ -58,7 +58,7 @@ app:
     image-processing:
       enable-watermark: true
       watermark:
-        text: "Persia Bazaar"
+        text: "Iran ECommerce"
         position: "BOTTOM_RIGHT"
         opacity: 0.7
       thumbnail-sizes:
@@ -370,7 +370,7 @@ curl -X POST \
 
 ```properties
 # در application.properties برای دیباگ
-logging.level.com.webrayan.bazaar.service=DEBUG
+logging.level.com.webrayan.commerce.service=DEBUG
 logging.level.org.springframework.web.multipart=DEBUG
 ```
 

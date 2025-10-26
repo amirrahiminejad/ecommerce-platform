@@ -1,7 +1,7 @@
 {
   "info": {
     "name": "File Upload Management System",
-    "description": "Comprehensive collection for testing file upload, image processing, and storage management APIs in Persia Bazaar. Includes image upload, processing, validation, and product gallery management.",
+    "description": "Comprehensive collection for testing file upload, image processing, and storage management APIs in Iran ECommerce. Includes image upload, processing, validation, and product gallery management.",
     "version": "1.0.0",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },

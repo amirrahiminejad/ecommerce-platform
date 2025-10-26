@@ -1,4 +1,4 @@
-# 🚀 Quick Start Guide - Persia Bazaar
+# 🚀 Quick Start Guide - Iran ECommerce
 
 ## راه‌اندازی 5 دقیقه‌ای
 
@@ -14,10 +14,10 @@
 ```bash
 # Clone repository
 git clone https://gitlab.com/webrayan/iran-bazaar.git
-cd iran-bazaar
+cd iran-commerce
 
 # ایجاد database
-createdb bazaar
+createdb commerce
 ```
 
 #### **2. تنظیم اولیه:**

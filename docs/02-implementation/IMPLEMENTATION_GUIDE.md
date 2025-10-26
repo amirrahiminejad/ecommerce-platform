@@ -1,4 +1,4 @@
-# راهنمای پیاده‌سازی و استفاده - Persia Bazaar Project
+# راهنمای پیاده‌سازی و استفاده - Iran ECommerce Project
 
 ## فهرست مطالب
 1. [پیشرفت پیاده‌سازی](#پیشرفت-پیاده‌سازی)
@@ -125,7 +125,7 @@ springdoc.api-docs.path=/v3/api-docs
 ```bash
 # Clone repository
 git clone https://gitlab.com/webrayan/iran-bazaar.git
-cd iran-bazaar
+cd iran-commerce
 
 # Install dependencies & run
 mvn clean install
@@ -506,7 +506,7 @@ public void createUser_WithDuplicateUsername_ThrowsConflictException() {
 #### **1. Logging Configuration:**
 ```properties
 # در application.properties
-logging.level.com.webrayan.bazaar=DEBUG
+logging.level.com.webrayan.commerce=DEBUG
 logging.level.org.springframework.security=DEBUG
 logging.level.org.springframework.web=DEBUG
 ```
@@ -593,4 +593,4 @@ SELECT * FROM acl_roles;
 
 ---
 
-**پروژه Persia Bazaar** حالا آماده برای توسعه پیشرفته و استفاده در محیط توسعه است! 🎉
+**پروژه Iran ECommerce** حالا آماده برای توسعه پیشرفته و استفاده در محیط توسعه است! 🎉

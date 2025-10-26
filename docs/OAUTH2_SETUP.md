@@ -10,7 +10,7 @@
 1. به [Google Cloud Console](https://console.cloud.google.com/) بروید
 2. روی **"Select a project"** کلیک کنید
 3. **"New Project"** را انتخاب کنید
-4. نام پروژه را وارد کنید (مثل "Persia Bazaar")
+4. نام پروژه را وارد کنید (مثل "Iran ECommerce")
 5. روی **"Create"** کلیک کنید
 
 ### 2. فعال‌سازی Google+ API
@@ -27,7 +27,7 @@
 
 #### تنظیم OAuth Consent Screen:
 ```
-App name: Persia Bazaar
+App name: Iran ECommerce
 User support email: your-email@gmail.com
 Developer contact information: your-email@gmail.com
 Scopes: Add email, profile, openid
@@ -37,7 +37,7 @@ Test users: اضافه کردن ایمیل‌های تست (اختیاری)
 #### ایجاد OAuth Client ID:
 ```
 Application type: Web application
-Name: Persia Bazaar Web Client
+Name: Iran ECommerce Web Client
 Authorized JavaScript origins:
 - http://localhost:8005
 - https://your-domain.com (برای production)
@@ -132,7 +132,7 @@ services:
     environment:
       - GOOGLE_CLIENT_ID=${GOOGLE_CLIENT_ID}
       - GOOGLE_CLIENT_SECRET=${GOOGLE_CLIENT_SECRET}
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/bazaar
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/commerce
     depends_on:
       - db
 ```
@@ -140,7 +140,7 @@ services:
 #### Systemd Service:
 ```ini
 [Unit]
-Description=Persia Bazaar Application
+Description=Iran ECommerce Application
 After=network.target
 
 [Service]
@@ -182,7 +182,7 @@ logging.level.org.springframework.security.oauth2=DEBUG
 **راه حل**: Client ID یا Secret را بررسی کنید
 
 #### خطا: "This app isn't verified"
-**راه حل**: در محیط development، روی "Advanced" > "Go to Persia Bazaar (unsafe)" کلیک کنید
+**راه حل**: در محیط development، روی "Advanced" > "Go to Iran ECommerce (unsafe)" کلیک کنید
 
 ## 🛡️ نکات امنیتی
 

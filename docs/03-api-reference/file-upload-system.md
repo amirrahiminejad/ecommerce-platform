@@ -2,7 +2,7 @@
 
 ## Overview
 
-The Persia Bazaar file upload management system provides comprehensive functionality for handling image uploads, processing, storage, and management. This system includes advanced features such as automatic image resizing, format conversion, watermarking, security validation, and multi-backend storage support.
+The Iran ECommerce file upload management system provides comprehensive functionality for handling image uploads, processing, storage, and management. This system includes advanced features such as automatic image resizing, format conversion, watermarking, security validation, and multi-backend storage support.
 
 ## Features
 
@@ -57,7 +57,7 @@ app:
     temp-directory: "temp/"
     enable-virus-scanning: false
     enable-watermark: true
-    watermark-text: "Persia Bazaar"
+    watermark-text: "Iran ECommerce"
     jpeg-quality: 85
     enable-webp-conversion: true
     

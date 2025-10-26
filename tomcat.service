@@ -14,11 +14,11 @@ Environment="CATALINA_HOME=/opt/tomcat"
 Environment="CATALINA_PID=/opt/tomcat/temp/tomcat.pid"
 Environment="CATALINA_OPTS=-Xms512M -Xmx2G -server -XX:+UseParallelGC"
 
-# Iran Bazaar specific environment variables
+# Online Store specific environment variables
 Environment="DB_PASSWORD=5Azar1360"
 Environment="JWT_SECRET=mySecretKey123456789MySecretKey123456789ProductionSecureKey"
-Environment="UPLOAD_DIR=/opt/iran-bazaar/uploads/"
-Environment="LOG_FILE=/opt/iran-bazaar/logs/application.log"
+Environment="UPLOAD_DIR=/opt/online-store/uploads/"
+Environment="LOG_FILE=/opt/online-store/logs/application.log"
 
 ExecStart=/opt/tomcat/bin/startup.sh
 ExecStop=/opt/tomcat/bin/shutdown.sh
