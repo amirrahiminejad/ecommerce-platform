@@ -37,4 +37,24 @@ public interface CategoryRepository extends JpaRepository<Category, Long> {
     
     @Query("SELECT COUNT(p) FROM Product p WHERE p.category = :category AND p.isActive = true")
     Long countActiveProductsByCategory(@Param("category") Category category);
+    
+    // متدهای مورد نیاز برای پنل ادمین
+    @Query("SELECT c FROM Category c WHERE c.isActive = :isActive ORDER BY c.sortOrder ASC")
+    org.springframework.data.domain.Page<Category> findByIsActive(@Param("isActive") Boolean isActive, org.springframework.data.domain.Pageable pageable);
+    
+    @Query("SELECT c FROM Category c WHERE LOWER(c.name) LIKE LOWER(CONCAT('%', :search, '%')) ORDER BY c.sortOrder ASC")
+    org.springframework.data.domain.Page<Category> findByNameContainingIgnoreCase(@Param("search") String search, org.springframework.data.domain.Pageable pageable);
+    
+    @Query("SELECT c FROM Category c WHERE c.parent IS NULL ORDER BY c.sortOrder ASC")
+    org.springframework.data.domain.Page<Category> findByParentIsNull(org.springframework.data.domain.Pageable pageable);
+    
+    @Query("SELECT c FROM Category c WHERE c.parent = :parent ORDER BY c.sortOrder ASC")
+    org.springframework.data.domain.Page<Category> findByParent(@Param("parent") Category parent, org.springframework.data.domain.Pageable pageable);
+    
+    Long countByIsActive(Boolean isActive);
+    
+    Long countByParentIsNull();
+
+    @Query("SELECT c FROM Category c LEFT JOIN FETCH c.subcategories WHERE c.id = :id")
+    Optional<Category> findByIdWithSubCategories(@Param("id") Long id);
 }

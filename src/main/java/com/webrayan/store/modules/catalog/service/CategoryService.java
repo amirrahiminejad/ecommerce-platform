@@ -3,6 +3,8 @@ package com.webrayan.store.modules.catalog.service;
 import com.webrayan.store.modules.catalog.entity.Category;
 import com.webrayan.store.modules.catalog.repository.CategoryRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -139,5 +141,50 @@ public class CategoryService {
             
             category.setSlug(slug);
         }
+    }
+
+    // متدهای جدید برای پنل ادمین
+    
+    public Page<Category> getAllCategories(Pageable pageable) {
+        return categoryRepository.findAll(pageable);
+    }
+    
+    public Page<Category> searchCategoriesByName(String search, Pageable pageable) {
+        return categoryRepository.findByNameContainingIgnoreCase(search, pageable);
+    }
+    
+    public Page<Category> getCategoriesByActiveStatus(Boolean isActive, Pageable pageable) {
+        return categoryRepository.findByIsActive(isActive, pageable);
+    }
+    
+    public Page<Category> getTopLevelCategories(Pageable pageable) {
+        return categoryRepository.findByParentIsNull(pageable);
+    }
+    
+    public List<Category> getTopLevelCategories() {
+        return categoryRepository.findActiveRootCategories();
+    }
+    
+    public Page<Category> getSubCategories(Category parent, Pageable pageable) {
+        return categoryRepository.findByParent(parent, pageable);
+    }
+    
+    public long count() {
+        return categoryRepository.count();
+    }
+    
+    public long countByActiveStatus(Boolean isActive) {
+        return categoryRepository.countByIsActive(isActive);
+    }
+    
+    public long countTopLevelCategories() {
+        return categoryRepository.countByParentIsNull();
+    }
+
+    /**
+     * دریافت دسته‌بندی با زیردسته‌هایش
+     */
+    public Optional<Category> getCategoryByIdWithSubCategories(Long id) {
+        return categoryRepository.findByIdWithSubCategories(id);
     }
 }

@@ -22,31 +22,37 @@
         
         <ul class="sidebar-menu">
             <li>
-                <a href="/admin/dashboard" th:href="@{/admin/dashboard}">
+                <a th:href="@{/admin/dashboard}">
                     <i class="fas fa-home"></i>
                     <span>داشبورد</span>
                 </a>
             </li>
             <li>
-                <a href="/admin/users" th:href="@{/admin/users}">
+                <a th:href="@{/admin/users}">
                     <i class="fas fa-users"></i>
                     <span>کاربران</span>
                 </a>
             </li>
             <li>
-                <a href="/admin/products" th:href="@{/admin/products}" class="active">
+                <a th:href="@{/admin/categories}">
+                    <i class="fas fa-tags"></i>
+                    <span>دسته‌بندی‌ها</span>
+                </a>
+            </li>
+            <li>
+                <a th:href="@{/admin/products}" class="active">
                     <i class="fas fa-box"></i>
                     <span>محصولات</span>
                 </a>
             </li>
             <li>
-                <a href="/admin/settings" th:href="@{/admin/settings}">
+                <a th:href="@{/admin/settings}">
                     <i class="fas fa-cog"></i>
                     <span>تنظیمات</span>
                 </a>
             </li>
             <li>
-                <a href="/admin/logout" th:href="@{/admin/logout}">
+                <a th:href="@{/admin/logout}">
                     <i class="fas fa-sign-out-alt"></i>
                     <span>خروج</span>
                 </a>
@@ -328,7 +334,7 @@
                             <i class="fas fa-save me-2"></i>
                             ثبت محصول
                         </button>
-                        <a href="/admin/products" th:href="@{/admin/products}" class="btn btn-secondary">
+                        <a th:href="@{/admin/products}" class="btn btn-secondary">
                             <i class="fas fa-arrow-right me-2"></i>
                             انصراف
                         </a>

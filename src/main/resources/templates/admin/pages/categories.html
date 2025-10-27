@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مدیریت دسته‌بندی‌ها - تاپ کالا</title>
+    
+    <!-- Bootstrap RTL CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.rtl.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="/css/admin-products-styles.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <img src="/images/logo-small.png" alt="تاپ کالا" height="100" style="margin-bottom: 10px;">
+        </div>
+        
+        <ul class="sidebar-menu">
+            <li>
+                <a href="/admin/dashboard" th:href="@{/admin/dashboard}">
+                    <i class="fas fa-home"></i>
+                    <span>داشبورد</span>
+                </a>
+            </li>
+            <li>
+                <a href="/admin/users" th:href="@{/admin/users}">
+                    <i class="fas fa-users"></i>
+                    <span>کاربران</span>
+                </a>
+            </li>
+            <li>
+                <a href="/admin/categories" th:href="@{/admin/categories}" class="active">
+                    <i class="fas fa-tags"></i>
+                    <span>دسته‌بندی‌ها</span>
+                </a>
+            </li>
+            <li>
+                <a href="/admin/products" th:href="@{/admin/products}">
+                    <i class="fas fa-box"></i>
+                    <span>محصولات</span>
+                </a>
+            </li>
+            <li>
+                <a href="/admin/settings" th:href="@{/admin/settings}">
+                    <i class="fas fa-cog"></i>
+                    <span>تنظیمات</span>
+                </a>
+            </li>
+            <li>
+                <a href="/admin/logout" th:href="@{/admin/logout}">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span>خروج</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content" id="main-content">
+        <!-- Top Navbar -->
+        <div class="top-navbar">
+            <div class="d-flex align-items-center">
+                <button class="sidebar-toggle" id="sidebar-toggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <div class="navbar-brand">مدیریت دسته‌بندی‌ها</div>
+            </div>
+            
+            <div class="navbar-actions">
+                <div class="user-info">
+                    <div class="user-avatar">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <span>مدیر سیستم</span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Content Area -->
+        <div class="content-area">
+
+            <!-- Success/Error Messages -->
+            <div th:if="${successMessage}" class="alert alert-success alert-dismissible fade show">
+                <i class="fas fa-check-circle me-2"></i>
+                <span th:text="${successMessage}">پیام موفقیت</span>
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+            
+            <div th:if="${errorMessage}" class="alert alert-danger alert-dismissible fade show">
+                <i class="fas fa-exclamation-circle me-2"></i>
+                <span th:text="${errorMessage}">پیام خطا</span>
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+
+            <!-- Statistics Cards -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-tags"></i>
+                    </div>
+                    <div class="stat-content">
+                        <h3 th:text="${totalCategories}">0</h3>
+                        <p>کل دسته‌بندی‌ها</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon stat-success">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                    <div class="stat-content">
+                        <h3 th:text="${activeCategories}">0</h3>
+                        <p>دسته‌بندی‌های فعال</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon stat-info">
+                        <i class="fas fa-layer-group"></i>
+                    </div>
+                    <div class="stat-content">
+                        <h3 th:text="${topLevelCategories}">0</h3>
+                        <p>دسته‌بندی‌های اصلی</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Filter Section -->
+            <div class="filter-card fade-in">
+                <form th:action="@{/admin/categories}" method="GET" id="filterForm">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <label for="search" class="form-label">جستجو</label>
+                            <input type="text" 
+                                   class="form-control" 
+                                   id="search" 
+                                   name="search" 
+                                   th:value="${search}"
+                                   placeholder="نام دسته‌بندی...">
+                        </div>
+                        <div class="col-md-2">
+                            <label for="isActive" class="form-label">وضعیت</label>
+                            <select class="form-select" id="isActive" name="isActive">
+                                <option value="">همه</option>
+                                <option value="true" th:selected="${selectedIsActive == true}">فعال</option>
+                                <option value="false" th:selected="${selectedIsActive == false}">غیرفعال</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <label for="parentId" class="form-label">دسته‌بندی والد</label>
+                            <select class="form-select" id="parentId" name="parentId">
+                                <option value="">همه</option>
+                                <option value="0" th:selected="${selectedParentId == 0}">دسته‌های اصلی</option>
+                                <option th:each="parent : ${parentCategories}" 
+                                        th:value="${parent.id}" 
+                                        th:text="${parent.name}"
+                                        th:selected="${selectedParentId == parent.id}">دسته‌بندی والد</option>
+                            </select>
+                        </div>
+                        <div class="col-md-2">
+                            <label for="size" class="form-label">تعداد در صفحه</label>
+                            <select class="form-select" id="size" name="size">
+                                <option value="10" th:selected="${pageSize == 10}">10</option>
+                                <option value="25" th:selected="${pageSize == 25}">25</option>
+                                <option value="50" th:selected="${pageSize == 50}">50</option>
+                            </select>
+                        </div>
+                        <div class="col-md-1">
+                            <label class="form-label">&nbsp;</label>
+                            <div class="d-grid gap-2">
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fas fa-search me-2"></i>
+                                    جستجو
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Categories Table -->
+            <div class="table-card fade-in">
+                <div class="table-header">
+                    <h5 class="table-title">
+                        <i class="fas fa-tags me-2"></i>
+                        لیست دسته‌بندی‌ها
+                        <span class="badge bg-primary ms-2" th:text="${categories.totalElements ?: 0}">0</span>
+                    </h5>
+                    <div>
+                        <a href="/admin/categories/create" th:href="@{/admin/categories/create}" class="btn btn-success">
+                            <i class="fas fa-plus me-2"></i>
+                            افزودن دسته‌بندی جدید
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="table-responsive">
+                    <table class="custom-table">
+                        <thead>
+                            <tr>
+                                <th>شناسه</th>
+                                <th>نام</th>
+                                <th>دسته‌بندی والد</th>
+                                <th>ترتیب</th>
+                                <th>وضعیت</th>
+                                <th>تاریخ ایجاد</th>
+                                <th>عملیات</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="category : ${categories.content}" th:if="${not #lists.isEmpty(categories.content)}">
+                                <td th:text="${category.id}">1</td>
+                                <td>
+                                    <div>
+                                        <strong th:text="${category.name}">نام دسته‌بندی</strong>
+                                        <br>
+                                        <small class="text-muted" th:text="${category.slug}">slug</small>
+                                    </div>
+                                </td>
+                                <td th:text="${category.parent != null ? category.parent.name : 'دسته اصلی'}">دسته اصلی</td>
+                                <td th:text="${category.sortOrder ?: 0}">0</td>
+                                <td>
+                                    <span class="status-badge" 
+                                          th:classappend="${category.isActive ? 'status-active' : 'status-inactive'}"
+                                          th:text="${category.isActive ? 'فعال' : 'غیرفعال'}">فعال</span>
+                                </td>
+                                <td th:text="${#temporals.format(category.createdAt, 'yyyy/MM/dd')}">تاریخ</td>
+                                <td>
+                                    <button class="action-btn btn-view" 
+                                            th:title="'مشاهده ' + ${category.name}"
+                                            th:data-category-id="${category.id}"
+                                            onclick="viewCategory(this.dataset.categoryId)">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                    <button class="action-btn btn-edit" 
+                                            th:title="'ویرایش ' + ${category.name}"
+                                            th:data-category-id="${category.id}"
+                                            onclick="editCategory(this.dataset.categoryId)">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                    <button class="action-btn" 
+                                            th:classappend="${category.isActive ? 'btn-warning' : 'btn-success'}"
+                                            th:title="${category.isActive ? 'غیرفعال کردن' : 'فعال کردن'}"
+                                            th:data-category-id="${category.id}"
+                                            onclick="toggleCategoryStatus(this.dataset.categoryId)">
+                                        <i th:class="${category.isActive ? 'fas fa-pause' : 'fas fa-play'}"></i>
+                                    </button>
+                                    <button class="action-btn btn-delete" 
+                                            th:title="'حذف ' + ${category.name}"
+                                            th:data-category-id="${category.id}"
+                                            th:data-category-name="${category.name}"
+                                            onclick="deleteCategory(this.dataset.categoryId, this.dataset.categoryName)">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    
+                    <!-- Pagination -->
+                    <nav th:if="${categories.totalPages > 1}" class="pagination-wrapper">
+                        <ul class="pagination justify-content-center">
+                            <li class="page-item" th:classappend="${!categories.hasPrevious()} ? 'disabled'">
+                                <a class="page-link" th:href="@{/admin/categories(page=${categories.number - 1}, size=${pageSize}, search=${search}, isActive=${selectedIsActive}, parentId=${selectedParentId})}">قبلی</a>
+                            </li>
+                            
+                            <li th:each="i : ${#numbers.sequence(0, categories.totalPages - 1)}" 
+                                class="page-item" th:classappend="${i == categories.number} ? 'active'">
+                                <a class="page-link" th:href="@{/admin/categories(page=${i}, size=${pageSize}, search=${search}, isActive=${selectedIsActive}, parentId=${selectedParentId})}" th:text="${i + 1}">1</a>
+                            </li>
+                            
+                            <li class="page-item" th:classappend="${!categories.hasNext()} ? 'disabled'">
+                                <a class="page-link" th:href="@{/admin/categories(page=${categories.number + 1}, size=${pageSize}, search=${search}, isActive=${selectedIsActive}, parentId=${selectedParentId})}">بعدی</a>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        // Sidebar toggle functionality
+        document.getElementById('sidebar-toggle').addEventListener('click', function() {
+            const sidebar = document.getElementById('sidebar');
+            const mainContent = document.getElementById('main-content');
+            
+            sidebar.classList.toggle('collapsed');
+            mainContent.classList.toggle('expanded');
+        });
+
+        // Category management functions
+        function viewCategory(categoryId) {
+            window.location.href = `/admin/categories/${categoryId}`;
+        }
+
+        function editCategory(categoryId) {
+            window.location.href = `/admin/categories/edit?id=${categoryId}`;
+        }
+
+        function toggleCategoryStatus(categoryId) {
+            if (confirm('آیا از تغییر وضعیت این دسته‌بندی اطمینان دارید؟')) {
+                const form = document.createElement('form');
+                form.method = 'POST';
+                form.action = `/admin/categories/toggle-status/${categoryId}`;
+                document.body.appendChild(form);
+                form.submit();
+            }
+        }
+
+        function deleteCategory(categoryId, categoryName) {
+            if (confirm(`آیا از حذف دسته‌بندی "${categoryName}" اطمینان دارید؟`)) {
+                const form = document.createElement('form');
+                form.method = 'POST';
+                form.action = `/admin/categories/delete/${categoryId}`;
+                document.body.appendChild(form);
+                form.submit();
+            }
+        }
+    </script>
+</body>
+</html>
