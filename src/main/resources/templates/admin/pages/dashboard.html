@@ -15,7 +15,7 @@
     <!-- Sidebar -->
     <div class="sidebar" id="sidebar">
         <div class="sidebar-header">
-            <img src="/images/logo-online-store-small.png" alt="فروشگاه اینترنتی" height="100" style="margin-bottom: 10px;">
+            <img src="/images/logo-small.png" alt="فروشگاه اینترنتی" height="100" style="margin-bottom: 10px;">
         </div>
         
         <ul class="sidebar-menu">
@@ -35,12 +35,6 @@
                 <a href="/admin/products" th:href="@{/admin/products}">
                     <i class="fas fa-box"></i>
                     <span>محصولات</span>
-                </a>
-            </li>
-            <li>
-                <a href="/admin/ads" th:href="@{/admin/ads}">
-                    <i class="fas fa-bullhorn"></i>
-                    <span>آگهی‌ها</span>
                 </a>
             </li>
             <li>
@@ -83,7 +77,7 @@
         <div class="content-area">
             <!-- Statistics Cards -->
             <div class="row fade-in">
-                <div class="col-lg-3 col-md-6 col-12">
+                <div class="col-lg-4 col-md-6 col-12">
                     <div class="stat-card">
                         <div class="stat-icon primary">
                             <i class="fas fa-users"></i>
@@ -93,7 +87,7 @@
                     </div>
                 </div>
                 
-                <div class="col-lg-3 col-md-6 col-12">
+                <div class="col-lg-4 col-md-6 col-12">
                     <div class="stat-card success">
                         <div class="stat-icon success">
                             <i class="fas fa-box"></i>
@@ -103,17 +97,7 @@
                     </div>
                 </div>
                 
-                <div class="col-lg-3 col-md-6 col-12">
-                    <div class="stat-card warning">
-                        <div class="stat-icon warning">
-                            <i class="fas fa-bullhorn"></i>
-                        </div>
-                        <div class="stat-number" th:text="${totalAds ?: 0}">0</div>
-                        <div class="stat-label">کل آگهی‌ها</div>
-                    </div>
-                </div>
-                
-                <div class="col-lg-3 col-md-6 col-12">
+                <div class="col-lg-4 col-md-6 col-12">
                     <div class="stat-card danger">
                         <div class="stat-icon danger">
                             <i class="fas fa-shopping-cart"></i>
@@ -136,25 +120,20 @@
                             از این پنل می‌توانید تمامی بخش‌های سایت را مدیریت کنید
                         </p>
                         <div class="row mt-5">
-                            <div class="col-md-3 col-6 mb-3">
+                            <div class="col-md-4 col-6 mb-3">
                                 <a href="/admin/users" th:href="@{/admin/users}" class="btn btn-outline-primary btn-lg w-100">
                                     <i class="fas fa-users d-block mb-2"></i>
                                     مدیریت کاربران
                                 </a>
                             </div>
-                            <div class="col-md-3 col-6 mb-3">
+                            <div class="col-md-4 col-6 mb-3">
                                 <a href="/admin/products" th:href="@{/admin/products}" class="btn btn-outline-success btn-lg w-100">
                                     <i class="fas fa-box d-block mb-2"></i>
                                     مدیریت محصولات
                                 </a>
                             </div>
-                            <div class="col-md-3 col-6 mb-3">
-                                <a href="/admin/ads" th:href="@{/admin/ads}" class="btn btn-outline-warning btn-lg w-100">
-                                    <i class="fas fa-bullhorn d-block mb-2"></i>
-                                    مدیریت آگهی‌ها
-                                </a>
-                            </div>
-                            <div class="col-md-3 col-6 mb-3">
+
+                            <div class="col-md-4 col-6 mb-3">
                                 <a href="/admin/settings" th:href="@{/admin/settings}" class="btn btn-outline-info btn-lg w-100">
                                     <i class="fas fa-cog d-block mb-2"></i>
                                     تنظیمات سیستم

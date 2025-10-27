@@ -100,44 +100,7 @@ public class AdminController {
         return "admin/pages/dashboard";
     }
 
-    /**
-     * صفحه مدیریت آگهی‌ها
-     */
-    @GetMapping("/ads")
-    public String ads(Model model,
-                      @RequestParam(defaultValue = "0") int page,
-                      @RequestParam(defaultValue = "10") int size,
-                      @RequestParam(defaultValue = "") String search,
-                      @RequestParam(defaultValue = "") String status) {
-        try {
 
-            model.addAttribute("pageTitle", "مدیریت آگهی‌ها");
-
-            // Pagination setup
-            Pageable pageable = PageRequest.of(page, size, Sort.by("createdAt").descending());
-
-            // Filter logic
-                      model.addAttribute("size", size);
-            model.addAttribute("search", search);
-            model.addAttribute("selectedStatus", status);
-            
-        } catch (Exception e) {
-            // در صورت خطا، مقادیر پیش‌فرض
-            model.addAttribute("pageTitle", "مدیریت آگهی‌ها");
-            model.addAttribute("totalAds", 0L);
-            model.addAttribute("pendingAds", 0L);
-            model.addAttribute("approvedAds", 0L);
-            model.addAttribute("rejectedAds", 0L);
-            model.addAttribute("currentPage", 0);
-            model.addAttribute("totalPages", 0);
-            model.addAttribute("totalElements", 0L);
-            model.addAttribute("size", 10);
-            model.addAttribute("search", "");
-            model.addAttribute("selectedStatus", "");
-        }
-        
-        return "admin/pages/ads";
-    }
 
     
 
