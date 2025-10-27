@@ -187,10 +187,22 @@
                             <tr th:each="product : ${products.content}">
                                 <td th:text="${product.id}">1</td>
                                 <td>
-                                    <img class="product-image" 
-                                         th:src="${@productImageUtils.getFirstImageUrl(product)}"
-                                         th:alt="${product.name}"
-                                         src="/images/no-image.png" alt="بدون تصویر">
+                                    <div class="product-image-container">
+                                        <div th:if="${@productImageUtils.getFirstImageUrl(product) != null and @productImageUtils.getFirstImageUrl(product) != ''}" class="product-image-wrapper">
+                                            <img class="product-image" 
+                                                 th:src="${@productImageUtils.getFirstImageUrl(product)}"
+                                                 th:alt="${product.name}"
+                                                 onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                                            <div class="product-image-placeholder" style="display: none;">
+                                                <i class="fas fa-image"></i>
+                                                <span>بدون تصویر</span>
+                                            </div>
+                                        </div>
+                                        <div th:unless="${@productImageUtils.getFirstImageUrl(product) != null and @productImageUtils.getFirstImageUrl(product) != ''}" class="product-image-placeholder">
+                                            <i class="fas fa-image"></i>
+                                            <span>بدون تصویر</span>
+                                        </div>
+                                    </div>
                                 </td>
                                 <td>
                                     <div>

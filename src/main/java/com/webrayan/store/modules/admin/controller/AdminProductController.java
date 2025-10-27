@@ -138,7 +138,7 @@ public class AdminProductController {
         model.addAttribute("categories", categoryService.getActiveCategories());
         model.addAttribute("sellers", userService.getAllUsers()); // همه کاربران که می‌توانند فروشنده باشند
         model.addAttribute("statuses", ProductStatus.values());
-        return "admin/pages/product-create";
+        return "admin/pages/product-form";
     }
 
     /**
@@ -193,14 +193,14 @@ public class AdminProductController {
      */
     @GetMapping("/edit")
     public String editProductForm(@RequestParam Long id, Model model) {
-        Product product = productService.getProductById(id)
+        Product product = productService.getProductByIdWithImages(id)
                 .orElseThrow(() -> new RuntimeException("محصول یافت نشد"));
         
         model.addAttribute("product", product);
         model.addAttribute("categories", categoryService.getActiveCategories());
         model.addAttribute("sellers", userService.getAllUsers());
         model.addAttribute("statuses", ProductStatus.values());
-        return "admin/pages/product-edit";
+        return "admin/pages/product-form";
     }
 
     /**

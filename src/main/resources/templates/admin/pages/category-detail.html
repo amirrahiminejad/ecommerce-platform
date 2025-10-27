@@ -3,54 +3,54 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>جزئیات دسته‌بندی - فروشگاه اینترنتی</title>
+    <title>جزئیات دسته‌بندی - تاپ کالا</title>
     
     <!-- Bootstrap RTL CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.rtl.min.css" rel="stylesheet">
     <!-- Font Awesome -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-    <link href="/css/admin-products-styles.css" rel="stylesheet">
+    <link href="/css/admin-product-create-styles.css" rel="stylesheet">
 </head>
 <body>
     <!-- Sidebar -->
     <div class="sidebar" id="sidebar">
         <div class="sidebar-header">
-            <img src="/images/logo-small.png" alt="فروشگاه اینترنتی" height="100" style="margin-bottom: 10px;">
+            <img src="/images/logo-small.png" alt="تاپ کالا" height="100" style="margin-bottom: 10px;">
         </div>
         
         <ul class="sidebar-menu">
             <li>
-                <a href="/admin/dashboard" th:href="@{/admin/dashboard}">
+                <a th:href="@{/admin/dashboard}">
                     <i class="fas fa-home"></i>
                     <span>داشبورد</span>
                 </a>
             </li>
             <li>
-                <a href="/admin/users" th:href="@{/admin/users}">
+                <a th:href="@{/admin/users}">
                     <i class="fas fa-users"></i>
                     <span>کاربران</span>
                 </a>
             </li>
             <li>
-                <a href="/admin/categories" th:href="@{/admin/categories}" class="active">
+                <a th:href="@{/admin/categories}" class="active">
                     <i class="fas fa-tags"></i>
                     <span>دسته‌بندی‌ها</span>
                 </a>
             </li>
             <li>
-                <a href="/admin/products" th:href="@{/admin/products}">
+                <a th:href="@{/admin/products}">
                     <i class="fas fa-box"></i>
                     <span>محصولات</span>
                 </a>
             </li>
             <li>
-                <a href="/admin/settings" th:href="@{/admin/settings}">
+                <a th:href="@{/admin/settings}">
                     <i class="fas fa-cog"></i>
                     <span>تنظیمات</span>
                 </a>
             </li>
             <li>
-                <a href="/admin/logout" th:href="@{/admin/logout}">
+                <a th:href="@{/admin/logout}">
                     <i class="fas fa-sign-out-alt"></i>
                     <span>خروج</span>
                 </a>
@@ -59,208 +59,142 @@
     </div>
 
     <!-- Main Content -->
-    <div class="main-content">
-        <!-- Header -->
-        <div class="header">
-            <button class="sidebar-toggle" id="sidebarToggle">
-                <i class="fas fa-bars"></i>
-            </button>
-            <h1>جزئیات دسته‌بندی</h1>
-            <div class="header-actions">
-                <a href="/admin/categories" class="btn btn-secondary">
-                    <i class="fas fa-arrow-right"></i>
-                    بازگشت به لیست
-                </a>
-                <a th:href="@{'/admin/categories/edit?id=' + ${category.id}}" class="btn btn-warning">
-                    <i class="fas fa-edit"></i>
-                    ویرایش
-                </a>
+    <div class="main-content" id="main-content">
+        <!-- Top Navbar -->
+        <div class="top-navbar">
+            <div class="d-flex align-items-center">
+                <button class="sidebar-toggle" id="sidebar-toggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <div class="navbar-brand">جزئیات دسته‌بندی</div>
+            </div>
+            
+            <div class="navbar-actions">
+                <div class="user-info">
+                    <div class="user-avatar">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <span>مدیر سیستم</span>
+                </div>
             </div>
         </div>
-
-        <div class="row">
-            <!-- Category Details -->
-            <div class="col-md-8">
-                <div class="card">
-                    <div class="card-header">
-                        <h5 class="card-title mb-0">
-                            <i class="fas fa-tags"></i>
-                            اطلاعات دسته‌بندی
-                        </h5>
-                    </div>
-                    <div class="card-body">
-                        <div class="category-header">
-                            <h2 class="category-title" th:text="${category.name}">نام دسته‌بندی</h2>
-                            <div class="category-subtitle">
-                                <span>شناسه: <span th:text="${category.id}">1</span></span>
-                                <span class="mx-2">|</span>
-                                <span>نامک: <span th:text="${category.slug ?: '-'}">slug</span></span>
+        
+        <!-- Content Area -->
+        <div class="content-area">
+            
+            <!-- Category Detail Form -->
+            <div class="form-container fade-in">
+                <div class="form-header">
+                    <h2 class="form-title">جزئیات دسته‌بندی</h2>
+                    <p class="form-subtitle">مشاهده اطلاعات کامل دسته‌بندی</p>
+                </div>
+                
+                <!-- Category Info Badge -->
+                <div class="product-info-badge">
+                    <strong>دسته‌بندی:</strong> <span th:text="${category.name}">نام دسته‌بندی</span> 
+                    | <strong>شناسه:</strong> <span th:text="${category.id}">ID</span>
+                    | <strong>Slug:</strong> <span th:text="${category.slug ?: 'بدون slug'}">Slug</span>
+                </div>
+                
+                <!-- Category Information -->
+                <div class="form-section">
+                    <h4 class="section-title">
+                        <i class="fas fa-info-circle"></i>
+                        اطلاعات اصلی
+                    </h4>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label class="form-label">نام دسته‌بندی</label>
+                            <div class="form-display" th:text="${category.name}">نام دسته‌بندی</div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Slug</label>
+                            <div class="form-display" th:text="${category.slug ?: '-'}">slug</div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">دسته‌بندی والد</label>
+                            <div class="form-display" th:text="${category.parent != null ? category.parent.name : 'دسته اصلی'}">دسته اصلی</div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">ترتیب نمایش</label>
+                            <div class="form-display" th:text="${category.sortOrder ?: 0}">0</div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">وضعیت</label>
+                            <div class="form-display">
+                                <span th:if="${category.isActive}" class="badge bg-success">فعال</span>
+                                <span th:unless="${category.isActive}" class="badge bg-danger">غیرفعال</span>
                             </div>
                         </div>
-
-                        <div class="category-info mt-4">
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <div class="info-item">
-                                        <span class="info-label">دسته‌بندی والد:</span>
-                                        <span class="info-value" th:text="${category.parent != null ? category.parent.name : 'دسته اصلی'}">دسته اصلی</span>
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="info-item">
-                                        <span class="info-label">ترتیب نمایش:</span>
-                                        <span class="info-value" th:text="${category.sortOrder ?: 0}">0</span>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="row mt-3">
-                                <div class="col-md-6">
-                                    <div class="info-item">
-                                        <span class="info-label">وضعیت:</span>
-                                        <span th:if="${category.isActive}" class="badge bg-success">فعال</span>
-                                        <span th:unless="${category.isActive}" class="badge bg-danger">غیرفعال</span>
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="info-item">
-                                        <span class="info-label">تاریخ ایجاد:</span>
-                                        <span class="info-value" th:text="${#temporals.format(category.createdAt, 'yyyy/MM/dd HH:mm')}">تاریخ</span>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="row mt-3" th:if="${category.description}">
-                                <div class="col-12">
-                                    <div class="info-item">
-                                        <span class="info-label">توضیحات:</span>
-                                        <div class="info-value mt-2">
-                                            <p th:text="${category.description}">توضیحات دسته‌بندی</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                        <div class="form-group">
+                            <label class="form-label">تاریخ ایجاد</label>
+                            <div class="form-display" th:text="${#temporals.format(category.createdAt, 'yyyy/MM/dd HH:mm')}">تاریخ</div>
                         </div>
-
-                        <!-- SEO Information -->
-                        <div class="seo-info mt-4" th:if="${category.metaTitle or category.metaDescription}">
-                            <h6><i class="fas fa-search"></i> اطلاعات SEO</h6>
-                            <div class="row">
-                                <div class="col-md-6" th:if="${category.metaTitle}">
-                                    <div class="info-item">
-                                        <span class="info-label">عنوان SEO:</span>
-                                        <span class="info-value" th:text="${category.metaTitle}">عنوان</span>
-                                    </div>
-                                </div>
-                                <div class="col-md-12 mt-2" th:if="${category.metaDescription}">
-                                    <div class="info-item">
-                                        <span class="info-label">توضیحات SEO:</span>
-                                        <div class="info-value mt-1">
-                                            <p th:text="${category.metaDescription}">توضیحات</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                        <div class="form-group full-width" th:if="${category.description}">
+                            <label class="form-label">توضیحات</label>
+                            <div class="form-display description" th:text="${category.description}">توضیحات دسته‌بندی</div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Sub Categories -->
-                <div class="card mt-4" th:if="${category.subcategories != null && !category.subcategories.isEmpty()}">
-                    <div class="card-header">
-                        <h5 class="card-title mb-0">
-                            <i class="fas fa-layer-group"></i>
-                            زیر دسته‌های موجود
-                        </h5>
-                    </div>
-                    <div class="card-body">
-                        <div class="table-responsive">
-                            <table class="table table-striped">
-                                <thead>
-                                    <tr>
-                                        <th>نام</th>
-                                        <th>ترتیب</th>
-                                        <th>وضعیت</th>
-                                        <th>عملیات</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr th:each="subCategory : ${category.subcategories}">
-                                        <td th:text="${subCategory.name}">نام زیر دسته</td>
-                                        <td th:text="${subCategory.sortOrder ?: 0}">0</td>
-                                        <td>
-                                            <span th:if="${subCategory.isActive}" class="badge bg-success">فعال</span>
-                                            <span th:unless="${subCategory.isActive}" class="badge bg-danger">غیرفعال</span>
-                                        </td>
-                                        <td>
-                                            <a th:href="@{'/admin/categories/' + ${subCategory.id}}" class="btn btn-sm btn-info">
+                <!-- Sub Categories Section -->
+                <div class="form-section" th:if="${category.subcategories != null && !category.subcategories.isEmpty()}">
+                    <h4 class="section-title">
+                        <i class="fas fa-layer-group"></i>
+                        زیر دسته‌های موجود
+                    </h4>
+                    <div class="table-responsive">
+                        <table class="table table-striped table-hover">
+                            <thead class="table-dark">
+                                <tr>
+                                    <th>نام</th>
+                                    <th>ترتیب</th>
+                                    <th>وضعیت</th>
+                                    <th>عملیات</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr th:each="subCategory : ${category.subcategories}">
+                                    <td>
+                                        <strong th:text="${subCategory.name}">نام زیر دسته</strong>
+                                    </td>
+                                    <td>
+                                        <span class="badge bg-secondary" th:text="${subCategory.sortOrder ?: 0}">0</span>
+                                    </td>
+                                    <td>
+                                        <span th:if="${subCategory.isActive}" class="badge bg-success">فعال</span>
+                                        <span th:unless="${subCategory.isActive}" class="badge bg-danger">غیرفعال</span>
+                                    </td>
+                                    <td>
+                                        <div class="btn-group" role="group">
+                                            <a th:href="@{'/admin/categories/' + ${subCategory.id}}" class="btn btn-sm btn-info" title="مشاهده">
                                                 <i class="fas fa-eye"></i>
                                             </a>
-                                            <a th:href="@{'/admin/categories/edit?id=' + ${subCategory.id}}" class="btn btn-sm btn-warning">
+                                            <a th:href="@{'/admin/categories/edit?id=' + ${subCategory.id}}" class="btn btn-sm btn-warning" title="ویرایش">
                                                 <i class="fas fa-edit"></i>
                                             </a>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
-            </div>
-
-            <!-- Actions Sidebar -->
-            <div class="col-md-4">
-                <div class="card">
-                    <div class="card-header">
-                        <h5 class="card-title mb-0">عملیات</h5>
-                    </div>
-                    <div class="card-body">
-                        <div class="d-grid gap-2">
-                            <a th:href="@{'/admin/categories/edit?id=' + ${category.id}}" class="btn btn-warning">
-                                <i class="fas fa-edit"></i>
-                                ویرایش دسته‌بندی
-                            </a>
-                            
-                            <form th:action="@{'/admin/categories/toggle-status/' + ${category.id}}" method="post">
-                                <button type="submit" class="btn btn-secondary w-100" 
-                                        th:text="${category.isActive ? 'غیرفعال کردن' : 'فعال کردن'}">
-                                    <i th:class="${category.isActive ? 'fas fa-pause' : 'fas fa-play'}"></i>
-                                </button>
-                            </form>
-
-                            <a th:href="@{'/admin/categories/create?parentId=' + ${category.id}}" class="btn btn-success">
-                                <i class="fas fa-plus"></i>
-                                افزودن زیر دسته
-                            </a>
-
-                            <hr>
-
-                            <form th:action="@{'/admin/categories/delete/' + ${category.id}}" method="post" 
-                                  onsubmit="return confirm('آیا از حذف این دسته‌بندی اطمینان دارید؟ این عمل قابل بازگشت نیست.');">
-                                <button type="submit" class="btn btn-danger w-100">
-                                    <i class="fas fa-trash"></i>
-                                    حذف دسته‌بندی
-                                </button>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Statistics -->
-                <div class="card mt-4">
-                    <div class="card-header">
-                        <h5 class="card-title mb-0">آمار</h5>
-                    </div>
-                    <div class="card-body">
-                        <div class="stat-item">
-                            <span class="stat-label">تعداد محصولات:</span>
-                            <span class="stat-value">0</span>
-                        </div>
-                        <div class="stat-item">
-                            <span class="stat-label">تعداد زیر دسته‌ها:</span>
-                            <span class="stat-value" th:text="${category.subcategories != null ? category.subcategories.size() : 0}">0</span>
-                        </div>
-                    </div>
+                
+                <!-- Action Buttons -->
+                <div class="form-actions">
+                    <a th:href="@{'/admin/categories/edit?id=' + ${category.id}}" class="btn btn-warning">
+                        <i class="fas fa-edit me-2"></i>
+                        ویرایش دسته‌بندی
+                    </a>
+                    <a th:href="@{'/admin/categories/create?parentId=' + ${category.id}}" class="btn btn-success">
+                        <i class="fas fa-plus me-2"></i>
+                        افزودن زیر دسته
+                    </a>
+                    <a href="/admin/categories" th:href="@{/admin/categories}" class="btn btn-secondary">
+                        <i class="fas fa-arrow-right me-2"></i>
+                        بازگشت به لیست
+                    </a>
                 </div>
             </div>
         </div>
@@ -270,70 +204,75 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     
     <script>
-        // Sidebar toggle functionality
-        document.getElementById('sidebarToggle').addEventListener('click', function() {
-            document.getElementById('sidebar').classList.toggle('collapsed');
+        // Sidebar Toggle
+        document.getElementById('sidebar-toggle').addEventListener('click', function() {
+            const sidebar = document.getElementById('sidebar');
+            const mainContent = document.getElementById('main-content');
+            
+            if (window.innerWidth > 768) {
+                sidebar.classList.toggle('collapsed');
+                mainContent.classList.toggle('expanded');
+            } else {
+                sidebar.classList.toggle('show');
+            }
+        });
+        
+        // Responsive sidebar
+        window.addEventListener('resize', function() {
+            const sidebar = document.getElementById('sidebar');
+            
+            if (window.innerWidth > 768) {
+                sidebar.classList.remove('show');
+            }
         });
     </script>
-
+    
     <style>
-        .category-header {
-            border-bottom: 1px solid #dee2e6;
-            padding-bottom: 15px;
-        }
-
-        .category-title {
-            margin: 0;
+        /* Form Display Styles */
+        .form-display {
+            background-color: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 6px;
+            padding: 12px 15px;
             color: #495057;
-        }
-
-        .category-subtitle {
-            color: #6c757d;
-            font-size: 0.9rem;
-            margin-top: 5px;
-        }
-
-        .info-item {
-            margin-bottom: 15px;
-        }
-
-        .info-label {
-            font-weight: 600;
-            color: #495057;
-            display: inline-block;
-            min-width: 120px;
-        }
-
-        .info-value {
-            color: #6c757d;
-        }
-
-        .seo-info {
-            border-top: 1px solid #dee2e6;
-            padding-top: 15px;
-        }
-
-        .seo-info h6 {
-            color: #495057;
-            margin-bottom: 15px;
-        }
-
-        .stat-item {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 10px;
-            padding: 8px 0;
-            border-bottom: 1px solid #f1f3f4;
-        }
-
-        .stat-label {
             font-weight: 500;
-            color: #495057;
+            min-height: 46px;
+            display: flex;
+            align-items: center;
         }
-
-        .stat-value {
+        
+        .form-display.description {
+            min-height: 80px;
+            align-items: flex-start;
+            padding: 15px;
+            line-height: 1.6;
+        }
+        
+        .section-title {
+            color: #495057;
+            font-size: 1.2rem;
             font-weight: 600;
-            color: #007bff;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid #e3f2fd;
+        }
+        
+        .section-title i {
+            color: #2196F3;
+            margin-left: 10px;
+        }
+        
+        .table-hover tbody tr:hover {
+            background-color: rgba(33, 150, 243, 0.1);
+        }
+        
+        .btn-group .btn {
+            margin-left: 5px;
+        }
+        
+        .badge {
+            font-size: 0.8rem;
+            padding: 6px 12px;
         }
     </style>
 </body>

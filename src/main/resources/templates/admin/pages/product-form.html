@@ -1,35 +1,17 @@
 <!DOCTYPE html>
-<html lang="f            <li>
-                <a href="/admin/users" th:href="@{/admin/users}">
-                    <i class="fas fa-users"></i>
-                    <span>کاربران</span>
-                </a>
-            </li>
-            <li>
-                <a href="/admin/categories" th:href="@{/admin/categories}">
-                    <i class="fas fa-tags"></i>
-                    <span>دسته‌بندی‌ها</span>
-                </a>
-            </li>
-            <li>
-                <a href="/admin/products" th:href="@{/admin/products}">
-                    <i class="fas fa-box"></i>
-                    <span>محصولات</span>
-                </a>
-            </li> xmlns:th="http://www.thymeleaf.org">
+<html lang="fa" dir="rtl" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ویرایش محصول - تاپ کالا</title>
+    <title th:text="${product?.id != null ? 'ویرایش محصول' : 'ثبت محصول جدید'} + ' - تاپ کالا'">مدیریت محصول - تاپ کالا</title>
     
     <!-- Bootstrap RTL CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.rtl.min.css" rel="stylesheet">
     <!-- Font Awesome -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-    <!-- Quill.js CSS -->
+    <!-- Quill Rich Text Editor -->
     <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
-    <link href="/css/admin-product-edit-styles.css" rel="stylesheet">
-
+    <link href="/css/admin-product-create-styles.css" rel="stylesheet">
 </head>
 <body>
     <!-- Sidebar -->
@@ -40,38 +22,44 @@
         
         <ul class="sidebar-menu">
             <li>
-                <a href="/admin/dashboard" th:href="@{/admin/dashboard}">
+                <a th:href="@{/admin/dashboard}">
                     <i class="fas fa-home"></i>
                     <span>داشبورد</span>
                 </a>
             </li>
             <li>
-                <a href="/admin/users" th:href="@{/admin/users}">
+                <a th:href="@{/admin/users}">
                     <i class="fas fa-users"></i>
                     <span>کاربران</span>
                 </a>
             </li>
             <li>
-                <a href="/admin/products" th:href="@{/admin/products}" class="active">
+                <a th:href="@{/admin/categories}">
+                    <i class="fas fa-tags"></i>
+                    <span>دسته‌بندی‌ها</span>
+                </a>
+            </li>
+            <li>
+                <a th:href="@{/admin/products}" class="active">
                     <i class="fas fa-box"></i>
                     <span>محصولات</span>
                 </a>
             </li>
             <li>
-                <a href="/admin/settings" th:href="@{/admin/settings}">
+                <a th:href="@{/admin/settings}">
                     <i class="fas fa-cog"></i>
                     <span>تنظیمات</span>
                 </a>
             </li>
             <li>
-                <a href="/admin/logout" th:href="@{/admin/logout}">
+                <a th:href="@{/admin/logout}">
                     <i class="fas fa-sign-out-alt"></i>
                     <span>خروج</span>
                 </a>
             </li>
         </ul>
     </div>
-    
+
     <!-- Main Content -->
     <div class="main-content" id="main-content">
         <!-- Top Navbar -->
@@ -80,7 +68,7 @@
                 <button class="sidebar-toggle" id="sidebar-toggle">
                     <i class="fas fa-bars"></i>
                 </button>
-                <div class="navbar-brand">ویرایش محصول</div>
+                <div class="navbar-brand" th:text="${product?.id != null ? 'ویرایش محصول' : 'ثبت محصول جدید'}">مدیریت محصول</div>
             </div>
             
             <div class="navbar-actions">
@@ -108,22 +96,28 @@
                 <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
             </div>
             
-            <!-- Edit Form -->
+            <!-- Product Form -->
             <div class="form-container fade-in">
                 <div class="form-header">
-                    <h2 class="form-title">ویرایش محصول</h2>
-                    <p class="form-subtitle">اطلاعات محصول را ویرایش کنید</p>
+                    <h2 class="form-title" th:text="${product?.id != null ? 'ویرایش محصول' : 'ثبت محصول جدید'}">مدیریت محصول</h2>
+                    <p class="form-subtitle" th:text="${product?.id != null ? 'اطلاعات محصول را ویرایش کنید' : 'اطلاعات محصول جدید را وارد کنید'}">مدیریت اطلاعات محصول</p>
                 </div>
                 
-                <!-- Product Info Badge -->
-                <div class="product-info-badge">
+                <!-- Product Info Badge (Only for Edit Mode) -->
+                <div th:if="${product?.id != null}" class="product-info-badge">
                     <strong>محصول:</strong> <span th:text="${product.name}">نام محصول</span> 
                     | <strong>شناسه:</strong> <span th:text="${product.id}">ID</span>
                     | <strong>SKU:</strong> <span th:text="${product.sku ?: 'بدون SKU'}">SKU</span>
                 </div>
                 
-                <form th:action="@{/admin/products/edit}" method="POST" enctype="multipart/form-data" th:object="${product}">
-                    <input type="hidden" th:field="*{id}">
+                <form th:action="${product?.id != null ? '/admin/products/edit' : '/admin/products/create'}" 
+                      method="POST" 
+                      enctype="multipart/form-data" 
+                      th:object="${product}"
+                      id="productForm">
+                    
+                    <!-- Hidden ID field for edit mode -->
+                    <input th:if="${product?.id != null}" type="hidden" th:field="*{id}">
                     
                     <!-- Tab Navigation -->
                     <div class="nav-tabs-container">
@@ -193,7 +187,7 @@
                                             <option value="">انتخاب دسته‌بندی</option>
                                             <option th:each="category : ${categories}" 
                                                     th:value="${category.id}" 
-                                                    th:selected="${category.id == product.category?.id}"
+                                                    th:selected="${category.id == product?.category?.id}"
                                                     th:text="${category.name}">دسته‌بندی</option>
                                         </select>
                                     </div>
@@ -203,7 +197,7 @@
                                             <option value="">انتخاب فروشنده</option>
                                             <option th:each="seller : ${sellers}" 
                                                     th:value="${seller.id}" 
-                                                    th:selected="${seller.id == product.seller?.id}"
+                                                    th:selected="${seller.id == product?.seller?.id}"
                                                     th:text="${seller.firstName + ' ' + seller.lastName}">فروشنده</option>
                                         </select>
                                     </div>
@@ -280,18 +274,36 @@
                                     <small class="form-text text-muted">می‌توانید چندین عکس انتخاب کنید. فرمت‌های پشتیبانی شده: JPG, PNG, WebP</small>
                                 </div>
                                 <div id="imagePreview" class="image-preview-container mt-3">
-                                    <!-- تصاویر فعلی محصول در اینجا نمایش داده می‌شوند -->
-                                    <div th:if="${product.imageUrls != null and not #lists.isEmpty(product.imageUrls)}" class="current-images">
+                                    <!-- تصاویر فعلی محصول در حالت ویرایش -->
+                                    <div th:if="${product?.images != null and not #lists.isEmpty(product.images)}" class="current-images">
                                         <h6 class="mb-3">تصاویر فعلی:</h6>
                                         <div class="current-images-grid">
-                                            <div th:each="imageUrl : ${product.imageUrls}" class="current-image-item">
-                                                <img th:src="@{/uploads/products/} + ${imageUrl}" alt="Product Image" class="current-image">
+                                            <div th:each="productImage : ${product.images}" class="current-image-item">
+                                                <div class="edit-image-container">
+                                                    <img th:src="${productImage.image?.url != null ? productImage.image.url : '/uploads/products/' + productImage.image?.filename}" 
+                                                         alt="Product Image" 
+                                                         class="current-image"
+                                                         onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                                                    <div class="edit-image-placeholder" style="display: none;">
+                                                        <i class="fas fa-image"></i>
+                                                        <span>تصویر یافت نشد</span>
+                                                    </div>
+                                                </div>
                                                 <div class="current-image-overlay">
-                                                    <button type="button" class="btn btn-danger btn-sm" onclick="removeCurrentImage(this, '[[${imageUrl}]]')">
+                                                    <button type="button" class="btn btn-danger btn-sm" onclick="removeCurrentImage(this, '[[${productImage.image?.filename}]]')">
                                                         <i class="fas fa-trash"></i>
                                                     </button>
                                                 </div>
                                             </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- پیغام placeholder برای حالتی که هیچ تصویری وجود ندارد -->
+                                    <div th:if="${product?.images == null or #lists.isEmpty(product?.images)}" class="no-images-placeholder-edit">
+                                        <div class="no-images-content">
+                                            <i class="fas fa-images"></i>
+                                            <h6>هیچ تصویری برای این محصول آپلود نشده</h6>
+                                            <p>برای افزودن تصویر از فیلد بالا استفاده کنید</p>
                                         </div>
                                     </div>
                                 </div>
@@ -366,9 +378,9 @@
                     <div class="form-actions">
                         <button type="submit" class="btn btn-primary">
                             <i class="fas fa-save me-2"></i>
-                            ذخیره تغییرات
+                            <span th:text="${product?.id != null ? 'ذخیره تغییرات' : 'ثبت محصول'}">ذخیره</span>
                         </button>
-                        <a th:href="@{/admin/products/{id}(id=${product.id})}" class="btn btn-warning">
+                        <a th:if="${product?.id != null}" th:href="@{/admin/products/{id}(id=${product.id})}" class="btn btn-warning">
                             <i class="fas fa-eye me-2"></i>
                             مشاهده محصول
                         </a>
@@ -407,7 +419,7 @@
             placeholder: 'توضیحات کامل محصول را وارد کنید...'
         });
 
-        // Load existing content into Quill
+        // Load existing content into Quill (for edit mode)
         const existingDescription = document.getElementById('description').value;
         if (existingDescription) {
             quill.root.innerHTML = existingDescription;
@@ -471,7 +483,7 @@
             previewImages(); // Refresh preview
         }
 
-        // Remove current image
+        // Remove current image (for edit mode)
         function removeCurrentImage(button, imageUrl) {
             if (confirm('آیا از حذف این تصویر اطمینان دارید؟')) {
                 // Add hidden input to mark image for deletion
@@ -507,6 +519,55 @@
             }
         }
 
+        // Auto-generate slug from product name
+        document.getElementById('name').addEventListener('input', function() {
+            const name = this.value;
+            const currentSlug = document.getElementById('slug').value;
+            
+            // Only auto-generate if slug is empty or matches previous name
+            if (!currentSlug || currentSlug === name.toLowerCase().replace(/\s+/g, '-')) {
+                const slug = name
+                    .toLowerCase()
+                    .replace(/[^\u0600-\u06FF\w\s-]/g, '') // حفظ حروف فارسی و انگلیسی
+                    .replace(/\s+/g, '-')
+                    .replace(/-+/g, '-')
+                    .trim('-');
+                
+                document.getElementById('slug').value = slug;
+            }
+            
+            // Auto fill meta title if empty
+            const metaTitle = document.getElementById('metaTitle');
+            if (name && !metaTitle.value) {
+                metaTitle.value = name;
+            }
+        });
+
+        // Validate discount price
+        document.getElementById('discountPrice').addEventListener('input', function() {
+            const price = parseFloat(document.getElementById('price').value) || 0;
+            const discountPrice = parseFloat(this.value) || 0;
+            
+            if (discountPrice > price) {
+                this.setCustomValidity('قیمت تخفیف نمی‌تواند بیشتر از قیمت اصلی باشد');
+            } else {
+                this.setCustomValidity('');
+            }
+        });
+        
+        // Price change validation
+        document.getElementById('price').addEventListener('input', function() {
+            const price = parseFloat(this.value) || 0;
+            const discountPriceField = document.getElementById('discountPrice');
+            const discountPrice = parseFloat(discountPriceField.value) || 0;
+            
+            if (discountPrice > price) {
+                discountPriceField.setCustomValidity('قیمت تخفیف نمی‌تواند بیشتر از قیمت اصلی باشد');
+            } else {
+                discountPriceField.setCustomValidity('');
+            }
+        });
+
         // Form validation before submit
         document.getElementById('productForm').addEventListener('submit', function(e) {
             // Update description from Quill
@@ -517,11 +578,11 @@
             let hasError = false;
             
             requiredFields.forEach(fieldName => {
-                const field = document.getElementById(fieldName);
-                if (!field.value.trim()) {
+                const field = document.getElementById(fieldName) || document.getElementsByName(fieldName)[0];
+                if (field && !field.value.trim()) {
                     field.classList.add('is-invalid');
                     hasError = true;
-                } else {
+                } else if (field) {
                     field.classList.remove('is-invalid');
                 }
             });
@@ -555,66 +616,6 @@
             }
         });
 
-        // Auto-generate slug from product name
-        document.getElementById('name').addEventListener('input', function() {
-            const name = this.value;
-            const slug = name.toLowerCase()
-                .replace(/[ضصثقفغعهخحجچپژکگلآشيئدذرزطظتنبمو]/g, function(match) {
-                    const map = {
-                        'ض': 'z', 'ص': 's', 'ث': 's', 'ق': 'gh', 'ف': 'f',
-                        'غ': 'gh', 'ع': 'a', 'ه': 'h', 'خ': 'kh', 'ح': 'h',
-                        'ج': 'j', 'چ': 'ch', 'پ': 'p', 'ژ': 'zh', 'ک': 'k',
-                        'گ': 'g', 'ل': 'l', 'آ': 'a', 'ش': 'sh', 'ي': 'y',
-                        'ئ': 'y', 'د': 'd', 'ذ': 'z', 'ر': 'r', 'ز': 'z',
-                        'ط': 't', 'ظ': 'z', 'ت': 't', 'ن': 'n', 'ب': 'b',
-                        'م': 'm', 'و': 'v'
-                    };
-                    return map[match] || match;
-                })
-                .replace(/\s+/g, '-')
-                .replace(/[^a-zA-Z0-9\-]/g, '');
-            
-            document.getElementById('slug').value = slug;
-        });
-
-        // Real-time stock status update
-        document.getElementById('stock').addEventListener('input', function() {
-            const stock = parseInt(this.value) || 0;
-            const statusElement = document.getElementById('stockStatus');
-            
-            if (stock <= 0) {
-                statusElement.textContent = 'ناموجود';
-                statusElement.className = 'badge bg-danger';
-            } else if (stock <= 5) {
-                statusElement.textContent = 'کم موجود';
-                statusElement.className = 'badge bg-warning';
-            } else {
-                statusElement.textContent = 'موجود';
-                statusElement.className = 'badge bg-success';
-            }
-        });
-
-        // Price formatting
-        document.getElementById('price').addEventListener('input', function() {
-            let value = this.value.replace(/[^\d]/g, '');
-            if (value) {
-                this.value = parseInt(value).toLocaleString('fa-IR');
-            }
-        });
-
-        document.getElementById('comparePrice').addEventListener('input', function() {
-            let value = this.value.replace(/[^\d]/g, '');
-            if (value) {
-                this.value = parseInt(value).toLocaleString('fa-IR');
-            }
-        });
-
-        // Initialize Quill and other features after DOM load
-        document.addEventListener('DOMContentLoaded', function() {
-            // Trigger stock status update
-            document.getElementById('stock').dispatchEvent(new Event('input'));
-        });
-    
         // Sidebar Toggle
         document.getElementById('sidebar-toggle').addEventListener('click', function() {
             const sidebar = document.getElementById('sidebar');
@@ -628,55 +629,6 @@
             }
         });
         
-        // Auto generate slug from name
-        document.getElementById('name').addEventListener('input', function() {
-            const name = this.value;
-            const currentSlug = document.getElementById('slug').value;
-            
-            // Only auto-generate if slug is empty or matches previous name
-            if (!currentSlug || currentSlug === name.toLowerCase().replace(/\s+/g, '-')) {
-                const slug = name
-                    .toLowerCase()
-                    .replace(/[^\u0600-\u06FF\w\s-]/g, '') // حفظ حروف فارسی و انگلیسی
-                    .replace(/\s+/g, '-')
-                    .replace(/-+/g, '-')
-                    .trim('-');
-                
-                document.getElementById('slug').value = slug;
-            }
-            
-            // Auto fill meta title if empty
-            const metaTitle = document.getElementById('metaTitle');
-            if (name && !metaTitle.value) {
-                metaTitle.value = name;
-            }
-        });
-        
-        // Validate discount price
-        document.getElementById('discountPrice').addEventListener('input', function() {
-            const price = parseFloat(document.getElementById('price').value) || 0;
-            const discountPrice = parseFloat(this.value) || 0;
-            
-            if (discountPrice > price) {
-                this.setCustomValidity('قیمت تخفیف نمی‌تواند بیشتر از قیمت اصلی باشد');
-            } else {
-                this.setCustomValidity('');
-            }
-        });
-        
-        // Price change validation
-        document.getElementById('price').addEventListener('input', function() {
-            const price = parseFloat(this.value) || 0;
-            const discountPriceField = document.getElementById('discountPrice');
-            const discountPrice = parseFloat(discountPriceField.value) || 0;
-            
-            if (discountPrice > price) {
-                discountPriceField.setCustomValidity('قیمت تخفیف نمی‌تواند بیشتر از قیمت اصلی باشد');
-            } else {
-                discountPriceField.setCustomValidity('');
-            }
-        });
-        
         // Responsive sidebar
         window.addEventListener('resize', function() {
             const sidebar = document.getElementById('sidebar');
@@ -686,36 +638,17 @@
             }
         });
         
-        // Form validation
-        document.querySelector('form').addEventListener('submit', function(e) {
-            const requiredFields = this.querySelectorAll('[required]');
-            let isValid = true;
+        // Initialize form after DOM load
+        document.addEventListener('DOMContentLoaded', function() {
+            // Trigger validation events
+            const priceField = document.getElementById('price');
+            const discountField = document.getElementById('discountPrice');
             
-            requiredFields.forEach(field => {
-                if (!field.value.trim()) {
-                    field.classList.add('is-invalid');
-                    isValid = false;
-                } else {
-                    field.classList.remove('is-invalid');
-                }
-            });
-            
-            if (!isValid) {
-                e.preventDefault();
-                alert('لطفاً تمام فیلدهای الزامی را پر کنید');
-                
-                // Switch to the first tab with invalid fields
-                const firstInvalid = this.querySelector('.is-invalid');
-                if (firstInvalid) {
-                    const tabPane = firstInvalid.closest('.tab-pane');
-                    if (tabPane) {
-                        const tabId = tabPane.id;
-                        const tabButton = document.querySelector(`[data-bs-target="#${tabId}"]`);
-                        if (tabButton) {
-                            tabButton.click();
-                        }
-                    }
-                }
+            if (priceField.value) {
+                priceField.dispatchEvent(new Event('input'));
+            }
+            if (discountField.value) {
+                discountField.dispatchEvent(new Event('input'));
             }
         });
     </script>
