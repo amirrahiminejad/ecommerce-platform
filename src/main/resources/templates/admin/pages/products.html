@@ -182,7 +182,7 @@
                                 <td th:text="${product.id}">1</td>
                                 <td>
                                     <img class="product-image" 
-                                         th:src="${!product.images.isEmpty() ? product.images[0].image.url : '/images/no-image.png'}"
+                                         th:src="${@productImageUtils.getFirstImageUrl(product)}"
                                          th:alt="${product.name}"
                                          src="/images/no-image.png" alt="بدون تصویر">
                                 </td>
@@ -193,7 +193,7 @@
                                         <small class="text-muted" th:text="${product.sku}">SKU</small>
                                     </div>
                                 </td>
-                                <td th:text="${product.category.name}">دسته‌بندی</td>
+                                <td th:text="${@productImageUtils.getCategoryName(product)}">دسته‌بندی</td>
                                 <td>
                                     <div class="price" th:if="${product.discountPrice != null and product.discountPrice.compareTo(product.price) < 0}">
                                         <span th:text="${#numbers.formatDecimal(product.discountPrice, 0, 'COMMA', 0, 'POINT')} + ' تومان'">قیمت تخفیف</span>

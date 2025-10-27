@@ -68,6 +68,10 @@ public class ProductService {
     public Optional<Product> getProductById(Long id) {
         return productRepository.findById(id);
     }
+    
+    public Optional<Product> getProductByIdWithImages(Long id) {
+        return productRepository.findByIdWithImages(id);
+    }
 
     public Optional<Product> getProductBySlug(String slug) {
         return productRepository.findBySlug(slug);
@@ -381,5 +385,26 @@ public class ProductService {
      */
     public long countByFeaturedStatus(Boolean isFeatured) {
         return productRepository.countByIsFeatured(isFeatured);
+    }
+    
+    /**
+     * بررسی اینکه آیا محصول تصویری دارد یا نه (بدون lazy loading exception)
+     */
+    @Transactional(readOnly = true)
+    public boolean hasImages(Long productId) {
+        return productRepository.findByIdWithImages(productId)
+                .map(product -> product.getImages() != null && !product.getImages().isEmpty())
+                .orElse(false);
+    }
+    
+    /**
+     * دریافت اولین تصویر محصول (بدون lazy loading exception)
+     */
+    @Transactional(readOnly = true)
+    public String getFirstImageUrl(Long productId) {
+        return productRepository.findByIdWithImages(productId)
+                .filter(product -> product.getImages() != null && !product.getImages().isEmpty())
+                .map(product -> product.getImages().get(0).getImage().getUrl())
+                .orElse("/images/no-image.png");
     }
 }

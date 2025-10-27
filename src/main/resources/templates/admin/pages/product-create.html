@@ -162,7 +162,7 @@
                                     </div>
                                     <div class="form-group">
                                         <label for="category" class="form-label">دسته‌بندی <span class="required">*</span></label>
-                                        <select class="form-control" id="category" name="category.id" required>
+                                        <select class="form-control" id="category" name="categoryId" required>
                                             <option value="">انتخاب دسته‌بندی</option>
                                             <option th:each="category : ${categories}" 
                                                     th:value="${category.id}" 
@@ -171,11 +171,11 @@
                                     </div>
                                     <div class="form-group">
                                         <label for="seller" class="form-label">فروشنده <span class="required">*</span></label>
-                                        <select class="form-control" id="seller" name="seller.id" required>
+                                        <select class="form-control" id="seller" name="sellerId" required>
                                             <option value="">انتخاب فروشنده</option>
-                                            <option th:each="user : ${users}" 
-                                                    th:value="${user.id}" 
-                                                    th:text="${user.firstName + ' ' + user.lastName}">فروشنده</option>
+                                            <option th:each="seller : ${sellers}" 
+                                                    th:value="${seller.id}" 
+                                                    th:text="${seller.firstName + ' ' + seller.lastName}">فروشنده</option>
                                         </select>
                                     </div>
                                     <div class="form-group">
@@ -246,8 +246,8 @@
                         <div class="tab-pane fade" id="images" role="tabpanel">
                             <div class="form-section">
                                 <div class="form-group">
-                                    <label for="images" class="form-label">تصاویر محصول</label>
-                                    <input type="file" class="form-control" id="images" name="images" multiple accept="image/*">
+                                    <label for="imageFiles" class="form-label">تصاویر محصول</label>
+                                    <input type="file" class="form-control" id="imageFiles" name="imageFiles" multiple accept="image/*">
                                     <div class="form-text">می‌توانید چندین تصویر انتخاب کنید. حداکثر حجم هر تصویر: 5MB</div>
                                 </div>
                                 
@@ -379,7 +379,7 @@
 
         // Image preview functionality
         function previewImages() {
-            const input = document.getElementById('images');
+            const input = document.getElementById('imageFiles');
             const previewContainer = document.getElementById('imagePreview');
             
             // Clear previous previews
@@ -416,7 +416,7 @@
 
         // Remove image from preview
         function removeImage(index) {
-            const input = document.getElementById('images');
+            const input = document.getElementById('imageFiles');
             const dt = new DataTransfer();
             
             Array.from(input.files).forEach((file, i) => {
@@ -437,7 +437,7 @@
             }
             
             // Basic validation
-            const requiredFields = ['name', 'category', 'price'];
+            const requiredFields = ['name', 'category', 'seller', 'price'];
             let hasError = false;
             
             requiredFields.forEach(fieldName => {

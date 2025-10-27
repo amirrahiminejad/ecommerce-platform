@@ -83,13 +83,13 @@
                 </div>
                 
                 <!-- Product Images -->
-                <div class="product-images" th:if="${!product.images.isEmpty()}">
+                <div class="product-images" th:if="${product.images != null && !product.images.isEmpty()}">
                     <img class="main-image" id="mainImage"
                          th:src="${product.images[0].image.url}"
                          th:alt="${product.name}"
                          src="/images/no-image.png" alt="تصویر محصول">
                     
-                    <div class="image-thumbnails" th:if="${product.images.size() > 1}">
+                    <div class="image-thumbnails" th:if="${product.images != null && product.images.size() > 1}">
                         <img th:each="image, iterStat : ${product.images}"
                              class="thumbnail"
                              th:classappend="${iterStat.index == 0} ? 'active'"

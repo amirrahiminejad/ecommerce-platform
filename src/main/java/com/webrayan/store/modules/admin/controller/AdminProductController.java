@@ -13,9 +13,15 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.InitBinder;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import java.util.ArrayList;
 
 @Controller
 @RequestMapping("/admin/products")
@@ -27,9 +33,18 @@ public class AdminProductController {
     private final UserService userService;
 
     /**
+     * Exclude images field from automatic binding to prevent conflicts
+     */
+    @InitBinder
+    public void initBinder(WebDataBinder binder) {
+        binder.setDisallowedFields("images");
+    }
+
+    /**
      * نمایش لیست محصولات با فیلتر و جستجو
      */
     @GetMapping
+    @Transactional(readOnly = true)
     public String listProducts(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
@@ -105,8 +120,9 @@ public class AdminProductController {
      * نمایش جزئیات محصول
      */
     @GetMapping("/{id}")
+    @Transactional(readOnly = true)
     public String viewProduct(@PathVariable Long id, Model model) {
-        Product product = productService.getProductById(id)
+        Product product = productService.getProductByIdWithImages(id)
                 .orElseThrow(() -> new RuntimeException("محصول یافت نشد"));
         
         model.addAttribute("product", product);
@@ -132,6 +148,7 @@ public class AdminProductController {
     public String createProduct(@ModelAttribute Product product,
                                @RequestParam Long sellerId,
                                @RequestParam Long categoryId,
+                               @RequestParam(value = "imageFiles", required = false) MultipartFile[] imageFiles,
                                RedirectAttributes redirectAttributes) {
         try {
             // تنظیم فروشنده و دسته‌بندی
@@ -142,7 +159,25 @@ public class AdminProductController {
             product.setSeller(seller);
             product.setCategory(category);
             
+            // Clear any existing images from form binding issues
+            product.setImages(new ArrayList<>());
+            
             Product savedProduct = productService.createProduct(product);
+            
+            // Handle image uploads if provided
+            if (imageFiles != null && imageFiles.length > 0) {
+                for (MultipartFile file : imageFiles) {
+                    if (!file.isEmpty()) {
+                        // TODO: Implement image processing and saving
+                        // This would typically involve:
+                        // 1. Validating file type and size
+                        // 2. Saving file to storage (disk/cloud)
+                        // 3. Creating ProductImage entity
+                        // 4. Associating with product
+                    }
+                }
+            }
+            
             redirectAttributes.addFlashAttribute("successMessage", 
                 "محصول با موفقیت ایجاد شد");
             return "redirect:/admin/products/" + savedProduct.getId();
@@ -173,19 +208,30 @@ public class AdminProductController {
      */
     @PostMapping("/edit")
     public String editProduct(@ModelAttribute Product product,
-                             @RequestParam Long sellerId,
                              @RequestParam Long categoryId,
+                             @RequestParam(value = "imageFiles", required = false) MultipartFile[] imageFiles,
                              RedirectAttributes redirectAttributes) {
         try {
             // تنظیم فروشنده و دسته‌بندی
-            User seller = userService.findById(sellerId);
             Category category = categoryService.getCategoryById(categoryId)
                     .orElseThrow(() -> new RuntimeException("دسته‌بندی یافت نشد"));
             
-            product.setSeller(seller);
             product.setCategory(category);
             
+            // Clear any existing images from form binding issues
+            product.setImages(new ArrayList<>());
+            
             Product updatedProduct = productService.updateProduct(product.getId(), product);
+            
+            // Handle new image uploads if provided
+            if (imageFiles != null && imageFiles.length > 0) {
+                for (MultipartFile file : imageFiles) {
+                    if (!file.isEmpty()) {
+                        // TODO: Implement image processing and saving for updates
+                    }
+                }
+            }
+            
             redirectAttributes.addFlashAttribute("successMessage", 
                 "محصول با موفقیت به‌روزرسانی شد");
             return "redirect:/admin/products/" + updatedProduct.getId();

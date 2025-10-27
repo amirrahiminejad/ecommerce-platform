@@ -86,4 +86,11 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     Long countByIsActive(Boolean isActive);
     
     Long countByIsFeatured(Boolean isFeatured);
+    
+    // متد برای بارگذاری محصول با تصاویر و دسته‌بندی به صورت eager
+    @Query("SELECT p FROM Product p LEFT JOIN FETCH p.images LEFT JOIN FETCH p.category LEFT JOIN FETCH p.seller WHERE p.id = :id")
+    Optional<Product> findByIdWithImages(@Param("id") Long id);
+    
+    // Note: Cannot use multiple JOIN FETCH with pagination due to Cartesian product
+    // Use separate queries or service-level solutions for list views
 }
