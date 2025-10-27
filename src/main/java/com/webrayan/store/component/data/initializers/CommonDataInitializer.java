@@ -141,12 +141,12 @@ public class CommonDataInitializer {
         log.info("⚙️ Creating default settings...");
         
         List<String[]> settingData = Arrays.asList(
-            new String[]{"site_name", "Iran ECommerce"},
-            new String[]{"site_title", "Iran International Bazaar"},
-            new String[]{"site_description", "The largest online marketplace in Iran"},
-            new String[]{"default_currency", "$"},
-            new String[]{"default_language", "en"},
-            new String[]{"admin_email", "admin@iran-store.com"},
+            new String[]{"site_name", "فروشگاه اینترنتی"},
+            new String[]{"site_title", "فروشگاه آنلاین"},
+            new String[]{"site_description", "فروشگاه اینترنتی با محصولات متنوع و کیفیت بالا"},
+            new String[]{"default_currency", "تومان"},
+            new String[]{"default_language", "fa"},
+            new String[]{"admin_email", "admin@online-store.com"},
             new String[]{"support_phone", "+98-21-12345678"},
             new String[]{"max_upload_size", "10485760"},
             new String[]{"items_per_page", "20"},
@@ -172,11 +172,20 @@ public class CommonDataInitializer {
         log.info("🏷️ Creating default tags...");
         
         List<String> tagNames = Arrays.asList(
-            "New", "Special Offer", "Special Sale", "Popular", "Best Seller",
-            "Organic", "Handmade", "Export", "Import", "Original",
-            "Discounted", "Free", "Fast", "High Quality", "Limited"
+            "جدید", "پیشنهاد ویژه", "فروش ویژه", "محبوب", "پرفروش",
+            "ارگانیک", "دست‌ساز", "صادراتی", "وارداتی", "اصل",
+            "تخفیف‌دار", "رایگان", "سریع", "کیفیت بالا", "محدود"
         );
-
+        
+        int createdCount = 0;
+        for (String tagName : tagNames) {
+            // Note: Tag creation logic would need the Tag repository and entity
+            // This is a placeholder for when Tag entity and repository are available
+            log.debug("Tag {} would be created", tagName);
+            createdCount++;
+        }
+        
+        log.info("✅ {} tags prepared for creation", createdCount);
     }
 
 

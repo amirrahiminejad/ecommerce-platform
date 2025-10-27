@@ -31,16 +31,16 @@ public class CatalogDataInitializer {
         log.info("📂 Creating main categories...");
         
         List<String[]> mainCategories = Arrays.asList(
-            new String[]{"Electronics", "Mobile phones, laptops, tablets and other electronic devices"},
-            new String[]{"Clothing", "Men's, women's, children's clothing and shoes"},
-            new String[]{"Home & Kitchen", "Home appliances, decoration, kitchen items"},
-            new String[]{"Books & Magazines", "Books, magazines, educational software"},
-            new String[]{"Health & Beauty", "Health products, cosmetics, personal care"},
-            new String[]{"Sports & Travel", "Sports equipment, backpacks, luggage"},
-            new String[]{"Automotive", "Spare parts, car accessories"},
-            new String[]{"Food & Beverages", "Food items, drinks, groceries"},
-            new String[]{"Industrial & Office", "Tools, industrial and office equipment"},
-            new String[]{"Arts & Crafts", "Handicrafts, paintings, sculptures"}
+            new String[]{"کالاهای دیجیتال", "موبایل، لپ‌تاپ، تبلت و سایر تجهیزات الکترونیکی"},
+            new String[]{"مد و پوشاک", "پوشاک مردانه، زنانه، بچه‌گانه و کفش"},
+            new String[]{"خانه و آشپزخانه", "لوازم خانگی، دکوراسیون، وسایل آشپزخانه"},
+            new String[]{"کتاب و مجله", "کتاب، مجله، نرم‌افزارهای آموزشی"},
+            new String[]{"بهداشت و زیبایی", "محصولات بهداشتی، آرایشی، مراقبت شخصی"},
+            new String[]{"ورزش و سفر", "تجهیزات ورزشی، کوله‌پشتی، چمدان"},
+            new String[]{"خودرو و وسایل نقلیه", "قطعات یدکی، لوازم جانبی خودرو"},
+            new String[]{"مواد غذایی و نوشیدنی", "مواد غذایی، نوشیدنی، مواد اولیه"},
+            new String[]{"صنعتی و اداری", "ابزارآلات، تجهیزات صنعتی و اداری"},
+            new String[]{"هنر و صنایع دستی", "صنایع‌دستی، نقاشی، مجسمه"}
         );
         
         int createdCount = 0;
@@ -63,17 +63,17 @@ public class CatalogDataInitializer {
     private void initializeElectronicsSubCategories() {
         log.info("📱 Creating electronics subcategories...");
         
-        Category electronics = categoryRepository.findByName("Electronics");
+        Category electronics = categoryRepository.findByName("کالاهای دیجیتال");
         if (electronics != null) {
             List<String[]> subCategories = Arrays.asList(
-                new String[]{"Mobile Phones", "Various smartphones"},
-                new String[]{"Laptops", "Portable computers"},
-                new String[]{"Tablets", "Tablets and tablet computers"},
-                new String[]{"Headphones", "Headphones and headsets"},
-                new String[]{"Smart Watches", "Smart watches and fitness trackers"},
-                new String[]{"Cameras", "Digital cameras and photography equipment"},
-                new String[]{"Computers", "Personal computers and components"},
-                new String[]{"Accessories", "Cables, chargers, cases"}
+                new String[]{"گوشی موبایل", "انواع گوشی‌های هوشمند"},
+                new String[]{"لپ‌تاپ", "رایانه‌های قابل حمل"},
+                new String[]{"تبلت", "تبلت و رایانه‌های لوحی"},
+                new String[]{"هدفون و هندزفری", "هدفون و هندزفری"},
+                new String[]{"ساعت هوشمند", "ساعت‌های هوشمند و ردیاب تناسب اندام"},
+                new String[]{"دوربین", "دوربین‌های دیجیتال و تجهیزات عکاسی"},
+                new String[]{"کامپیوتر", "رایانه‌های شخصی و قطعات"},
+                new String[]{"لوازم جانبی", "کابل، شارژر، کیف"}
             );
             
             int createdCount = 0;
@@ -93,7 +93,7 @@ public class CatalogDataInitializer {
             
             log.info("✅ {} electronics subcategories created", createdCount);
         } else {
-            log.warn("⚠️ Electronics category not found");
+            log.warn("⚠️ کالاهای دیجیتال category not found");
         }
     }
 }
