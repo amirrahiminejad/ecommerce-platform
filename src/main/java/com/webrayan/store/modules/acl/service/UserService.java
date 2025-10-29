@@ -357,5 +357,35 @@ public class UserService {
         return userRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("کاربر یافت نشد"));
     }
+
+    /**
+     * دریافت کاربران بازاریاب با pagination و جستجو
+     */
+    public Page<User> findAffiliateUsers(Pageable pageable, String search, String status) {
+        Role.RoleName affiliateRole = Role.RoleName.AFFILIATE;
+        
+        if (search != null && !search.trim().isEmpty() && status != null && !status.trim().isEmpty()) {
+            // جستجو با وضعیت
+            User.UserStatus userStatus = User.UserStatus.valueOf(status);
+            return userRepository.findByRoleAndSearchAndStatus(affiliateRole, search, userStatus, pageable);
+        } else if (search != null && !search.trim().isEmpty()) {
+            // فقط جستجو
+            return userRepository.findByRoleAndSearch(affiliateRole, search, pageable);
+        } else if (status != null && !status.trim().isEmpty()) {
+            // فقط وضعیت
+            User.UserStatus userStatus = User.UserStatus.valueOf(status);
+            return userRepository.findByRoleAndStatus(affiliateRole, userStatus, pageable);
+        } else {
+            // همه بازاریابها
+            return userRepository.findByRole(affiliateRole, pageable);
+        }
+    }
+
+    /**
+     * ذخیره کاربر
+     */
+    public User save(User user) {
+        return userRepository.save(user);
+    }
 }
 

@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مشاهده بازاریاب - تاپ کالا</title>
+    
+    <!-- Bootstrap RTL CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.rtl.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="/css/admin-user-detail-styles.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <img src="/images/logo-small.png" alt="تاپ کالا" height="100" style="margin-bottom: 10px;">
+        </div>
+        
+        <ul class="sidebar-menu">
+            <li>
+                <a href="/admin/dashboard" th:href="@{/admin/dashboard}">
+                    <i class="fas fa-home"></i>
+                    <span>داشبورد</span>
+                </a>
+            </li>
+            <li>
+                <a href="/admin/users" th:href="@{/admin/users}">
+                    <i class="fas fa-users"></i>
+                    <span>کاربران</span>
+                </a>
+            </li>
+            <li>
+                <a href="/admin/affiliates" th:href="@{/admin/affiliates}" class="active">
+                    <i class="fas fa-handshake"></i>
+                    <span>بازاریابها</span>
+                </a>
+            </li>
+            <li>
+                <a href="/admin/categories" th:href="@{/admin/categories}">
+                    <i class="fas fa-tags"></i>
+                    <span>دسته‌بندی‌ها</span>
+                </a>
+            </li>
+            <li>
+                <a href="/admin/products" th:href="@{/admin/products}">
+                    <i class="fas fa-box"></i>
+                    <span>محصولات</span>
+                </a>
+            </li>
+            <li>
+                <a href="/admin/settings" th:href="@{/admin/settings}">
+                    <i class="fas fa-cog"></i>
+                    <span>تنظیمات</span>
+                </a>
+            </li>
+            <li>
+                <a href="/admin/logout" th:href="@{/admin/logout}">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span>خروج</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+    
+    <!-- Main Content -->
+    <div class="main-content" id="main-content">
+        <!-- Top Navbar -->
+        <div class="top-navbar">
+            <div class="d-flex align-items-center">
+                <button class="sidebar-toggle" id="sidebar-toggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <div class="navbar-brand">مشاهده بازاریاب</div>
+            </div>
+            
+            <div class="navbar-actions">
+                <div class="user-info">
+                    <div class="user-avatar">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <span>مدیر سیستم</span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Content Area -->
+        <div class="content-area">
+            <!-- Back Button -->
+            <div class="back-button-container fade-in">
+                <a href="/admin/affiliates" th:href="@{/admin/affiliates}" class="back-button">
+                    <i class="fas fa-arrow-right"></i>
+                    بازگشت به لیست بازاریابها
+                </a>
+            </div>
+
+            <!-- Profile Card -->
+            <div class="profile-card fade-in">
+                <div class="profile-header">
+                    <div class="profile-avatar" th:text="${#strings.substring(affiliate.username, 0, 1).toUpperCase()}">A</div>
+                    <h2 class="profile-title">
+                        <span th:if="${affiliate.firstName != null and affiliate.lastName != null}"
+                              th:text="${affiliate.firstName + ' ' + affiliate.lastName}">نام کامل بازاریاب</span>
+                        <span th:unless="${affiliate.firstName != null and affiliate.lastName != null}"
+                              th:text="${affiliate.username}">نام کاربری</span>
+                    </h2>
+                    <p class="profile-subtitle">@<span th:text="${affiliate.username}">username</span></p>
+                    <div class="profile-badges">
+                        <span class="role-badge affiliate-badge">
+                            <i class="fas fa-handshake me-1"></i>
+                            بازاریاب
+                        </span>
+                    </div>
+                </div>
+                
+                <!-- اطلاعات شخصی -->
+                <div class="info-section">
+                    <h3 class="section-title">
+                        <i class="fas fa-user"></i>
+                        اطلاعات شخصی
+                    </h3>
+                    <div class="info-grid">
+                        <div class="info-item">
+                            <span class="info-label">شناسه کاربر:</span>
+                            <span class="info-value" th:text="${affiliate.id}">1</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">نام کاربری:</span>
+                            <span class="info-value" th:text="${affiliate.username}">username</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">نام:</span>
+                            <span class="info-value" th:text="${affiliate.firstName ?: '-'}">نام</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">نام خانوادگی:</span>
+                            <span class="info-value" th:text="${affiliate.lastName ?: '-'}">نام خانوادگی</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">ایمیل:</span>
+                            <span class="info-value" th:text="${affiliate.email}">email@example.com</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">شماره تلفن:</span>
+                            <span class="info-value" th:text="${affiliate.phoneNumber ?: '-'}">09123456789</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- وضعیت حساب -->
+                <div class="info-section">
+                    <h3 class="section-title">
+                        <i class="fas fa-shield-alt"></i>
+                        وضعیت حساب کاربری
+                    </h3>
+                    <div class="info-grid">
+                        <div class="info-item">
+                            <span class="info-label">وضعیت:</span>
+                            <span class="info-value">
+                                <span class="status-badge" 
+                                      th:classappend="${affiliate.status.name() == 'ACTIVE' ? 'status-active' : 
+                                                       affiliate.status.name() == 'INACTIVE' ? 'status-inactive' :
+                                                       affiliate.status.name() == 'SUSPENDED' ? 'status-suspended' :
+                                                       affiliate.status.name() == 'BANNED' ? 'status-banned' : 'status-pending'}"
+                                      th:text="${affiliate.status.getPersianName()}">فعال</span>
+                            </span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">تأیید ایمیل:</span>
+                            <span class="info-value">
+                                <span class="verification-badge" 
+                                      th:classappend="${affiliate.emailVerified != null and affiliate.emailVerified ? 'verified' : 'not-verified'}">
+                                    <i th:class="${affiliate.emailVerified != null and affiliate.emailVerified ? 'fas fa-check' : 'fas fa-times'}"></i>
+                                    <span th:text="${affiliate.emailVerified != null and affiliate.emailVerified ? 'تأیید شده' : 'تأیید نشده'}">تأیید شده</span>
+                                </span>
+                            </span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">تأیید تلفن:</span>
+                            <span class="info-value">
+                                <span class="verification-badge" 
+                                      th:classappend="${affiliate.phoneVerified != null and affiliate.phoneVerified ? 'verified' : 'not-verified'}">
+                                    <i th:class="${affiliate.phoneVerified != null and affiliate.phoneVerified ? 'fas fa-check' : 'fas fa-times'}"></i>
+                                    <span th:text="${affiliate.phoneVerified != null and affiliate.phoneVerified ? 'تأیید شده' : 'تأیید نشده'}">تأیید نشده</span>
+                                </span>
+                            </span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">تاریخ عضویت:</span>
+                            <span class="info-value" th:text="${#temporals.format(affiliate.createdAt, 'yyyy/MM/dd HH:mm')}">1403/06/15</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">آخرین ورود:</span>
+                            <span class="info-value" th:text="${affiliate.lastLogin != null ? #temporals.format(affiliate.lastLogin, 'yyyy/MM/dd HH:mm') : 'هرگز'}">-</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">آخرین بروزرسانی:</span>
+                            <span class="info-value" th:text="${affiliate.updatedAt != null ? #temporals.format(affiliate.updatedAt, 'yyyy/MM/dd HH:mm') : '-'}">1403/06/15</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- نقش‌ها و دسترسی‌ها -->
+                <div class="info-section">
+                    <h3 class="section-title">
+                        <i class="fas fa-users-cog"></i>
+                        نقش‌ها و دسترسی‌ها
+                    </h3>
+                    <div class="info-item">
+                        <span class="info-label">نقش‌های کاربر:</span>
+                        <div class="info-value">
+                            <div class="roles-list">
+                                <span th:each="role : ${affiliate.roles}" 
+                                      class="role-badge"
+                                      th:classappend="${role.roleName.name() == 'AFFILIATE' ? 'affiliate-role' : ''}"
+                                      th:text="${role.roleName.persianName}">بازاریاب</span>
+                                <span th:if="${#lists.isEmpty(affiliate.roles)}" class="text-muted">بدون نقش</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- شبکه‌های اجتماعی -->
+                <div class="info-section" th:if="${affiliate.linkdin != null or affiliate.facebook != null or 
+                                                 affiliate.instagram != null or affiliate.whatsapp != null or 
+                                                 affiliate.telegram != null}">
+                    <h3 class="section-title">
+                        <i class="fas fa-share-alt"></i>
+                        شبکه‌های اجتماعی
+                    </h3>
+                    <div class="social-links-grid">
+                        <div class="social-item" th:if="${affiliate.linkdin != null}">
+                            <i class="fab fa-linkedin social-icon linkedin"></i>
+                            <a th:href="${affiliate.linkdin}" target="_blank" class="social-link">LinkedIn</a>
+                        </div>
+                        <div class="social-item" th:if="${affiliate.facebook != null}">
+                            <i class="fab fa-facebook social-icon facebook"></i>
+                            <a th:href="${affiliate.facebook}" target="_blank" class="social-link">Facebook</a>
+                        </div>
+                        <div class="social-item" th:if="${affiliate.instagram != null}">
+                            <i class="fab fa-instagram social-icon instagram"></i>
+                            <a th:href="${affiliate.instagram}" target="_blank" class="social-link">Instagram</a>
+                        </div>
+                        <div class="social-item" th:if="${affiliate.whatsapp != null}">
+                            <i class="fab fa-whatsapp social-icon whatsapp"></i>
+                            <a th:href="${affiliate.whatsapp}" target="_blank" class="social-link">WhatsApp</a>
+                        </div>
+                        <div class="social-item" th:if="${affiliate.telegram != null}">
+                            <i class="fab fa-telegram social-icon telegram"></i>
+                            <a th:href="${affiliate.telegram}" target="_blank" class="social-link">Telegram</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- آمار بازاریابی -->
+                <div class="info-section">
+                    <h3 class="section-title">
+                        <i class="fas fa-chart-line"></i>
+                        آمار بازاریابی
+                    </h3>
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-icon">
+                                <i class="fas fa-users"></i>
+                            </div>
+                            <div class="stat-content">
+                                <h4 class="stat-value">0</h4>
+                                <p class="stat-label">کل ارجاعات</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon">
+                                <i class="fas fa-shopping-cart"></i>
+                            </div>
+                            <div class="stat-content">
+                                <h4 class="stat-value">0</h4>
+                                <p class="stat-label">فروش‌های موفق</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon">
+                                <i class="fas fa-coins"></i>
+                            </div>
+                            <div class="stat-content">
+                                <h4 class="stat-value">0 تومان</h4>
+                                <p class="stat-label">کل کمیسیون</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon">
+                                <i class="fas fa-percentage"></i>
+                            </div>
+                            <div class="stat-content">
+                                <h4 class="stat-value">0%</h4>
+                                <p class="stat-label">نرخ تبدیل</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="alert alert-info mt-3">
+                        <i class="fas fa-info-circle me-2"></i>
+                        آمار بازاریابی در نسخه‌های آینده به‌روزرسانی خواهد شد.
+                    </div>
+                </div>
+
+                <!-- عملیات -->
+                <div class="info-section">
+                    <h3 class="section-title">
+                        <i class="fas fa-cogs"></i>
+                        عملیات مدیریتی
+                    </h3>
+                    <div class="action-buttons">
+                        <form th:action="@{/admin/affiliates/toggle-status/{id}(id=${affiliate.id})}" method="post" class="d-inline">
+                            <button type="submit" 
+                                    class="btn action-btn-primary"
+                                    th:classappend="${affiliate.status.name() == 'ACTIVE' ? 'btn-warning' : 'btn-success'}"
+                                    onclick="return confirm('آیا از تغییر وضعیت این بازاریاب اطمینان دارید؟')">
+                                <i th:class="${affiliate.status.name() == 'ACTIVE' ? 'fas fa-pause' : 'fas fa-play'}"></i>
+                                <span th:text="${affiliate.status.name() == 'ACTIVE' ? 'غیرفعال کردن' : 'فعال کردن'}"></span>
+                            </button>
+                        </form>
+                        
+                        <form th:action="@{/admin/affiliates/delete/{id}(id=${affiliate.id})}" method="post" class="d-inline">
+                            <button type="submit" 
+                                    class="btn btn-danger action-btn-danger"
+                                    onclick="return confirm('آیا از حذف این بازاریاب اطمینان دارید؟ این عمل قابل بازگشت نیست.')">
+                                <i class="fas fa-trash"></i>
+                                حذف بازاریاب
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <!-- Custom Admin JS -->
+    <script src="/assets/js/admin/admin-scripts.js"></script>
+    
+    <script>
+        // Sidebar Toggle
+        document.getElementById('sidebar-toggle').addEventListener('click', function() {
+            const sidebar = document.getElementById('sidebar');
+            const mainContent = document.querySelector('.main-content');
+            
+            if (window.innerWidth > 768) {
+                sidebar.classList.toggle('collapsed');
+                if (mainContent) mainContent.classList.toggle('expanded');
+            } else {
+                sidebar.classList.toggle('show');
+            }
+        });
+        
+        // Responsive sidebar
+        window.addEventListener('resize', function() {
+            const sidebar = document.getElementById('sidebar');
+            
+            if (window.innerWidth > 768) {
+                sidebar.classList.remove('show');
+            }
+        });
+    </script>
+</body>
+</html>

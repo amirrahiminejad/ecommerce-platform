@@ -78,4 +78,41 @@ public interface UserRepository extends JpaRepository<User, Long> {
                                                                   @Param("status") User.UserStatus status, 
                                                                   Pageable pageable);
 
+    // Methods for affiliate management
+    
+    /**
+     * دریافت کاربران بر اساس نقش با pagination
+     */
+    @Query("SELECT u FROM User u JOIN u.roles r WHERE r.roleName = :roleName")
+    Page<User> findByRole(@Param("roleName") Role.RoleName roleName, Pageable pageable);
+
+    /**
+     * دریافت کاربران بر اساس نقش و وضعیت با pagination
+     */
+    @Query("SELECT u FROM User u JOIN u.roles r WHERE r.roleName = :roleName AND u.status = :status")
+    Page<User> findByRoleAndStatus(@Param("roleName") Role.RoleName roleName, 
+                                   @Param("status") User.UserStatus status, 
+                                   Pageable pageable);
+
+    /**
+     * جستجو در کاربران بر اساس نقش با pagination
+     */
+    @Query("SELECT u FROM User u JOIN u.roles r WHERE r.roleName = :roleName AND " +
+           "(u.username LIKE %:search% OR u.email LIKE %:search% OR " +
+           "u.firstName LIKE %:search% OR u.lastName LIKE %:search%)")
+    Page<User> findByRoleAndSearch(@Param("roleName") Role.RoleName roleName, 
+                                   @Param("search") String search, 
+                                   Pageable pageable);
+
+    /**
+     * جستجو در کاربران بر اساس نقش و وضعیت با pagination
+     */
+    @Query("SELECT u FROM User u JOIN u.roles r WHERE r.roleName = :roleName AND u.status = :status AND " +
+           "(u.username LIKE %:search% OR u.email LIKE %:search% OR " +
+           "u.firstName LIKE %:search% OR u.lastName LIKE %:search%)")
+    Page<User> findByRoleAndSearchAndStatus(@Param("roleName") Role.RoleName roleName, 
+                                            @Param("search") String search, 
+                                            @Param("status") User.UserStatus status, 
+                                            Pageable pageable);
+
 }
