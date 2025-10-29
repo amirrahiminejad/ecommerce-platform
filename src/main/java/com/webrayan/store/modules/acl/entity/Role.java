@@ -41,11 +41,7 @@ public class Role {
         SYSTEM_ADMIN("مدیر سیستم"),
         EMPLOYEE("کارمند"),
         CUSTOMER("مشتری"),
-        AFFILIATE("بازاریاب"),
-        MODERATOR("مدیر محتوا"),
-        SALES_MANAGER("مدیر فروش"),
-        INVENTORY_MANAGER("مدیر انبار"),
-        ACCOUNTANT("حسابدار");
+        AFFILIATE("بازاریاب");
 
         private final String persianName;
 
