@@ -7,7 +7,8 @@
 | **[API_DOCUMENTATION.md](03-api-reference/API_DOCUMENTATION.md)** | مستندات کامل Swagger | 15 دقیقه | API Consumer |
 | **[API_USAGE_EXAMPLES.md](03-api-reference/API_USAGE_EXAMPLES.md)** | نمونه‌های عملی استفاده از API | 20 دقیقه | Frontend Developer |
 | **[SWAGGER_QUICK_GUIDE.md](03-api-reference/SWAGGER_QUICK_GUIDE.md)** | راهنمای سریع Swagger | 10 دقیقه | API Consumer |
-| **[EMAIL_SYSTEM_API.md](03-api-reference/EMAIL_SYSTEM_API.md)** | 📧 API سیستم ایمیل و بازیابی رمز عبور | 25 دقیقه | Backend/Frontend Developer | 🗂️ ساختار مستندات
+| **[EMAIL_SYSTEM_API.md](03-api-reference/EMAIL_SYSTEM_API.md)** | 📧 API سیستم ایمیل و بازیابی رمز عبور | 25 دقیقه | Backend/Frontend Developer |
+| **[SETTINGS_API.md](03-api-reference/SETTINGS_API.md)** | ⚙️ API سیستم تنظیمات مدیریت | 20 دقیقه | Backend/Admin Developer | 🗂️ ساختار مستندات
 
 مستندات پروژه Iran ECommerce به صورت منطقی در پوشه‌های جداگانه دسته‌بندی شده‌اند:
 
@@ -125,6 +126,7 @@ docs/
 | 03-api-reference/API_USAGE_EXAMPLES.md | ✅ Complete | 2025-09-09 | 100% |
 | 03-api-reference/SWAGGER_QUICK_GUIDE.md | ✅ Complete | 2025-09-09 | 100% |
 | 03-api-reference/EMAIL_SYSTEM_API.md | ✅ Complete | 2025-10-06 | 100% |
+| 03-api-reference/SETTINGS_API.md | ✅ Complete | 2025-10-10 | 100% |
 | 01-getting-started/EMAIL_SYSTEM_USER_GUIDE.md | ✅ Complete | 2025-10-06 | 100% |
 | 04-security/SECURITY.md | ✅ Complete | 2025-09-07 | 100% |
 | 04-security/SECURITY_CONFIG.md | ✅ Complete | 2025-09-07 | 100% |
@@ -193,7 +195,7 @@ docs/
 
 ## 📈 آمار مستندات
 
-- **تعداد کل مستندات**: 10 فایل
+- **تعداد کل مستندات**: 11 فایل
 - **تعداد فولدرهای دسته‌بندی**: 5 دسته
 - **تعداد کل صفحات**: ~200 صفحه
 - **تعداد نمونه‌های کد**: 50+ مثال
