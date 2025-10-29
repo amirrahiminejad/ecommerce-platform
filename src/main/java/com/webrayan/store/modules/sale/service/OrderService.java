@@ -244,4 +244,143 @@ public class OrderService {
         // جستجو بر اساس شماره سفارش یا ایمیل مشتری
         return orderRepository.findByCustomerEmail(searchTerm);
     }
+
+    // Methods for admin panel
+    
+    /**
+     * دریافت همه سفارشات با pagination
+     */
+    public Page<Order> findAll(Pageable pageable) {
+        return orderRepository.findAll(pageable);
+    }
+
+    /**
+     * جستجو در سفارشات برای admin panel
+     */
+    public Page<Order> findOrdersForAdmin(String search, OrderStatus status, 
+                                         LocalDateTime startDate, LocalDateTime endDate, 
+                                         Pageable pageable) {
+        if (search != null && !search.trim().isEmpty() && 
+            status != null && startDate != null && endDate != null) {
+            // جستجو کامل با همه فیلترها
+            return orderRepository.findWithFilters(status, startDate, endDate, search, pageable);
+        } else if (search != null && !search.trim().isEmpty() && status != null) {
+            // جستجو با وضعیت
+            return orderRepository.findByStatusAndSearchTerm(status, search, pageable);
+        } else if (search != null && !search.trim().isEmpty()) {
+            // فقط جستجو
+            return orderRepository.findBySearchTerm(search, pageable);
+        } else if (status != null && startDate != null && endDate != null) {
+            // فیلتر وضعیت و تاریخ
+            return orderRepository.findWithFilters(status, startDate, endDate, null, pageable);
+        } else if (status != null) {
+            // فقط وضعیت
+            return orderRepository.findByStatus(status, pageable);
+        } else if (startDate != null && endDate != null) {
+            // فقط بازه تاریخ
+            return orderRepository.findByOrderDateBetween(startDate, endDate, pageable);
+        } else {
+            // همه سفارشات
+            return orderRepository.findAll(pageable);
+        }
+    }
+
+    /**
+     * دریافت سفارش با جزئیات کامل برای نمایش
+     */
+    @Transactional(readOnly = true)
+    public Order getOrderWithDetails(Long id) {
+        Order order = orderRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("سفارش یافت نشد"));
+        
+        // Force loading of lazy collections
+        order.getOrderItems().size();
+        order.getPayments().size();
+        order.getStatusHistories().size();
+        if (order.getShipping() != null) {
+            order.getShipping().getId();
+        }
+        
+        return order;
+    }
+
+    /**
+     * تغییر وضعیت سفارش توسط ادمین
+     */
+    @Transactional
+    public Order updateOrderStatus(Long orderId, OrderStatus newStatus, String reason) {
+        Order order = getOrderById(orderId);
+        
+        // Validation based on current status
+        switch (newStatus) {
+            case CONFIRMED:
+                if (order.getStatus() != OrderStatus.PENDING) {
+                    throw new RuntimeException("فقط سفارشات در انتظار قابل تایید هستند");
+                }
+                break;
+            case PROCESSING:
+                if (order.getStatus() != OrderStatus.CONFIRMED) {
+                    throw new RuntimeException("فقط سفارشات تایید شده قابل پردازش هستند");
+                }
+                break;
+            case SHIPPED:
+                if (order.getStatus() != OrderStatus.PROCESSING) {
+                    throw new RuntimeException("فقط سفارشات در حال پردازش قابل ارسال هستند");
+                }
+                break;
+            case DELIVERED:
+                if (order.getStatus() != OrderStatus.SHIPPED) {
+                    throw new RuntimeException("فقط سفارشات ارسال شده قابل تحویل هستند");
+                }
+                break;
+            case CANCELLED:
+                if (order.getStatus() == OrderStatus.DELIVERED) {
+                    throw new RuntimeException("نمی‌توان سفارش تحویل داده شده را لغو کرد");
+                }
+                // بازگردانی موجودی در صورت لغو
+                restoreProductStock(order);
+                break;
+        }
+        
+        order.updateStatus(newStatus, reason);
+        return orderRepository.save(order);
+    }
+
+    /**
+     * بازگردانی موجودی محصولات هنگام لغو سفارش
+     */
+    private void restoreProductStock(Order order) {
+        for (OrderItem item : order.getOrderItems()) {
+            Product product = item.getProduct();
+            product.setStockQuantity(product.getStockQuantity() + item.getQuantity());
+            productRepository.save(product);
+        }
+    }
+
+    /**
+     * شمارش کل سفارشات
+     */
+    public long count() {
+        return orderRepository.count();
+    }
+
+    /**
+     * شمارش سفارشات امروز
+     */
+    public long countTodayOrders() {
+        LocalDateTime startOfDay = LocalDateTime.now().withHour(0).withMinute(0).withSecond(0);
+        LocalDateTime endOfDay = LocalDateTime.now().withHour(23).withMinute(59).withSecond(59);
+        return orderRepository.findOrdersByDateRange(startOfDay, endOfDay).size();
+    }
+
+    /**
+     * درآمد کل امروز
+     */
+    public BigDecimal getTodayRevenue() {
+        LocalDateTime startOfDay = LocalDateTime.now().withHour(0).withMinute(0).withSecond(0);
+        LocalDateTime endOfDay = LocalDateTime.now().withHour(23).withMinute(59).withSecond(59);
+        BigDecimal revenue = orderRepository.sumTotalAmountByStatusAndDateRange(
+                OrderStatus.DELIVERED, startOfDay, endOfDay);
+        return revenue != null ? revenue : BigDecimal.ZERO;
+    }
 }

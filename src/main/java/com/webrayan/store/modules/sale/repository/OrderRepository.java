@@ -67,4 +67,57 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
 
     @Query("SELECT o FROM Order o WHERE o.status = 'PENDING' AND o.createdAt < :cutoffDate")
     List<Order> findExpiredPendingOrders(@Param("cutoffDate") LocalDateTime cutoffDate);
+
+    // Methods for admin panel with pagination and search
+    
+    /**
+     * جستجو در سفارشات بر اساس شماره سفارش یا نام مشتری یا ایمیل
+     */
+    @Query("SELECT o FROM Order o WHERE " +
+           "o.orderNumber LIKE %:search% OR " +
+           "o.customer.username LIKE %:search% OR " +
+           "o.customer.email LIKE %:search% OR " +
+           "o.customer.firstName LIKE %:search% OR " +
+           "o.customer.lastName LIKE %:search%")
+    Page<Order> findBySearchTerm(@Param("search") String search, Pageable pageable);
+
+    /**
+     * جستجو در سفارشات بر اساس وضعیت و عبارت جستجو
+     */
+    @Query("SELECT o FROM Order o WHERE o.status = :status AND (" +
+           "o.orderNumber LIKE %:search% OR " +
+           "o.customer.username LIKE %:search% OR " +
+           "o.customer.email LIKE %:search% OR " +
+           "o.customer.firstName LIKE %:search% OR " +
+           "o.customer.lastName LIKE %:search%)")
+    Page<Order> findByStatusAndSearchTerm(@Param("status") OrderStatus status, 
+                                         @Param("search") String search, 
+                                         Pageable pageable);
+
+    /**
+     * جستجو در سفارشات بر اساس بازه تاریخ
+     */
+    @Query("SELECT o FROM Order o WHERE o.orderDate BETWEEN :startDate AND :endDate")
+    Page<Order> findByOrderDateBetween(@Param("startDate") LocalDateTime startDate,
+                                      @Param("endDate") LocalDateTime endDate,
+                                      Pageable pageable);
+
+    /**
+     * جستجو ترکیبی: وضعیت + تاریخ + جستجو
+     */
+    @Query("SELECT o FROM Order o WHERE " +
+           "(:status IS NULL OR o.status = :status) AND " +
+           "(:startDate IS NULL OR o.orderDate >= :startDate) AND " +
+           "(:endDate IS NULL OR o.orderDate <= :endDate) AND " +
+           "(:search IS NULL OR :search = '' OR " +
+           "o.orderNumber LIKE %:search% OR " +
+           "o.customer.username LIKE %:search% OR " +
+           "o.customer.email LIKE %:search% OR " +
+           "o.customer.firstName LIKE %:search% OR " +
+           "o.customer.lastName LIKE %:search%)")
+    Page<Order> findWithFilters(@Param("status") OrderStatus status,
+                               @Param("startDate") LocalDateTime startDate,
+                               @Param("endDate") LocalDateTime endDate,
+                               @Param("search") String search,
+                               Pageable pageable);
 }

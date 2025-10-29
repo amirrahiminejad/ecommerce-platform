@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مدیریت سفارشات - تاپ کالا</title>
+    
+    <!-- Bootstrap RTL CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.rtl.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="/css/admin-users-styles.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <img src="/images/logo-small.png" alt="تاپ کالا" height="100" style="margin-bottom: 10px;">
+        </div>
+        
+        <ul class="sidebar-menu">
+            <li>
+                <a href="/admin/dashboard" th:href="@{/admin/dashboard}">
+                    <i class="fas fa-home"></i>
+                    <span>داشبورد</span>
+                </a>
+            </li>
+            <li>
+                <a href="/admin/users" th:href="@{/admin/users}">
+                    <i class="fas fa-users"></i>
+                    <span>کاربران</span>
+                </a>
+            </li>
+            <li>
+                <a href="/admin/affiliates" th:href="@{/admin/affiliates}">
+                    <i class="fas fa-handshake"></i>
+                    <span>بازاریابها</span>
+                </a>
+            </li>
+            <li>
+                <a href="/admin/orders" th:href="@{/admin/orders}" class="active">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span>سفارشات</span>
+                </a>
+            </li>
+            <li>
+                <a href="/admin/categories" th:href="@{/admin/categories}">
+                    <i class="fas fa-tags"></i>
+                    <span>دسته‌بندی‌ها</span>
+                </a>
+            </li>
+            <li>
+                <a href="/admin/products" th:href="@{/admin/products}">
+                    <i class="fas fa-box"></i>
+                    <span>محصولات</span>
+                </a>
+            </li>
+            <li>
+                <a href="/admin/settings" th:href="@{/admin/settings}">
+                    <i class="fas fa-cog"></i>
+                    <span>تنظیمات</span>
+                </a>
+            </li>
+            <li>
+                <a href="/admin/logout" th:href="@{/admin/logout}">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span>خروج</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+    
+    <!-- Main Content -->
+    <div class="main-content" id="main-content">
+        <!-- Top Navbar -->
+        <div class="top-navbar">
+            <div class="d-flex align-items-center">
+                <button class="sidebar-toggle" id="sidebar-toggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <div class="navbar-brand">مدیریت سفارشات</div>
+            </div>
+            
+            <div class="navbar-actions">
+                <div class="user-info">
+                    <div class="user-avatar">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <span>مدیر سیستم</span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Content Area -->
+        <div class="content-area">
+            <!-- Alert Messages -->
+            <div th:if="${successMessage}" class="alert alert-success alert-dismissible fade show" role="alert">
+                <i class="fas fa-check-circle me-2"></i>
+                <span th:text="${successMessage}"></span>
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+
+            <div th:if="${errorMessage}" class="alert alert-danger alert-dismissible fade show" role="alert">
+                <i class="fas fa-exclamation-circle me-2"></i>
+                <span th:text="${errorMessage}"></span>
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+
+            <!-- Filter Section -->
+            <div class="filter-card fade-in">
+                <form th:action="@{/admin/orders}" method="GET" id="filterForm">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <label for="search" class="form-label">جستجو</label>
+                            <input type="text" 
+                                   class="form-control" 
+                                   id="search" 
+                                   name="search" 
+                                   th:value="${searchTerm}"
+                                   placeholder="شماره سفارش، نام یا ایمیل مشتری">
+                        </div>
+                        <div class="col-md-2">
+                            <label for="status" class="form-label">وضعیت</label>
+                            <select class="form-select" id="status" name="status">
+                                <option value="">همه وضعیت‌ها</option>
+                                <option th:each="orderStatus : ${orderStatuses}" 
+                                        th:value="${orderStatus}" 
+                                        th:text="${orderStatus.persianName}"
+                                        th:selected="${orderStatus.toString() == selectedStatus}">
+                                </option>
+                            </select>
+                        </div>
+                        <div class="col-md-2">
+                            <label for="startDate" class="form-label">از تاریخ</label>
+                            <input type="datetime-local" 
+                                   class="form-control" 
+                                   id="startDate" 
+                                   name="startDate"
+                                   th:value="${startDate != null ? #temporals.format(startDate, 'yyyy-MM-ddTHH:mm') : ''}">
+                        </div>
+                        <div class="col-md-2">
+                            <label for="endDate" class="form-label">تا تاریخ</label>
+                            <input type="datetime-local" 
+                                   class="form-control" 
+                                   id="endDate" 
+                                   name="endDate"
+                                   th:value="${endDate != null ? #temporals.format(endDate, 'yyyy-MM-ddTHH:mm') : ''}">
+                        </div>
+                        <div class="col-md-2">
+                            <label for="size" class="form-label">تعداد در صفحه</label>
+                            <select class="form-select" id="size" name="size">
+                                <option value="10" th:selected="${size == 10}">10</option>
+                                <option value="25" th:selected="${size == 25}">25</option>
+                                <option value="50" th:selected="${size == 50}">50</option>
+                                <option value="100" th:selected="${size == 100}">100</option>
+                            </select>
+                        </div>
+                        <div class="col-md-1">
+                            <label class="form-label">&nbsp;</label>
+                            <div class="d-grid gap-2">
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fas fa-search me-2"></i>
+                                    جستجو
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            
+            <!-- Orders Table -->
+            <div class="table-card fade-in">
+                <div class="table-header">
+                    <h5 class="table-title">
+                        <i class="fas fa-shopping-cart me-2"></i>
+                        لیست سفارشات
+                        <span class="badge bg-primary ms-2" th:text="${totalElements ?: 0}">0</span>
+                    </h5>
+                </div>
+                
+                <div class="table-responsive">
+                    <table class="custom-table">
+                        <thead>
+                            <tr>
+                                <th>شماره سفارش</th>
+                                <th>مشتری</th>
+                                <th>تاریخ ثبت</th>
+                                <th>مبلغ کل</th>
+                                <th>وضعیت</th>
+                                <th>وضعیت پرداخت</th>
+                                <th>عملیات</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="order : ${orders.content}" th:if="${not #lists.isEmpty(orders.content)}">
+                                <td>
+                                    <strong th:text="${order.orderNumber}">#ORD-123</strong>
+                                </td>
+                                <td>
+                                    <div class="customer-info">
+                                        <div class="user-table-avatar" th:text="${#strings.substring(order.customer.username, 0, 1).toUpperCase()}">A</div>
+                                        <div class="ms-2">
+                                            <strong th:text="${order.customer.firstName != null and order.customer.lastName != null ? 
+                                                             order.customer.firstName + ' ' + order.customer.lastName : 
+                                                             order.customer.username}">نام مشتری</strong>
+                                            <small class="d-block text-muted" th:text="${order.customer.email}">email</small>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <span th:text="${#temporals.format(order.orderDate, 'yyyy/MM/dd HH:mm')}">1403/06/15</span>
+                                </td>
+                                <td>
+                                    <strong th:text="${#numbers.formatDecimal(order.totalAmount, 0, 'COMMA', 0, 'POINT')} + ' تومان'">1,250,000 تومان</strong>
+                                </td>
+                                <td>
+                                    <span class="status-badge" 
+                                          th:classappend="${order.status.name() == 'PENDING' ? 'status-pending' : 
+                                                           order.status.name() == 'CONFIRMED' ? 'status-active' :
+                                                           order.status.name() == 'PROCESSING' ? 'status-suspended' :
+                                                           order.status.name() == 'SHIPPED' ? 'status-suspended' :
+                                                           order.status.name() == 'DELIVERED' ? 'status-active' :
+                                                           order.status.name() == 'CANCELLED' ? 'status-banned' : 'status-inactive'}"
+                                          th:text="${order.status.persianName}">در انتظار تایید</span>
+                                </td>
+                                <td>
+                                    <span th:if="${order.paid}" class="badge bg-success">پرداخت شده</span>
+                                    <span th:unless="${order.paid}" class="badge bg-warning">پرداخت نشده</span>
+                                </td>
+                                <td>
+                                    <button class="action-btn btn-view" 
+                                            th:title="'مشاهده سفارش ' + ${order.orderNumber}"
+                                            th:data-order-id="${order.id}"
+                                            onclick="viewOrder(this.dataset.orderId)">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                    
+                                    <!-- Quick Actions based on status -->
+                                    <button th:if="${order.status.name() == 'PENDING'}"
+                                            class="action-btn btn-edit" 
+                                            th:title="'تایید سفارش ' + ${order.orderNumber}"
+                                            th:data-order-id="${order.id}"
+                                            onclick="confirmOrder(this.dataset.orderId)">
+                                        <i class="fas fa-check"></i>
+                                    </button>
+                                    
+                                    <button th:if="${order.status.name() == 'CONFIRMED'}"
+                                            class="action-btn btn-edit" 
+                                            th:title="'شروع پردازش ' + ${order.orderNumber}"
+                                            th:data-order-id="${order.id}"
+                                            onclick="processOrder(this.dataset.orderId)">
+                                        <i class="fas fa-cogs"></i>
+                                    </button>
+                                    
+                                    <button th:if="${order.status.name() == 'PROCESSING'}"
+                                            class="action-btn btn-edit" 
+                                            th:title="'ارسال سفارش ' + ${order.orderNumber}"
+                                            th:data-order-id="${order.id}"
+                                            onclick="shipOrder(this.dataset.orderId)">
+                                        <i class="fas fa-shipping-fast"></i>
+                                    </button>
+                                    
+                                    <button th:if="${order.status.name() == 'SHIPPED'}"
+                                            class="action-btn btn-edit" 
+                                            th:title="'تحویل سفارش ' + ${order.orderNumber}"
+                                            th:data-order-id="${order.id}"
+                                            onclick="deliverOrder(this.dataset.orderId)">
+                                        <i class="fas fa-box-open"></i>
+                                    </button>
+                                    
+                                    <button th:if="${order.status.name() != 'CANCELLED' and order.status.name() != 'DELIVERED'}"
+                                            class="action-btn btn-delete" 
+                                            th:title="'لغو سفارش ' + ${order.orderNumber}"
+                                            th:data-order-id="${order.id}"
+                                            th:data-order-number="${order.orderNumber}"
+                                            onclick="cancelOrder(this.dataset.orderId, this.dataset.orderNumber)">
+                                        <i class="fas fa-times"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    
+                    <!-- Empty State -->
+                    <div th:if="${#lists.isEmpty(orders.content)}" class="text-center py-5">
+                        <i class="fas fa-shopping-cart fa-3x text-muted mb-3"></i>
+                        <h5 class="text-muted">هیچ سفارشی یافت نشد</h5>
+                        <p class="text-muted">فیلترهای جستجو را تغییر دهید یا منتظر ثبت سفارش جدید باشید</p>
+                    </div>
+                </div>
+                
+                <!-- Pagination -->
+                <div th:if="${totalPages > 1}" class="custom-pagination">
+                    <!-- Previous -->
+                    <a th:if="${currentPage > 0}" 
+                       th:href="@{/admin/orders(page=${currentPage - 1}, size=${size}, search=${searchTerm}, status=${selectedStatus}, startDate=${startDate}, endDate=${endDate})}" 
+                       class="page-link">
+                        <i class="fas fa-chevron-right"></i>
+                    </a>
+                    
+                    <!-- Page Numbers -->
+                    <th:block th:each="i : ${#numbers.sequence(0, totalPages - 1)}">
+                        <a th:if="${i >= currentPage - 2 and i <= currentPage + 2}"
+                           th:href="@{/admin/orders(page=${i}, size=${size}, search=${searchTerm}, status=${selectedStatus}, startDate=${startDate}, endDate=${endDate})}" 
+                           th:text="${i + 1}"
+                           th:classappend="${i == currentPage ? 'active' : ''}"
+                           class="page-link">1</a>
+                    </th:block>
+                    
+                    <!-- Next -->
+                    <a th:if="${currentPage < totalPages - 1}" 
+                       th:href="@{/admin/orders(page=${currentPage + 1}, size=${size}, search=${searchTerm}, status=${selectedStatus}, startDate=${startDate}, endDate=${endDate})}" 
+                       class="page-link">
+                        <i class="fas fa-chevron-left"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        // Sidebar Toggle
+        document.getElementById('sidebar-toggle').addEventListener('click', function() {
+            const sidebar = document.getElementById('sidebar');
+            const mainContent = document.getElementById('main-content');
+            
+            if (window.innerWidth > 768) {
+                sidebar.classList.toggle('collapsed');
+                mainContent.classList.toggle('expanded');
+            } else {
+                sidebar.classList.toggle('show');
+            }
+        });
+        
+        // Auto submit on filter change
+        document.getElementById('status').addEventListener('change', function() {
+            document.getElementById('filterForm').submit();
+        });
+        
+        document.getElementById('size').addEventListener('change', function() {
+            document.getElementById('filterForm').submit();
+        });
+        
+        // Search on Enter
+        document.getElementById('search').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                document.getElementById('filterForm').submit();
+            }
+        });
+        
+        // Order Actions
+        function viewOrder(orderId) {
+            window.location.href = '/admin/orders/' + orderId;
+        }
+        
+        function confirmOrder(orderId) {
+            if (confirm('آیا از تایید این سفارش اطمینان دارید؟')) {
+                const form = document.createElement('form');
+                form.method = 'POST';
+                form.action = '/admin/orders/' + orderId + '/confirm';
+                document.body.appendChild(form);
+                form.submit();
+            }
+        }
+        
+        function processOrder(orderId) {
+            if (confirm('آیا از شروع پردازش این سفارش اطمینان دارید؟')) {
+                const form = document.createElement('form');
+                form.method = 'POST';
+                form.action = '/admin/orders/' + orderId + '/process';
+                document.body.appendChild(form);
+                form.submit();
+            }
+        }
+        
+        function shipOrder(orderId) {
+            if (confirm('آیا این سفارش برای ارسال آماده است؟')) {
+                const form = document.createElement('form');
+                form.method = 'POST';
+                form.action = '/admin/orders/' + orderId + '/ship';
+                document.body.appendChild(form);
+                form.submit();
+            }
+        }
+        
+        function deliverOrder(orderId) {
+            if (confirm('آیا این سفارش تحویل داده شده است؟')) {
+                const form = document.createElement('form');
+                form.method = 'POST';
+                form.action = '/admin/orders/' + orderId + '/deliver';
+                document.body.appendChild(form);
+                form.submit();
+            }
+        }
+        
+        function cancelOrder(orderId, orderNumber) {
+            const reason = prompt('دلیل لغو سفارش "' + orderNumber + '" را وارد کنید:');
+            if (reason && reason.trim() !== '') {
+                const form = document.createElement('form');
+                form.method = 'POST';
+                form.action = '/admin/orders/' + orderId + '/cancel';
+                
+                const reasonInput = document.createElement('input');
+                reasonInput.type = 'hidden';
+                reasonInput.name = 'reason';
+                reasonInput.value = reason.trim();
+                
+                form.appendChild(reasonInput);
+                document.body.appendChild(form);
+                form.submit();
+            }
+        }
+        
+        // Responsive sidebar
+        window.addEventListener('resize', function() {
+            const sidebar = document.getElementById('sidebar');
+            
+            if (window.innerWidth > 768) {
+                sidebar.classList.remove('show');
+            }
+        });
+        
+        // Animation on scroll
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+        
+        const observer = new IntersectionObserver(function(entries) {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+        
+        // Observe all fade-in elements
+        document.querySelectorAll('.fade-in').forEach(el => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(20px)';
+            el.style.transition = 'all 0.6s ease';
+            observer.observe(el);
+        });
+    </script>
+
+    <style>
+        .customer-info {
+            display: flex;
+            align-items: center;
+        }
+        
+        .user-table-avatar {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            font-size: 0.9rem;
+            flex-shrink: 0;
+        }
+        
+        .status-pending {
+            background: #fff3cd;
+            color: #856404;
+        }
+    </style>
+</body>
+</html>

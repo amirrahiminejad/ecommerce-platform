@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="'جزئیات سفارش ' + ${order.orderNumber} + ' - تاپ کالا'">جزئیات سفارش - تاپ کالا</title>
+    
+    <!-- Bootstrap RTL CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.rtl.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="/css/admin-users-styles.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <img src="/images/logo-small.png" alt="تاپ کالا" height="100" style="margin-bottom: 10px;">
+        </div>
+        
+        <ul class="sidebar-menu">
+            <li>
+                <a href="/admin/dashboard" th:href="@{/admin/dashboard}">
+                    <i class="fas fa-home"></i>
+                    <span>داشبورد</span>
+                </a>
+            </li>
+            <li>
+                <a href="/admin/users" th:href="@{/admin/users}">
+                    <i class="fas fa-users"></i>
+                    <span>کاربران</span>
+                </a>
+            </li>
+            <li>
+                <a href="/admin/affiliates" th:href="@{/admin/affiliates}">
+                    <i class="fas fa-handshake"></i>
+                    <span>بازاریابها</span>
+                </a>
+            </li>
+            <li>
+                <a href="/admin/orders" th:href="@{/admin/orders}" class="active">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span>سفارشات</span>
+                </a>
+            </li>
+            <li>
+                <a href="/admin/categories" th:href="@{/admin/categories}">
+                    <i class="fas fa-tags"></i>
+                    <span>دسته‌بندی‌ها</span>
+                </a>
+            </li>
+            <li>
+                <a href="/admin/products" th:href="@{/admin/products}">
+                    <i class="fas fa-box"></i>
+                    <span>محصولات</span>
+                </a>
+            </li>
+            <li>
+                <a href="/admin/settings" th:href="@{/admin/settings}">
+                    <i class="fas fa-cog"></i>
+                    <span>تنظیمات</span>
+                </a>
+            </li>
+            <li>
+                <a href="/admin/logout" th:href="@{/admin/logout}">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span>خروج</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+    
+    <!-- Main Content -->
+    <div class="main-content" id="main-content">
+        <!-- Top Navbar -->
+        <div class="top-navbar">
+            <div class="d-flex align-items-center">
+                <button class="sidebar-toggle" id="sidebar-toggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <div class="navbar-brand">
+                    <a href="/admin/orders" th:href="@{/admin/orders}" class="text-decoration-none text-white me-3">
+                        <i class="fas fa-arrow-right"></i>
+                    </a>
+                    جزئیات سفارش <span th:text="${order.orderNumber}">#ORD-123</span>
+                </div>
+            </div>
+            
+            <div class="navbar-actions">
+                <div class="user-info">
+                    <div class="user-avatar">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <span>مدیر سیستم</span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Content Area -->
+        <div class="content-area">
+            <!-- Alert Messages -->
+            <div th:if="${successMessage}" class="alert alert-success alert-dismissible fade show" role="alert">
+                <i class="fas fa-check-circle me-2"></i>
+                <span th:text="${successMessage}"></span>
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+
+            <div th:if="${errorMessage}" class="alert alert-danger alert-dismissible fade show" role="alert">
+                <i class="fas fa-exclamation-circle me-2"></i>
+                <span th:text="${errorMessage}"></span>
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+
+            <!-- Order Header -->
+            <div class="filter-card fade-in">
+                <div class="row">
+                    <div class="col-md-8">
+                        <h4 class="mb-3">
+                            <i class="fas fa-shopping-cart text-primary me-2"></i>
+                            سفارش <span th:text="${order.orderNumber}">#ORD-123</span>
+                        </h4>
+                        
+                        <div class="row">
+                            <div class="col-md-6">
+                                <p class="mb-2">
+                                    <strong>تاریخ ثبت:</strong>
+                                    <span th:text="${#temporals.format(order.orderDate, 'yyyy/MM/dd HH:mm')}">1403/06/15 14:30</span>
+                                </p>
+                                <p class="mb-2">
+                                    <strong>آخرین بروزرسانی:</strong>
+                                    <span th:text="${order.updatedAt != null ? #temporals.format(order.updatedAt, 'yyyy/MM/dd HH:mm') : 'نامشخص'}">1403/06/15 16:45</span>
+                                </p>
+                                <p class="mb-2">
+                                    <strong>وضعیت پرداخت:</strong>
+                                    <span th:if="${order.paid}" class="badge bg-success">پرداخت شده</span>
+                                    <span th:unless="${order.paid}" class="badge bg-warning">پرداخت نشده</span>
+                                </p>
+                            </div>
+                            <div class="col-md-6">
+                                <p class="mb-2">
+                                    <strong>مبلغ کل:</strong>
+                                    <span class="fw-bold text-success" th:text="${#numbers.formatDecimal(order.totalAmount, 0, 'COMMA', 0, 'POINT')} + ' تومان'">1,250,000 تومان</span>
+                                </p>
+                                <p class="mb-2" th:if="${order.discountAmount != null and order.discountAmount > 0}">
+                                    <strong>مبلغ تخفیف:</strong>
+                                    <span class="text-danger" th:text="${#numbers.formatDecimal(order.discountAmount, 0, 'COMMA', 0, 'POINT')} + ' تومان'">50,000 تومان</span>
+                                </p>
+                                <p class="mb-2" th:if="${order.taxAmount != null and order.taxAmount > 0}">
+                                    <strong>مالیات:</strong>
+                                    <span th:text="${#numbers.formatDecimal(order.taxAmount, 0, 'COMMA', 0, 'POINT')} + ' تومان'">125,000 تومان</span>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-4 text-end">
+                        <div class="mb-3">
+                            <span class="status-badge large" 
+                                  th:classappend="${order.status.name() == 'PENDING' ? 'status-pending' : 
+                                                   order.status.name() == 'CONFIRMED' ? 'status-active' :
+                                                   order.status.name() == 'PROCESSING' ? 'status-suspended' :
+                                                   order.status.name() == 'SHIPPED' ? 'status-suspended' :
+                                                   order.status.name() == 'DELIVERED' ? 'status-active' :
+                                                   order.status.name() == 'CANCELLED' ? 'status-banned' : 'status-inactive'}"
+                                  th:text="${order.status.persianName}">در انتظار تایید</span>
+                        </div>
+                        
+                        <!-- Quick Actions -->
+                        <div class="btn-group-vertical w-100">
+                            <button th:if="${order.status.name() == 'PENDING'}"
+                                    class="btn btn-success mb-2" 
+                                    th:data-order-id="${order.id}"
+                                    onclick="confirmOrder(this.dataset.orderId)">
+                                <i class="fas fa-check me-2"></i>
+                                تایید سفارش
+                            </button>
+                            
+                            <button th:if="${order.status.name() == 'CONFIRMED'}"
+                                    class="btn btn-warning mb-2" 
+                                    th:data-order-id="${order.id}"
+                                    onclick="processOrder(this.dataset.orderId)">
+                                <i class="fas fa-cogs me-2"></i>
+                                شروع پردازش
+                            </button>
+                            
+                            <button th:if="${order.status.name() == 'PROCESSING'}"
+                                    class="btn btn-info mb-2" 
+                                    th:data-order-id="${order.id}"
+                                    onclick="shipOrder(this.dataset.orderId)">
+                                <i class="fas fa-shipping-fast me-2"></i>
+                                ارسال سفارش
+                            </button>
+                            
+                            <button th:if="${order.status.name() == 'SHIPPED'}"
+                                    class="btn btn-primary mb-2" 
+                                    th:data-order-id="${order.id}"
+                                    onclick="deliverOrder(this.dataset.orderId)">
+                                <i class="fas fa-box-open me-2"></i>
+                                تحویل سفارش
+                            </button>
+                            
+                            <button th:if="${order.status.name() != 'CANCELLED' and order.status.name() != 'DELIVERED'}"
+                                    class="btn btn-danger" 
+                                    th:data-order-id="${order.id}"
+                                    th:data-order-number="${order.orderNumber}"
+                                    onclick="cancelOrder(this.dataset.orderId, this.dataset.orderNumber)">
+                                <i class="fas fa-times me-2"></i>
+                                لغو سفارش
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <!-- Customer Information -->
+                <div class="col-md-6 mb-4">
+                    <div class="table-card fade-in">
+                        <div class="table-header">
+                            <h5 class="table-title">
+                                <i class="fas fa-user me-2"></i>
+                                اطلاعات مشتری
+                            </h5>
+                        </div>
+                        
+                        <div class="p-3">
+                            <div class="customer-info mb-3">
+                                <div class="user-table-avatar large" th:text="${#strings.substring(order.customer.username, 0, 1).toUpperCase()}">A</div>
+                                <div class="ms-3">
+                                    <h6 class="mb-1" th:text="${order.customer.firstName != null and order.customer.lastName != null ? 
+                                                               order.customer.firstName + ' ' + order.customer.lastName : 
+                                                               order.customer.username}">نام مشتری</h6>
+                                    <small class="text-muted" th:text="${order.customer.email}">email@example.com</small>
+                                </div>
+                            </div>
+                            
+                            <div class="row">
+                                <div class="col-6">
+                                    <strong>نام کاربری:</strong><br>
+                                    <span th:text="${order.customer.username}">username</span>
+                                </div>
+                                <div class="col-6">
+                                    <strong>شماره تماس:</strong><br>
+                                    <span th:text="${order.customer.phoneNumber ?: 'نامشخص'}">09123456789</span>
+                                </div>
+                            </div>
+                            
+                            <hr>
+                            
+                            <div>
+                                <strong>تاریخ عضویت:</strong><br>
+                                <span th:text="${#temporals.format(order.customer.createdAt, 'yyyy/MM/dd')}">1402/01/15</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Shipping Information -->
+                <div class="col-md-6 mb-4">
+                    <div class="table-card fade-in">
+                        <div class="table-header">
+                            <h5 class="table-title">
+                                <i class="fas fa-truck me-2"></i>
+                                اطلاعات ارسال
+                            </h5>
+                        </div>
+                        
+                        <div class="p-3">
+                            <div th:if="${order.shippingAddress != null}">
+                                <p class="mb-2">
+                                    <strong>آدرس:</strong><br>
+                                    <span th:text="${order.shippingAddress}">آدرس تحویل سفارش</span>
+                                </p>
+                            </div>
+                            
+                            <div th:if="${order.recipientName != null}">
+                                <p class="mb-2">
+                                    <strong>تحویل گیرنده:</strong>
+                                    <span th:text="${order.recipientName}">نام تحویل گیرنده</span>
+                                </p>
+                            </div>
+                            
+                            <div th:if="${order.recipientPhone != null}">
+                                <p class="mb-2">
+                                    <strong>شماره تماس:</strong>
+                                    <span th:text="${order.recipientPhone}">09123456789</span>
+                                </p>
+                            </div>
+                            
+                            <div th:if="${order.deliveryDate != null}">
+                                <p class="mb-2">
+                                    <strong>تاریخ تحویل:</strong>
+                                    <span th:text="${#temporals.format(order.deliveryDate, 'yyyy/MM/dd HH:mm')}">1403/06/20</span>
+                                </p>
+                            </div>
+                            
+                            <div th:if="${order.trackingNumber != null}">
+                                <p class="mb-0">
+                                    <strong>کد پیگیری:</strong>
+                                    <code th:text="${order.trackingNumber}">TRK123456789</code>
+                                </p>
+                            </div>
+                            
+                            <div th:if="${order.shippingAddress == null and order.recipientName == null}">
+                                <p class="text-muted mb-0">اطلاعات ارسال هنوز ثبت نشده است</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Order Items -->
+            <div class="table-card fade-in">
+                <div class="table-header">
+                    <h5 class="table-title">
+                        <i class="fas fa-list me-2"></i>
+                        آیتم‌های سفارش
+                        <span class="badge bg-primary ms-2" th:text="${#lists.size(order.orderItems)}">0</span>
+                    </h5>
+                </div>
+                
+                <div class="table-responsive">
+                    <table class="custom-table">
+                        <thead>
+                            <tr>
+                                <th>محصول</th>
+                                <th>قیمت واحد</th>
+                                <th>تعداد</th>
+                                <th>مبلغ کل</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="item : ${order.orderItems}">
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <div class="product-image me-3">
+                                            <img th:if="${item.product.mainImageUrl != null}" 
+                                                 th:src="${item.product.mainImageUrl}" 
+                                                 th:alt="${item.product.name}"
+                                                 class="product-thumbnail">
+                                            <div th:unless="${item.product.mainImageUrl != null}" class="product-placeholder">
+                                                <i class="fas fa-image"></i>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <h6 class="mb-1" th:text="${item.product.name}">نام محصول</h6>
+                                            <small class="text-muted" th:if="${item.product.sku}" th:text="'کد محصول: ' + ${item.product.sku}">کد: PRD-123</small>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <span th:text="${#numbers.formatDecimal(item.unitPrice, 0, 'COMMA', 0, 'POINT')} + ' تومان'">125,000 تومان</span>
+                                </td>
+                                <td>
+                                    <span th:text="${item.quantity}">2</span>
+                                </td>
+                                <td>
+                                    <strong th:text="${#numbers.formatDecimal(item.totalPrice, 0, 'COMMA', 0, 'POINT')} + ' تومان'">250,000 تومان</strong>
+                                </td>
+                            </tr>
+                        </tbody>
+                        <tfoot>
+                            <tr class="table-summary">
+                                <td colspan="3" class="text-end"><strong>جمع کل:</strong></td>
+                                <td><strong th:text="${#numbers.formatDecimal(order.totalAmount, 0, 'COMMA', 0, 'POINT')} + ' تومان'">1,250,000 تومان</strong></td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+            
+            <!-- Order Notes -->
+            <div th:if="${order.notes != null and not #strings.isEmpty(order.notes)}" class="table-card fade-in">
+                <div class="table-header">
+                    <h5 class="table-title">
+                        <i class="fas fa-sticky-note me-2"></i>
+                        یادداشت‌ها
+                    </h5>
+                </div>
+                
+                <div class="p-3">
+                    <p class="mb-0" th:text="${order.notes}">یادداشت های مربوط به سفارش</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        // Sidebar Toggle
+        document.getElementById('sidebar-toggle').addEventListener('click', function() {
+            const sidebar = document.getElementById('sidebar');
+            const mainContent = document.getElementById('main-content');
+            
+            if (window.innerWidth > 768) {
+                sidebar.classList.toggle('collapsed');
+                mainContent.classList.toggle('expanded');
+            } else {
+                sidebar.classList.toggle('show');
+            }
+        });
+        
+        // Order Actions
+        function confirmOrder(orderId) {
+            if (confirm('آیا از تایید این سفارش اطمینان دارید؟')) {
+                const form = document.createElement('form');
+                form.method = 'POST';
+                form.action = '/admin/orders/' + orderId + '/confirm';
+                document.body.appendChild(form);
+                form.submit();
+            }
+        }
+        
+        function processOrder(orderId) {
+            if (confirm('آیا از شروع پردازش این سفارش اطمینان دارید؟')) {
+                const form = document.createElement('form');
+                form.method = 'POST';
+                form.action = '/admin/orders/' + orderId + '/process';
+                document.body.appendChild(form);
+                form.submit();
+            }
+        }
+        
+        function shipOrder(orderId) {
+            const trackingNumber = prompt('کد پیگیری مرسوله را وارد کنید:');
+            if (trackingNumber && trackingNumber.trim() !== '') {
+                const form = document.createElement('form');
+                form.method = 'POST';
+                form.action = '/admin/orders/' + orderId + '/ship';
+                
+                const trackingInput = document.createElement('input');
+                trackingInput.type = 'hidden';
+                trackingInput.name = 'trackingNumber';
+                trackingInput.value = trackingNumber.trim();
+                
+                form.appendChild(trackingInput);
+                document.body.appendChild(form);
+                form.submit();
+            }
+        }
+        
+        function deliverOrder(orderId) {
+            if (confirm('آیا این سفارش تحویل داده شده است؟')) {
+                const form = document.createElement('form');
+                form.method = 'POST';
+                form.action = '/admin/orders/' + orderId + '/deliver';
+                document.body.appendChild(form);
+                form.submit();
+            }
+        }
+        
+        function cancelOrder(orderId, orderNumber) {
+            const reason = prompt('دلیل لغو سفارش "' + orderNumber + '" را وارد کنید:');
+            if (reason && reason.trim() !== '') {
+                const form = document.createElement('form');
+                form.method = 'POST';
+                form.action = '/admin/orders/' + orderId + '/cancel';
+                
+                const reasonInput = document.createElement('input');
+                reasonInput.type = 'hidden';
+                reasonInput.name = 'reason';
+                reasonInput.value = reason.trim();
+                
+                form.appendChild(reasonInput);
+                document.body.appendChild(form);
+                form.submit();
+            }
+        }
+        
+        // Responsive sidebar
+        window.addEventListener('resize', function() {
+            const sidebar = document.getElementById('sidebar');
+            
+            if (window.innerWidth > 768) {
+                sidebar.classList.remove('show');
+            }
+        });
+        
+        // Animation on scroll
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+        
+        const observer = new IntersectionObserver(function(entries) {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+        
+        // Observe all fade-in elements
+        document.querySelectorAll('.fade-in').forEach(el => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(20px)';
+            el.style.transition = 'all 0.6s ease';
+            observer.observe(el);
+        });
+    </script>
+
+    <style>
+        .customer-info {
+            display: flex;
+            align-items: center;
+        }
+        
+        .user-table-avatar {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            font-size: 0.9rem;
+            flex-shrink: 0;
+        }
+        
+        .user-table-avatar.large {
+            width: 50px;
+            height: 50px;
+            font-size: 1.2rem;
+        }
+        
+        .status-badge.large {
+            font-size: 1rem;
+            padding: 8px 16px;
+        }
+        
+        .product-thumbnail {
+            width: 50px;
+            height: 50px;
+            object-fit: cover;
+            border-radius: 8px;
+        }
+        
+        .product-placeholder {
+            width: 50px;
+            height: 50px;
+            background: #f8f9fa;
+            border: 2px dashed #dee2e6;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #6c757d;
+        }
+        
+        .product-image {
+            flex-shrink: 0;
+        }
+        
+        .table-summary {
+            background-color: #f8f9fa;
+            font-weight: 600;
+        }
+        
+        .status-pending {
+            background: #fff3cd;
+            color: #856404;
+        }
+    </style>
+</body>
+</html>
