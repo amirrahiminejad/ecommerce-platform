@@ -21,7 +21,8 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
 
     Page<Order> findByCustomerId(Long customerId, Pageable pageable);
 
-    Page<Order> findByStatus(OrderStatus status, Pageable pageable);
+    @Query("SELECT o FROM Order o JOIN FETCH o.customer WHERE o.status = :status")
+    Page<Order> findByStatus(@Param("status") OrderStatus status, Pageable pageable);
 
     Page<Order> findByCustomerIdAndStatus(Long customerId, OrderStatus status, Pageable pageable);
 
@@ -73,7 +74,7 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
     /**
      * جستجو در سفارشات بر اساس شماره سفارش یا نام مشتری یا ایمیل
      */
-    @Query("SELECT o FROM Order o WHERE " +
+    @Query("SELECT o FROM Order o JOIN FETCH o.customer WHERE " +
            "o.orderNumber LIKE %:search% OR " +
            "o.customer.username LIKE %:search% OR " +
            "o.customer.email LIKE %:search% OR " +
@@ -84,7 +85,7 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
     /**
      * جستجو در سفارشات بر اساس وضعیت و عبارت جستجو
      */
-    @Query("SELECT o FROM Order o WHERE o.status = :status AND (" +
+    @Query("SELECT o FROM Order o JOIN FETCH o.customer WHERE o.status = :status AND (" +
            "o.orderNumber LIKE %:search% OR " +
            "o.customer.username LIKE %:search% OR " +
            "o.customer.email LIKE %:search% OR " +
@@ -97,7 +98,7 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
     /**
      * جستجو در سفارشات بر اساس بازه تاریخ
      */
-    @Query("SELECT o FROM Order o WHERE o.orderDate BETWEEN :startDate AND :endDate")
+    @Query("SELECT o FROM Order o JOIN FETCH o.customer WHERE o.orderDate BETWEEN :startDate AND :endDate")
     Page<Order> findByOrderDateBetween(@Param("startDate") LocalDateTime startDate,
                                       @Param("endDate") LocalDateTime endDate,
                                       Pageable pageable);
@@ -105,7 +106,7 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
     /**
      * جستجو ترکیبی: وضعیت + تاریخ + جستجو
      */
-    @Query("SELECT o FROM Order o WHERE " +
+    @Query("SELECT o FROM Order o JOIN FETCH o.customer WHERE " +
            "(:status IS NULL OR o.status = :status) AND " +
            "(:startDate IS NULL OR o.orderDate >= :startDate) AND " +
            "(:endDate IS NULL OR o.orderDate <= :endDate) AND " +
@@ -120,4 +121,10 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
                                @Param("endDate") LocalDateTime endDate,
                                @Param("search") String search,
                                Pageable pageable);
+
+    /**
+     * دریافت همه سفارشات با customer eager loading
+     */
+    @Query("SELECT o FROM Order o JOIN FETCH o.customer")
+    Page<Order> findAllWithCustomer(Pageable pageable);
 }

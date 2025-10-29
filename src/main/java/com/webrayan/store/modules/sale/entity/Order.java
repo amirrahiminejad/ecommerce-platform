@@ -52,8 +52,8 @@ public class Order extends BaseEntity {
     @Column(name = "total_amount", precision = 12, scale = 2, nullable = false)
     private BigDecimal totalAmount;
 
-    @Column(name = "currency", length = 3, nullable = false)
-    private String currency = "$";
+    @Column(name = "currency", length = 10, nullable = false)
+    private String currency = "تومان";
 
     // آدرس تحویل
     @Column(name = "delivery_address", columnDefinition = "TEXT")

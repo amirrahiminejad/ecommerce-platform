@@ -3,6 +3,7 @@ package com.webrayan.store.component.data;
 import com.webrayan.store.component.data.initializers.CatalogDataInitializer;
 import com.webrayan.store.component.data.initializers.CommonDataInitializer;
 import com.webrayan.store.component.data.initializers.SecurityDataInitializer;
+import com.webrayan.store.component.data.initializers.SaleDataInitializer;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
@@ -21,6 +22,7 @@ public class MasterDataBootstrap implements CommandLineRunner {
     private final CommonDataInitializer commonDataInitializer;
     private final SecurityDataInitializer securityDataInitializer;
     private final CatalogDataInitializer catalogDataInitializer;
+    private final SaleDataInitializer saleDataInitializer;
 
     @Override
     @Transactional
@@ -35,6 +37,8 @@ public class MasterDataBootstrap implements CommandLineRunner {
             // 3. داده‌های کاتالوگ (دسته‌بندی محصولات)
             catalogDataInitializer.initialize();
             
+            // 4. داده‌های فروش (سفارشات نمونه)
+            saleDataInitializer.initialize();
 
         } catch (Exception e) {
             log.error("❌ Error on create data: {}", e.getMessage(), e);

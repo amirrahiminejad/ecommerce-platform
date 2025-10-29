@@ -281,7 +281,7 @@ public class OrderService {
             return orderRepository.findByOrderDateBetween(startDate, endDate, pageable);
         } else {
             // همه سفارشات
-            return orderRepository.findAll(pageable);
+            return orderRepository.findAllWithCustomer(pageable);
         }
     }
 

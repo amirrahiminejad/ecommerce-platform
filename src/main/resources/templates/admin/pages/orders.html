@@ -224,8 +224,7 @@
                                           th:text="${order.status.persianName}">در انتظار تایید</span>
                                 </td>
                                 <td>
-                                    <span th:if="${order.paid}" class="badge bg-success">پرداخت شده</span>
-                                    <span th:unless="${order.paid}" class="badge bg-warning">پرداخت نشده</span>
+                                    <span class="badge bg-info">نامشخص</span>
                                 </td>
                                 <td>
                                     <button class="action-btn btn-view" 
