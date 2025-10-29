@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مدیریت تنظیمات - تاپ کالا</title>
+    
+    <!-- Bootstrap RTL CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.rtl.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="/css/admin-users-styles.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <img src="/images/logo-small.png" alt="تاپ کالا" height="100" style="margin-bottom: 10px;">
+        </div>
+        
+        <ul class="sidebar-menu">
+            <li>
+                <a href="/admin/dashboard" th:href="@{/admin/dashboard}">
+                    <i class="fas fa-home"></i>
+                    <span>داشبورد</span>
+                </a>
+            </li>
+            <li>
+                <a href="/admin/users" th:href="@{/admin/users}">
+                    <i class="fas fa-users"></i>
+                    <span>کاربران</span>
+                </a>
+            </li>
+            <li>
+                <a href="/admin/affiliates" th:href="@{/admin/affiliates}">
+                    <i class="fas fa-handshake"></i>
+                    <span>بازاریابها</span>
+                </a>
+            </li>
+            <li>
+                <a href="/admin/orders" th:href="@{/admin/orders}">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span>سفارشات</span>
+                </a>
+            </li>
+            <li>
+                <a href="/admin/categories" th:href="@{/admin/categories}">
+                    <i class="fas fa-tags"></i>
+                    <span>دسته‌بندی‌ها</span>
+                </a>
+            </li>
+            <li>
+                <a href="/admin/products" th:href="@{/admin/products}">
+                    <i class="fas fa-box"></i>
+                    <span>محصولات</span>
+                </a>
+            </li>
+            <li>
+                <a href="/admin/settings" th:href="@{/admin/settings}" class="active">
+                    <i class="fas fa-cog"></i>
+                    <span>تنظیمات</span>
+                </a>
+            </li>
+            <li>
+                <a href="/admin/logout" th:href="@{/admin/logout}">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span>خروج</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+    
+    <!-- Main Content -->
+    <div class="main-content" id="main-content">
+        <!-- Top Navbar -->
+        <div class="top-navbar">
+            <div class="d-flex align-items-center">
+                <button class="sidebar-toggle" id="sidebar-toggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <div class="navbar-brand">مدیریت تنظیمات</div>
+            </div>
+            
+            <div class="navbar-actions">
+                <div class="user-info">
+                    <div class="user-avatar">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <span>مدیر سیستم</span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Content Area -->
+        <div class="content-area">
+            <!-- Alert Messages -->
+            <div th:if="${successMessage}" class="alert alert-success alert-dismissible fade show" role="alert">
+                <i class="fas fa-check-circle me-2"></i>
+                <span th:text="${successMessage}"></span>
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+
+            <div th:if="${errorMessage}" class="alert alert-danger alert-dismissible fade show" role="alert">
+                <i class="fas fa-exclamation-circle me-2"></i>
+                <span th:text="${errorMessage}"></span>
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="filter-card fade-in mb-4">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h5 class="mb-0">
+                            <i class="fas fa-cog text-primary me-2"></i>
+                            تنظیمات سیستم
+                        </h5>
+                        <small class="text-muted">مدیریت تنظیمات عمومی فروشگاه</small>
+                    </div>
+                    
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-success" onclick="showAddSettingModal()">
+                            <i class="fas fa-plus me-2"></i>
+                            افزودن تنظیمات
+                        </button>
+                        <button type="button" class="btn btn-warning" onclick="resetSettings()">
+                            <i class="fas fa-undo me-2"></i>
+                            بازگردانی پیش‌فرض
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Settings Form -->
+            <div class="table-card fade-in">
+                <div class="table-header">
+                    <h5 class="table-title">
+                        <i class="fas fa-list me-2"></i>
+                        لیست تنظیمات
+                        <span class="badge bg-primary ms-2" th:text="${#lists.size(settings)}">0</span>
+                    </h5>
+                </div>
+                
+                <form th:action="@{/admin/settings/update}" method="POST" id="settingsForm">
+                    <div class="table-responsive">
+                        <table class="custom-table">
+                            <thead>
+                                <tr>
+                                    <th style="width: 30%;">کلید تنظیمات</th>
+                                    <th style="width: 50%;">مقدار</th>
+                                    <th style="width: 15%;">توضیحات</th>
+                                    <th style="width: 5%;">عملیات</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr th:each="setting, stat : ${settings}">
+                                    <td>
+                                        <strong th:text="${setting.key}">setting_key</strong>
+                                        <input type="hidden" name="keys" th:value="${setting.key}">
+                                    </td>
+                                    <td>
+                                        <div th:switch="${setting.key}">
+                                            <!-- Boolean Settings -->
+                                            <div th:case="'maintenance_mode'">
+                                                <select class="form-select" name="values" th:attr="data-key=${setting.key}">
+                                                    <option value="false" th:selected="${setting.value == 'false'}">غیرفعال</option>
+                                                    <option value="true" th:selected="${setting.value == 'true'}">فعال</option>
+                                                </select>
+                                            </div>
+                                            
+                                            <!-- Large Text Settings -->
+                                            <div th:case="'site_description'">
+                                                <textarea class="form-control" 
+                                                        name="values" 
+                                                        rows="2"
+                                                        th:text="${setting.value}"
+                                                        th:attr="data-key=${setting.key}"></textarea>
+                                            </div>
+                                            
+                                            <!-- Number Settings -->
+                                            <div th:case="'max_upload_size'">
+                                                <input type="number" 
+                                                       class="form-control" 
+                                                       name="values" 
+                                                       th:value="${setting.value}"
+                                                       th:attr="data-key=${setting.key}">
+                                            </div>
+                                            
+                                            <div th:case="'items_per_page'">
+                                                <input type="number" 
+                                                       class="form-control" 
+                                                       name="values" 
+                                                       th:value="${setting.value}"
+                                                       th:attr="data-key=${setting.key}">
+                                            </div>
+                                            
+                                            <!-- Email Settings -->
+                                            <div th:case="'admin_email'">
+                                                <input type="email" 
+                                                       class="form-control" 
+                                                       name="values" 
+                                                       th:value="${setting.value}"
+                                                       th:attr="data-key=${setting.key}">
+                                            </div>
+                                            
+                                            <!-- Default Text Input -->
+                                            <div th:case="*">
+                                                <input type="text" 
+                                                       class="form-control" 
+                                                       name="values" 
+                                                       th:value="${setting.value}"
+                                                       th:attr="data-key=${setting.key}">
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <small class="text-muted" th:switch="${setting.key}">
+                                            <span th:case="'site_name'">نام سایت</span>
+                                            <span th:case="'site_title'">عنوان سایت</span>
+                                            <span th:case="'site_description'">توضیحات سایت</span>
+                                            <span th:case="'default_currency'">واحد پول</span>
+                                            <span th:case="'default_language'">زبان پیش‌فرض</span>
+                                            <span th:case="'admin_email'">ایمیل مدیریت</span>
+                                            <span th:case="'support_phone'">تلفن پشتیبانی</span>
+                                            <span th:case="'max_upload_size'">حداکثر اندازه آپلود (بایت)</span>
+                                            <span th:case="'items_per_page'">تعداد در هر صفحه</span>
+                                            <span th:case="'maintenance_mode'">حالت تعمیرات</span>
+                                            <span th:case="*">-</span>
+                                        </small>
+                                    </td>
+                                    <td>
+                                        <button type="button" 
+                                                class="action-btn btn-delete" 
+                                                th:title="'حذف تنظیمات ' + ${setting.key}"
+                                                th:data-setting-id="${setting.id}"
+                                                th:data-setting-key="${setting.key}"
+                                                onclick="deleteSetting(this.dataset.settingId, this.dataset.settingKey)">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        
+                        <!-- Empty State -->
+                        <div th:if="${#lists.isEmpty(settings)}" class="text-center py-5">
+                            <i class="fas fa-cog fa-3x text-muted mb-3"></i>
+                            <h5 class="text-muted">هیچ تنظیماتی یافت نشد</h5>
+                            <p class="text-muted">تنظیمات جدید اضافه کنید یا پیش‌فرض‌ها را بازگردانی کنید</p>
+                        </div>
+                    </div>
+                    
+                    <div class="p-3 bg-light border-top" th:if="${!#lists.isEmpty(settings)}">
+                        <div class="d-flex justify-content-end">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-save me-2"></i>
+                                ذخیره تغییرات
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Add Setting Modal -->
+    <div class="modal fade" id="addSettingModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form th:action="@{/admin/settings/add}" method="POST">
+                    <div class="modal-header">
+                        <h5 class="modal-title">
+                            <i class="fas fa-plus text-success me-2"></i>
+                            افزودن تنظیمات جدید
+                        </h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label for="settingKey" class="form-label">کلید تنظیمات</label>
+                            <input type="text" 
+                                   class="form-control" 
+                                   id="settingKey" 
+                                   name="key" 
+                                   required
+                                   placeholder="مثال: new_setting_key">
+                            <div class="form-text">کلید باید منحصر به فرد باشد</div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="settingValue" class="form-label">مقدار</label>
+                            <textarea class="form-control" 
+                                    id="settingValue" 
+                                    name="value" 
+                                    rows="3"
+                                    required
+                                    placeholder="مقدار تنظیمات را وارد کنید"></textarea>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">انصراف</button>
+                        <button type="submit" class="btn btn-success">
+                            <i class="fas fa-plus me-2"></i>
+                            افزودن
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        // Sidebar Toggle
+        document.getElementById('sidebar-toggle').addEventListener('click', function() {
+            const sidebar = document.getElementById('sidebar');
+            const mainContent = document.getElementById('main-content');
+            
+            if (window.innerWidth > 768) {
+                sidebar.classList.toggle('collapsed');
+                mainContent.classList.toggle('expanded');
+            } else {
+                sidebar.classList.toggle('show');
+            }
+        });
+        
+        // Show Add Setting Modal
+        function showAddSettingModal() {
+            const modal = new bootstrap.Modal(document.getElementById('addSettingModal'));
+            modal.show();
+        }
+        
+        // Reset Settings
+        function resetSettings() {
+            if (confirm('آیا از بازگردانی تمام تنظیمات به حالت پیش‌فرض اطمینان دارید؟\n\nاین عمل غیرقابل بازگشت است!')) {
+                const form = document.createElement('form');
+                form.method = 'POST';
+                form.action = '/admin/settings/reset';
+                document.body.appendChild(form);
+                form.submit();
+            }
+        }
+        
+        // Delete Setting
+        function deleteSetting(settingId, settingKey) {
+            if (confirm('آیا از حذف تنظیمات "' + settingKey + '" اطمینان دارید؟')) {
+                const form = document.createElement('form');
+                form.method = 'POST';
+                form.action = '/admin/settings/delete/' + settingId;
+                document.body.appendChild(form);
+                form.submit();
+            }
+        }
+        
+        // Auto-save indication
+        let saveTimeout;
+        document.querySelectorAll('input, select, textarea').forEach(input => {
+            if (input.name === 'values') {
+                input.addEventListener('change', function() {
+                    // Visual feedback for unsaved changes
+                    const form = document.getElementById('settingsForm');
+                    if (!form.querySelector('.unsaved-indicator')) {
+                        const indicator = document.createElement('div');
+                        indicator.className = 'alert alert-warning unsaved-indicator mt-2';
+                        indicator.innerHTML = '<i class="fas fa-exclamation-triangle me-2"></i>تغییرات ذخیره نشده وجود دارد';
+                        form.appendChild(indicator);
+                    }
+                });
+            }
+        });
+        
+        // Remove unsaved indicator after form submit
+        document.getElementById('settingsForm').addEventListener('submit', function() {
+            const indicator = this.querySelector('.unsaved-indicator');
+            if (indicator) {
+                indicator.remove();
+            }
+        });
+        
+        // Responsive sidebar
+        window.addEventListener('resize', function() {
+            const sidebar = document.getElementById('sidebar');
+            
+            if (window.innerWidth > 768) {
+                sidebar.classList.remove('show');
+            }
+        });
+        
+        // Animation on scroll
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+        
+        const observer = new IntersectionObserver(function(entries) {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+        
+        // Observe all fade-in elements
+        document.querySelectorAll('.fade-in').forEach(el => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(20px)';
+            el.style.transition = 'all 0.6s ease';
+            observer.observe(el);
+        });
+    </script>
+    
+    <style>
+        .custom-table input, 
+        .custom-table select, 
+        .custom-table textarea {
+            border: 1px solid #e0e0e0;
+            border-radius: 4px;
+            transition: all 0.2s ease;
+        }
+        
+        .custom-table input:focus, 
+        .custom-table select:focus, 
+        .custom-table textarea:focus {
+            border-color: #007bff;
+            box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+        }
+        
+        .unsaved-indicator {
+            position: sticky;
+            bottom: 20px;
+            z-index: 1000;
+            margin: 0 20px;
+            animation: slideUp 0.3s ease;
+        }
+        
+        @keyframes slideUp {
+            from {
+                transform: translateY(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+    </style>
+</body>
+</html>

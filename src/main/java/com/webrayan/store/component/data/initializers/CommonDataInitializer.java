@@ -159,6 +159,7 @@ public class CommonDataInitializer {
                 Setting setting = new Setting();
                 setting.setKey(data[0]);
                 setting.setValue(data[1]);
+                setting.setUser(null); // System-wide setting
                 settingRepository.save(setting);
                 createdCount++;
                 log.debug("Setting {} created", data[0]);
